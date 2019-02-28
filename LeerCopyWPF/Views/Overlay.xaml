@@ -22,18 +22,21 @@
     </Window.Resources>
     <!-- Set window transparency without affecting content transparency -->
     <Window.Background>
-        <SolidColorBrush Color="#FFCBCBCB" Opacity="0.2"></SolidColorBrush>
+        <SolidColorBrush Color="#FFCBCBCB" Opacity="0.1"></SolidColorBrush>
     </Window.Background>
     <!-- Window content -->
-    <StackPanel x:Name="LabelPanel" HorizontalAlignment="Right">
-        <TextBlock x:Name="SaveLbl" Text="{x:Static resx:Resources.SaveLblStr}"/>
-        <TextBlock x:Name="CopyLbl" Text="{x:Static resx:Resources.CopyLblStr}"/>
-        <TextBlock x:Name="EditLbl" Text="{x:Static resx:Resources.EditLblStr}"/>
-        <TextBlock x:Name="ClearLbl" Text="{x:Static resx:Resources.ClearLblStr}"/>
-        <TextBlock x:Name="NewLeerLbl" Text="{x:Static resx:Resources.NewLeerLblStr}"/>
-        <TextBlock x:Name="ArrowKeysLbl" Text="{x:Static resx:Resources.ArrowKeysLblStr}"/>
-        <TextBlock x:Name="SettingsWinLbl" Text="{x:Static resx:Resources.SettingsWinLblStr}"/>
-        <TextBlock x:Name="TipsLbl" Text="{x:Static resx:Resources.TipsLblStr}"/>
-        <TextBlock x:Name="QuitLbl" Text="{x:Static resx:Resources.QuitLblStr}"/>
-    </StackPanel>
+    <Grid>
+        <StackPanel x:Name="LabelPanel" HorizontalAlignment="Right">
+            <TextBlock x:Name="SaveLbl" Text="{x:Static resx:Resources.SaveLblStr}"/>
+            <TextBlock x:Name="CopyLbl" Text="{x:Static resx:Resources.CopyLblStr}"/>
+            <TextBlock x:Name="EditLbl" Text="{x:Static resx:Resources.EditLblStr}"/>
+            <TextBlock x:Name="ClearLbl" Text="{x:Static resx:Resources.ClearLblStr}"/>
+            <TextBlock x:Name="NewLeerLbl" Text="{x:Static resx:Resources.NewLeerLblStr}"/>
+            <TextBlock x:Name="ArrowKeysLbl" Text="{x:Static resx:Resources.ArrowKeysLblStr}"/>
+            <TextBlock x:Name="SettingsWinLbl" Text="{x:Static resx:Resources.SettingsWinLblStr}"/>
+            <TextBlock x:Name="TipsLbl" Text="{x:Static resx:Resources.TipsLblStr}"/>
+            <TextBlock x:Name="QuitLbl" Text="{x:Static resx:Resources.QuitLblStr}"/>
+        </StackPanel>
+        <Image x:Name="SelectionImg" Visibility="Hidden"/>
+    </Grid>
 </Window>

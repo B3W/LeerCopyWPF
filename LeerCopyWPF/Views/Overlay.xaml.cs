@@ -28,7 +28,40 @@ namespace LeerCopyWPF
             InitializeComponent();
             bitmapSource = bitmap;
             selectControl = new SelectControl(bitmap);
+
+            SelectionImg.Visibility = Visibility.Hidden;
+            SelectionImg.Source = bitmap;
+            SelectionImg.Clip = new RectangleGeometry();
+
+            this.PreviewMouseLeftButtonDown += Overlay_MouseLeftButtonDown;
+            this.PreviewMouseLeftButtonUp += Overlay_MouseLeftButtonUp;
+            this.PreviewMouseMove += Overlay_MouseMove;
         }
 
+        private void Overlay_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            selectControl.StartSelection(e.GetPosition(this));
+            UpdateDisplayedImage();
+            SelectionImg.Visibility = Visibility.Visible;
+        }
+
+        private void Overlay_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            selectControl.StopSelection(e.GetPosition(this));
+        }
+
+        private void Overlay_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (selectControl.isSelecting)
+            {
+                selectControl.UpdateSelection(e.GetPosition(this));
+                UpdateDisplayedImage();
+            }
+        }
+        
+        private void UpdateDisplayedImage()
+        {
+            SelectionImg.Clip = selectControl.GetSelectionGeometry();
+        }
     }
 }

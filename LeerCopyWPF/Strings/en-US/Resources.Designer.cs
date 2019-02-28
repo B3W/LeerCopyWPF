@@ -61,7 +61,7 @@ namespace LeerCopyWPF.Strings.en_US {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to  - Use arrow keys to resize selection.
+        ///   Looks up a localized string similar to  Use arrow keys to resize selection.
         /// </summary>
         public static string ArrowKeysLblStr {
             get {

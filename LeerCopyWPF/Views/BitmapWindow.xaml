@@ -9,5 +9,4 @@
         ResizeMode="NoResize" ShowInTaskbar="False"
         WindowState="Maximized" WindowStyle="None">
     <Image x:Name="BitmapImg"/>
-
 </Window>

@@ -18,30 +18,17 @@ namespace LeerCopyWPF
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class Overlay : Window
     {
         private SelectControl selectControl;
-        private BitmapWindow bitmapWindow;
+        private BitmapSource bitmapSource;
 
-        public MainWindow()
+        public Overlay(BitmapSource bitmap)
         {
-            this.Initialized += MainWindow_Initialized;
             InitializeComponent();
-            this.ContentRendered += MainWindow_ContentRendered;
-        }
-
-        private void MainWindow_Initialized(object sender, EventArgs e)
-        {
-            BitmapSource bitmap = Utilities.BitmapUtilities.CaptureScreen();
+            bitmapSource = bitmap;
             selectControl = new SelectControl(bitmap);
-
-            bitmapWindow = new BitmapWindow(bitmap);
-            bitmapWindow.Show();
         }
 
-        private void MainWindow_ContentRendered(object sender, EventArgs e)
-        {
-            bitmapWindow.Owner = this;
-        }
     }
 }

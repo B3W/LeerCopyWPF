@@ -25,11 +25,13 @@ namespace LeerCopyWPF.Models
         public void SetStart(Point point)
         {
             startPt = point;
+            endPt = point;
         }
 
         public void SetStart(double x, double y)
         {
             startPt = new Point(x, y);
+            endPt = new Point(x, y);
         }
 
         public void Update(Point point)

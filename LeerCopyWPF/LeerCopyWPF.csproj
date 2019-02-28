@@ -62,11 +62,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Views\BitmapWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Overlay.xaml">
+    <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -77,11 +73,8 @@
     <Compile Include="Controllers\SelectControl.cs" />
     <Compile Include="Utilities\BitmapUtilities.cs" />
     <Compile Include="Models\Selection.cs" />
-    <Compile Include="Views\BitmapWindow.xaml.cs">
-      <DependentUpon>BitmapWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Overlay.xaml.cs">
-      <DependentUpon>Overlay.xaml</DependentUpon>
+    <Compile Include="Views\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

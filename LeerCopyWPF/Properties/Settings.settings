@@ -1,7 +1,30 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="uri:settings" CurrentProfile="(Default)">
-  <Profiles>
-    <Profile Name="(Default)" />
-  </Profiles>
-  <Settings />
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="LeerCopyWPF.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="CopyKey" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C</Value>
+    </Setting>
+    <Setting Name="EditKey" Type="System.String" Scope="User">
+      <Value Profile="(Default)">E</Value>
+    </Setting>
+    <Setting Name="SaveKey" Type="System.String" Scope="User">
+      <Value Profile="(Default)">S</Value>
+    </Setting>
+    <Setting Name="ClearKey" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Z</Value>
+    </Setting>
+    <Setting Name="QuitKey" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Q</Value>
+    </Setting>
+    <Setting Name="TipKey" Type="System.String" Scope="User">
+      <Value Profile="(Default)">T</Value>
+    </Setting>
+    <Setting Name="NewLeerKey" Type="System.String" Scope="User">
+      <Value Profile="(Default)">R</Value>
+    </Setting>
+    <Setting Name="SettingsWinKey" Type="System.String" Scope="User">
+      <Value Profile="(Default)">P</Value>
+    </Setting>
+  </Settings>
 </SettingsFile>

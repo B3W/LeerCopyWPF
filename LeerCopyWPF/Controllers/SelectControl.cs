@@ -3,6 +3,7 @@ using System.Windows;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Media.Imaging;
+using System.Windows.Media;
 
 namespace LeerCopyWPF.Controllers
 {
@@ -35,16 +36,19 @@ namespace LeerCopyWPF.Controllers
 
         public void StartSelection(Point start)
         {
-            selection.SetStart(start);
+            if (isSelected)
+            {
+                selection.Update(start);
+            } else
+            {
+                selection.SetStart(start);
+            }
             isSelecting = true;
         }
 
         public void UpdateSelection(Point point)
         {
-            if (isSelecting)
-            {
-                selection.Update(point);
-            }
+            selection.Update(point);
         }
 
         public void UpdateSelection(double x, double y)
@@ -66,6 +70,16 @@ namespace LeerCopyWPF.Controllers
                 isSelected = false;
             }
             isSelecting = false;
+        }
+
+        public Rect GetSelectionRect()
+        {
+            return new Rect(selection.startPt, selection.endPt);
+        }
+
+        public RectangleGeometry GetSelectionGeometry()
+        {
+            return new RectangleGeometry(new Rect(selection.startPt, selection.endPt));
         }
 
         public void ClearSelection()

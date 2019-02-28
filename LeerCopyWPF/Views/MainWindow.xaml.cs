@@ -32,6 +32,7 @@ namespace LeerCopyWPF
         /// </summary>
         private static bool loaded = false;
 
+
         public MainWindow()
         {
             this.Initialized += MainWindow_Initialized;
@@ -42,15 +43,55 @@ namespace LeerCopyWPF
             SelectionImg.Visibility = Visibility.Hidden;
             SelectionImg.Clip = new RectangleGeometry();
 
+            this.PreviewKeyDown += MainWindow_PreviewKeyDown;
             this.PreviewMouseLeftButtonDown += MainWindow_MouseLeftButtonDown;
             this.PreviewMouseLeftButtonUp += MainWindow_MouseLeftButtonUp;
             this.PreviewMouseMove += MainWindow_MouseMove;
-        }
+        } // MainWindow
+
+
+        private void MainWindow_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            // TODO: BIND SETTINGS TO PROPERTIES FOR MANIPULATION
+
+        } // MainWindow_PreviewKeyDown
+
+
+        private void MainWindow_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            selectControl.StartSelection(e.GetPosition(this));
+            UpdateDisplayedImage();
+            SelectionImg.Visibility = Visibility.Visible;
+        } // MainWindow_MouseLeftButtonDown
+
+
+        private void MainWindow_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            selectControl.StopSelection(e.GetPosition(this));
+        } // MainWindow_MouseLeftButtonUp
+
+
+        private void MainWindow_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (selectControl.isSelecting)
+            {
+                selectControl.UpdateSelection(e.GetPosition(this));
+                UpdateDisplayedImage();
+            }
+        } // MainWindow_MouseMove
+
+
+        private void UpdateDisplayedImage()
+        {
+            SelectionImg.Clip = selectControl.GetSelectionGeometry();
+        } // UpdateDisplayedImage
+
 
         private void MainWindow_Initialized(object sender, EventArgs e)
         {
             bitmapSource = Utilities.BitmapUtilities.CaptureScreen();
-        }
+        } // MainWindow_Initialized
+
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
@@ -62,32 +103,6 @@ namespace LeerCopyWPF
 
                 loaded = true;
             }
-        }
-
-        private void MainWindow_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            selectControl.StartSelection(e.GetPosition(this));
-            UpdateDisplayedImage();
-            SelectionImg.Visibility = Visibility.Visible;
-        }
-
-        private void MainWindow_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            selectControl.StopSelection(e.GetPosition(this));
-        }
-
-        private void MainWindow_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (selectControl.isSelecting)
-            {
-                selectControl.UpdateSelection(e.GetPosition(this));
-                UpdateDisplayedImage();
-            }
-        }
-        
-        private void UpdateDisplayedImage()
-        {
-            SelectionImg.Clip = selectControl.GetSelectionGeometry();
-        }
+        } // MainWindow_Loaded
     }
 }

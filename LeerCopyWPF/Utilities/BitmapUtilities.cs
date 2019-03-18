@@ -35,7 +35,7 @@ namespace LeerCopyWPF.Utilities
             protected override bool ReleaseHandle()
             {
                 return NativeMethods.DeleteObject(handle);
-            }
+            } // SafeHBitmapHandle
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace LeerCopyWPF.Utilities
                 }
             }
             return bmSrc;
-        }
+        } // ToBitmapSource
 
         /// <summary>
         /// Captures the screen as a bitmap
@@ -91,6 +91,6 @@ namespace LeerCopyWPF.Utilities
                 throw new ApplicationException("BitmapUtilities.CaptureScreen: Unable to convert \'Bitmap\' to \'BitmapSouce\'.");
             }
             return bmSrc;
-        }
+        } // CaptureScreen
     }
 }

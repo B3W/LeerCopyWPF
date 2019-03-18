@@ -124,6 +124,15 @@ namespace LeerCopyWPF.Strings.en_US {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to  - Select entire screen.
+        /// </summary>
+        public static string SelectAllLblStr {
+            get {
+                return ResourceManager.GetString("SelectAllLblStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to  - Open settings.
         /// </summary>
         public static string SettingsWinLblStr {

@@ -138,6 +138,9 @@
   <data name="SaveLblStr" xml:space="preserve">
     <value> - Save selection to file</value>
   </data>
+  <data name="SelectAllLblStr" xml:space="preserve">
+    <value> - Select entire screen</value>
+  </data>
   <data name="SettingsWinLblStr" xml:space="preserve">
     <value> - Open settings</value>
   </data>

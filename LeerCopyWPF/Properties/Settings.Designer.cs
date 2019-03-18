@@ -25,6 +25,29 @@ namespace LeerCopyWPF.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(@"<?xml version=""1.0"" encoding=""utf-16""?>
+<ArrayOfString xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
+  <string>CopyKey</string>
+  <string>EditKey</string>
+  <string>SaveKey</string>
+  <string>ClearKey</string>
+  <string>QuitKey</string>
+  <string>TipKey</string>
+  <string>NewLeerKey</string>
+  <string>SettingsWinKey</string>
+  <string>SelectAllKey</string>
+</ArrayOfString>")]
+        public string[] KeyNames {
+            get {
+                return ((string[])(this["KeyNames"]));
+            }
+            set {
+                this["KeyNames"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("C")]
         public string CopyKey {
             get {
@@ -97,7 +120,7 @@ namespace LeerCopyWPF.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("R")]
+        [global::System.Configuration.DefaultSettingValueAttribute("N")]
         public string NewLeerKey {
             get {
                 return ((string)(this["NewLeerKey"]));
@@ -116,6 +139,18 @@ namespace LeerCopyWPF.Properties {
             }
             set {
                 this["SettingsWinKey"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("A")]
+        public string SelectAllKey {
+            get {
+                return ((string)(this["SelectAllKey"]));
+            }
+            set {
+                this["SelectAllKey"] = value;
             }
         }
     }

@@ -43,7 +43,7 @@ namespace LeerCopyWPF.Controllers
         {
             if (IsSelected)
             {
-                Selection.Update(start);
+                Selection.UpdateEnd(start);
             } else
             {
                 Selection.SetStart(start);
@@ -54,7 +54,7 @@ namespace LeerCopyWPF.Controllers
 
         public void UpdateSelection(Point point)
         {
-            Selection.Update(point);
+            Selection.UpdateEnd(point);
         } // UpdateSelection
 
 
@@ -62,7 +62,7 @@ namespace LeerCopyWPF.Controllers
         {
             if (IsSelected && !IsSelecting)
             {
-                Selection.Update(x, y, true);
+                Selection.UpdateEnd(x, y, true);
             }
         } // UpdateSelection
 
@@ -113,7 +113,10 @@ namespace LeerCopyWPF.Controllers
 
         public void MaximizeSelection()
         {
-
+            IsSelecting = false;
+            IsSelected = true;
+            Selection.UpdateStart(new Point());
+            Selection.UpdateEnd(Bitmap.Width, Bitmap.Height, false);
         } // MaximizeSelection
 
 

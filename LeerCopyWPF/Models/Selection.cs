@@ -41,13 +41,19 @@ namespace LeerCopyWPF.Models
         } // SetStart
 
 
-        public void Update(Point point)
+        public void UpdateStart(Point point)
+        {
+            StartPt = point;
+        } // UpdateStart
+
+
+        public void UpdateEnd(Point point)
         {
             EndPt = point;
         } // Update
 
 
-        public void Update(double x, double y, bool offset)
+        public void UpdateEnd(double x, double y, bool offset)
         {
             if (offset)
             {

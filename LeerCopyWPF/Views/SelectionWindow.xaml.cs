@@ -48,8 +48,8 @@ namespace LeerCopyWPF
 
             InitializeComponent();
 
-            SelectionImg.Visibility = Visibility.Hidden;
             SelectionImg.Clip = new RectangleGeometry();
+            SelectionImg.Visibility = Visibility.Visible;
 
             this.PreviewKeyDown += SelectionWindow_PreviewKeyDown;
             this.PreviewMouseLeftButtonDown += SelectionWindow_MouseLeftButtonDown;
@@ -146,7 +146,6 @@ namespace LeerCopyWPF
         {
             selectControl.StartSelection(e.GetPosition(this));
             UpdateDisplayedImage();
-            SelectionImg.Visibility = Visibility.Visible;
         } // SelectionWindow_MouseLeftButtonDown
 
 

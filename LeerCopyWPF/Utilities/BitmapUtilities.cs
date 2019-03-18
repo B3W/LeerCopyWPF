@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using System.Windows;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace LeerCopyWPF.Utilities
@@ -58,7 +60,7 @@ namespace LeerCopyWPF.Utilities
                     bmSrc = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
                             hBitmap,
                             IntPtr.Zero,
-                            System.Windows.Int32Rect.Empty,
+                            Int32Rect.Empty,
                             BitmapSizeOptions.FromEmptyOptions());
                 } catch
                 {
@@ -70,16 +72,43 @@ namespace LeerCopyWPF.Utilities
 
 
         /// <summary>
+        /// Convert from BitmapSource to a Bitmap
+        /// </summary>
+        /// <param name="bmSrc"></param>
+        /// <returns></returns>
+        public static Bitmap ToBitmap(BitmapSource bmSrc)
+        {
+            Bitmap bitmap = null;
+            try
+            {
+                using (System.IO.MemoryStream outStream = new System.IO.MemoryStream())
+                {
+                    BitmapEncoder enc = new BmpBitmapEncoder();
+                    enc.Frames.Add(BitmapFrame.Create(bmSrc));
+                    enc.Save(outStream);
+                    bitmap = new Bitmap(outStream);
+                }
+            }
+            catch
+            {
+                // TODO exception logging
+                throw;
+            }
+            return bitmap;
+        } // ToBitmap
+
+
+        /// <summary>
         /// Captures the screen as a bitmap
         /// </summary>
         /// <returns>Screen bitmap converted to BitmapSource object</returns>
         public static BitmapSource CaptureScreen()
         {
             BitmapSource bmSrc;
-            int vScreenLeft = (int) System.Windows.SystemParameters.VirtualScreenLeft;
-            int vScreenTop = (int)System.Windows.SystemParameters.VirtualScreenTop;
-            int vScreenWidth = (int)System.Windows.SystemParameters.VirtualScreenWidth;
-            int vScreenHeight = (int)System.Windows.SystemParameters.VirtualScreenHeight;
+            int vScreenLeft = (int) SystemParameters.VirtualScreenLeft;
+            int vScreenTop = (int) SystemParameters.VirtualScreenTop;
+            int vScreenWidth = (int) SystemParameters.VirtualScreenWidth;
+            int vScreenHeight = (int) SystemParameters.VirtualScreenHeight;
 
             using (Bitmap bitmap = new Bitmap(vScreenWidth, vScreenHeight, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
             {
@@ -91,9 +120,36 @@ namespace LeerCopyWPF.Utilities
             }
             if (bmSrc == null)
             {
+                // TODO exception logging
                 throw new ApplicationException("BitmapUtilities.CaptureScreen: Unable to convert \'Bitmap\' to \'BitmapSouce\'.");
             }
             return bmSrc;
         } // CaptureScreen
+
+
+        /// <summary>
+        /// Copies bitmap source to the clipboard
+        /// </summary>
+        /// <param name="bm"></param>
+        /// <returns>True on success, false otherwise</returns>
+        public static bool CopyToClipboard(BitmapSource bmSrc, Rect area)
+        {
+            try
+            {
+                int x = (int)area.X;
+                int y = (int)area.Y;
+                int width = (int)area.Width;
+                int height = (int)area.Height;
+                BitmapSource croppedBm = new CroppedBitmap(bmSrc, new Int32Rect(x, y, width, height));
+
+                Clipboard.SetImage(croppedBm);
+            }
+            catch (ExternalException)
+            {
+                // TODO exception logging
+                throw;
+            }
+            return false;
+        } // CopyToClipboard
     }
 }

@@ -1,4 +1,5 @@
 ﻿using LeerCopyWPF.Models;
+using LeerCopyWPF.Utilities;
 using System.Windows;
 using System.Collections.Generic;
 using System.Text;
@@ -95,7 +96,10 @@ namespace LeerCopyWPF.Controllers
 
         public void CopySelection()
         {
-
+            if (!IsSelecting && IsSelected && !Selection.StartPt.Equals(Selection.EndPt))
+            {
+                BitmapUtilities.CopyToClipboard(Bitmap, new Rect(Selection.StartPt, Selection.EndPt));
+            }
         } // CopySelection
 
 

@@ -33,42 +33,42 @@
         <!-- Tips -->
         <StackPanel x:Name="LabelPanel" HorizontalAlignment="Right" Panel.ZIndex="2">
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{Binding Source={x:Static prop:Settings.Default}, Path=SaveKey, Mode=OneWay}"/>
+                <TextBlock Text="{Binding Source={x:Static prop:Settings.Default}, Path=Save, Mode=OneWay}"/>
                 <TextBlock x:Name="SaveLbl" Text="{x:Static resx:Resources.SaveLblStr}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{Binding Source={x:Static prop:Settings.Default}, Path=CopyKey, Mode=OneWay}"/>
+                <TextBlock Text="{Binding Source={x:Static prop:Settings.Default}, Path=Copy, Mode=OneWay}"/>
                 <TextBlock x:Name="CopyLbl" Text="{x:Static resx:Resources.CopyLblStr}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{Binding Source={x:Static prop:Settings.Default}, Path=EditKey, Mode=OneWay}"/>
+                <TextBlock Text="{Binding Source={x:Static prop:Settings.Default}, Path=Edit, Mode=OneWay}"/>
                 <TextBlock x:Name="EditLbl" Text="{x:Static resx:Resources.EditLblStr}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{Binding Source={x:Static prop:Settings.Default}, Path=SelectAllKey, Mode=OneWay}"/>
+                <TextBlock Text="{Binding Source={x:Static prop:Settings.Default}, Path=SelectAll, Mode=OneWay}"/>
                 <TextBlock x:Name="SelAllLbl" Text="{x:Static resx:Resources.SelectAllLblStr}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{Binding Source={x:Static prop:Settings.Default}, Path=ClearKey, Mode=OneWay}"/>
+                <TextBlock Text="{Binding Source={x:Static prop:Settings.Default}, Path=Clear, Mode=OneWay}"/>
                 <TextBlock x:Name="ClearLbl" Text="{x:Static resx:Resources.ClearLblStr}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{Binding Source={x:Static prop:Settings.Default}, Path=NewLeerKey, Mode=OneWay}"/>
+                <TextBlock Text="{Binding Source={x:Static prop:Settings.Default}, Path=NewLeer, Mode=OneWay}"/>
                 <TextBlock x:Name="NewLeerLbl" Text="{x:Static resx:Resources.NewLeerLblStr}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock x:Name="ArrowKeysLbl" Text="{x:Static resx:Resources.ArrowKeysLblStr}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{Binding Source={x:Static prop:Settings.Default}, Path=SettingsWinKey, Mode=OneWay}"/>
+                <TextBlock Text="{Binding Source={x:Static prop:Settings.Default}, Path=SettingsWin, Mode=OneWay}"/>
                 <TextBlock x:Name="SettingsWinLbl" Text="{x:Static resx:Resources.SettingsWinLblStr}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{Binding Source={x:Static prop:Settings.Default}, Path=TipKey, Mode=OneWay}"/>
+                <TextBlock Text="{Binding Source={x:Static prop:Settings.Default}, Path=Tips, Mode=OneWay}"/>
                 <TextBlock x:Name="TipsLbl" Text="{x:Static resx:Resources.TipsLblStr}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{Binding Source={x:Static prop:Settings.Default}, Path=QuitKey, Mode=OneWay}"/>
+                <TextBlock Text="{Binding Source={x:Static prop:Settings.Default}, Path=Quit, Mode=OneWay}"/>
                 <TextBlock x:Name="QuitLbl" Text="{x:Static resx:Resources.QuitLblStr}"/>
             </StackPanel>
         </StackPanel>

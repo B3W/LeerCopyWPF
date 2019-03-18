@@ -27,15 +27,15 @@ namespace LeerCopyWPF.Properties {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute(@"<?xml version=""1.0"" encoding=""utf-16""?>
 <ArrayOfString xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
-  <string>CopyKey</string>
-  <string>EditKey</string>
-  <string>SaveKey</string>
-  <string>ClearKey</string>
-  <string>QuitKey</string>
-  <string>TipKey</string>
-  <string>NewLeerKey</string>
-  <string>SettingsWinKey</string>
-  <string>SelectAllKey</string>
+  <string>Copy</string>
+  <string>Edit</string>
+  <string>Save</string>
+  <string>Clear</string>
+  <string>Quit</string>
+  <string>Tips</string>
+  <string>NewLeer</string>
+  <string>SettingsWin</string>
+  <string>SelectAll</string>
 </ArrayOfString>")]
         public string[] KeyNames {
             get {
@@ -49,108 +49,108 @@ namespace LeerCopyWPF.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("C")]
-        public string CopyKey {
+        public string Copy {
             get {
-                return ((string)(this["CopyKey"]));
+                return ((string)(this["Copy"]));
             }
             set {
-                this["CopyKey"] = value;
+                this["Copy"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("E")]
-        public string EditKey {
+        public string Edit {
             get {
-                return ((string)(this["EditKey"]));
+                return ((string)(this["Edit"]));
             }
             set {
-                this["EditKey"] = value;
+                this["Edit"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("S")]
-        public string SaveKey {
+        public string Save {
             get {
-                return ((string)(this["SaveKey"]));
+                return ((string)(this["Save"]));
             }
             set {
-                this["SaveKey"] = value;
+                this["Save"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Z")]
-        public string ClearKey {
+        public string Clear {
             get {
-                return ((string)(this["ClearKey"]));
+                return ((string)(this["Clear"]));
             }
             set {
-                this["ClearKey"] = value;
+                this["Clear"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Q")]
-        public string QuitKey {
+        public string Quit {
             get {
-                return ((string)(this["QuitKey"]));
+                return ((string)(this["Quit"]));
             }
             set {
-                this["QuitKey"] = value;
+                this["Quit"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("T")]
-        public string TipKey {
+        public string Tips {
             get {
-                return ((string)(this["TipKey"]));
+                return ((string)(this["Tips"]));
             }
             set {
-                this["TipKey"] = value;
+                this["Tips"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("N")]
-        public string NewLeerKey {
+        public string NewLeer {
             get {
-                return ((string)(this["NewLeerKey"]));
+                return ((string)(this["NewLeer"]));
             }
             set {
-                this["NewLeerKey"] = value;
+                this["NewLeer"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("P")]
-        public string SettingsWinKey {
+        public string SettingsWin {
             get {
-                return ((string)(this["SettingsWinKey"]));
+                return ((string)(this["SettingsWin"]));
             }
             set {
-                this["SettingsWinKey"] = value;
+                this["SettingsWin"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("A")]
-        public string SelectAllKey {
+        public string SelectAll {
             get {
-                return ((string)(this["SelectAllKey"]));
+                return ((string)(this["SelectAll"]));
             }
             set {
-                this["SelectAllKey"] = value;
+                this["SelectAll"] = value;
             }
         }
     }

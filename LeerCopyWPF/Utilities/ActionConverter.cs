@@ -1,7 +1,4 @@
 ﻿using LeerCopyWPF.Enums;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace LeerCopyWPF.Utilities
 {
@@ -16,39 +13,39 @@ namespace LeerCopyWPF.Utilities
         {
             Actions.ActionEnum retEnum;
 
-            if (Key.Equals("CopyKey"))
+            if (Key.Equals("Copy"))
             {
                 retEnum = Actions.ActionEnum.Copy;
             }
-            else if (Key.Equals("EditKey"))
+            else if (Key.Equals("Edit"))
             {
                 retEnum = Actions.ActionEnum.Edit;
             }
-            else if (Key.Equals("SaveKey"))
+            else if (Key.Equals("Save"))
             {
                 retEnum = Actions.ActionEnum.Save;
             }
-            else if (Key.Equals("SelectAllKey"))
+            else if (Key.Equals("SelectAll"))
             {
                 retEnum = Actions.ActionEnum.SelectAll;
             }
-            else if (Key.Equals("ClearKey"))
+            else if (Key.Equals("Clear"))
             {
                 retEnum = Actions.ActionEnum.Clear;
             }
-            else if (Key.Equals("TipKey"))
+            else if (Key.Equals("Tips"))
             {
                 retEnum = Actions.ActionEnum.Tips;
             }
-            else if (Key.Equals("QuitKey"))
+            else if (Key.Equals("Quit"))
             {
                 retEnum = Actions.ActionEnum.Quit;
             }
-            else if (Key.Equals("NewLeerKey"))
+            else if (Key.Equals("NewLeer"))
             {
                 retEnum = Actions.ActionEnum.New;
             }
-            else if (Key.Equals("SettingsWinKey"))
+            else if (Key.Equals("SettingsWin"))
             {
                 retEnum = Actions.ActionEnum.Settings;
             }
@@ -59,6 +56,7 @@ namespace LeerCopyWPF.Utilities
 
             return retEnum;
         } // KeyStrToEnum
+
 
         /// <summary>
         /// Converts action enum to its key string equivalent
@@ -75,31 +73,31 @@ namespace LeerCopyWPF.Utilities
                     retStr = null;
                     break;
                 case Actions.ActionEnum.Copy:
-                    retStr = "CopyKey";
+                    retStr = "Copy";
                     break;
                 case Actions.ActionEnum.Edit:
-                    retStr = "EditKey";
+                    retStr = "Edit";
                     break;
                 case Actions.ActionEnum.Save:
-                    retStr = "SaveKey";
+                    retStr = "Save";
                     break;
                 case Actions.ActionEnum.SelectAll:
-                    retStr = "SelectAllKey";
+                    retStr = "SelectAll";
                     break;
                 case Actions.ActionEnum.Clear:
-                    retStr = "ClearKey";
+                    retStr = "Clear";
                     break;
                 case Actions.ActionEnum.New:
-                    retStr = "NewLeerKey";
+                    retStr = "NewLeery";
                     break;
                 case Actions.ActionEnum.Settings:
-                    retStr = "SettingWinKey";
+                    retStr = "SettingWin";
                     break;
                 case Actions.ActionEnum.Tips:
-                    retStr = "TipKey";
+                    retStr = "Tips";
                     break;
                 case Actions.ActionEnum.Quit:
-                    retStr = "QuitKey";
+                    retStr = "Quit";
                     break;
                 default:
                     retStr = null;

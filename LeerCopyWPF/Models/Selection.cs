@@ -19,28 +19,33 @@ namespace LeerCopyWPF.Models
         /// </summary>
         public Point EndPt { get; private set; }
 
+
         public Selection()
         {
             StartPt = new Point();
             EndPt = new Point();
         }
 
+
         public void SetStart(Point point)
         {
             StartPt = point;
             EndPt = point;
-        }
+        } // SetStart
+
 
         public void SetStart(double x, double y)
         {
             StartPt = new Point(x, y);
             EndPt = new Point(x, y);
-        }
+        } // SetStart
+
 
         public void Update(Point point)
         {
             EndPt = point;
-        }
+        } // Update
+
 
         public void Update(double x, double y, bool offset)
         {
@@ -52,12 +57,13 @@ namespace LeerCopyWPF.Models
             {
                 EndPt = new Point(x, y);
             }
-        }
+        } // Update
+
 
         public void Reset()
         {
             StartPt = new Point();
             EndPt = new Point();
-        }
+        } // Reset
     }
 }

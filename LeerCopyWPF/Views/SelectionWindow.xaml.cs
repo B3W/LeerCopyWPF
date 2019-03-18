@@ -40,6 +40,7 @@ namespace LeerCopyWPF
         /// </summary>
         private IDictionary<Key, Actions.ActionEnum> keyMappings;
 
+
         public SelectionWindow()
         {
             this.Initialized += SelectionWindow_Initialized;

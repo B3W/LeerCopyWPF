@@ -19,6 +19,7 @@ namespace LeerCopyWPF.Utilities
             internal static extern bool DeleteObject(IntPtr hObject);
         }
 
+
         /// <summary>
         /// Wrapper for creating safe handles from unmanaged handles
         /// Reference: https://stackoverflow.com/a/7035036
@@ -35,8 +36,9 @@ namespace LeerCopyWPF.Utilities
             protected override bool ReleaseHandle()
             {
                 return NativeMethods.DeleteObject(handle);
-            }
+            } // SafeHBitmapHandle
         }
+
 
         /// <summary>
         /// Convert a System.Drawing.Bitmap object to a System.Windows.Media.Imaging.BitmapSource object
@@ -64,7 +66,8 @@ namespace LeerCopyWPF.Utilities
                 }
             }
             return bmSrc;
-        }
+        } // ToBitmapSource
+
 
         /// <summary>
         /// Captures the screen as a bitmap
@@ -91,6 +94,6 @@ namespace LeerCopyWPF.Utilities
                 throw new ApplicationException("BitmapUtilities.CaptureScreen: Unable to convert \'Bitmap\' to \'BitmapSouce\'.");
             }
             return bmSrc;
-        }
+        } // CaptureScreen
     }
 }

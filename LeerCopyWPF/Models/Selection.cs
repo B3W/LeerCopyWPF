@@ -5,56 +5,65 @@ using System.Text;
 
 namespace LeerCopyWPF.Models
 {
+    /// <summary>
+    /// Data structure representing a selection of the screen
+    /// </summary>
     public class Selection
     {
         /// <summary>
         /// Point at which user began selection
         /// </summary>
-        public Point startPt { get; private set; }
+        public Point StartPt { get; private set; }
         /// <summary>
         /// Point at which user ended selection
         /// </summary>
-        public Point endPt { get; private set; }
+        public Point EndPt { get; private set; }
+
 
         public Selection()
         {
-            startPt = new Point();
-            endPt = new Point();
+            StartPt = new Point();
+            EndPt = new Point();
         }
+
 
         public void SetStart(Point point)
         {
-            startPt = point;
-            endPt = point;
-        }
+            StartPt = point;
+            EndPt = point;
+        } // SetStart
+
 
         public void SetStart(double x, double y)
         {
-            startPt = new Point(x, y);
-            endPt = new Point(x, y);
-        }
+            StartPt = new Point(x, y);
+            EndPt = new Point(x, y);
+        } // SetStart
+
 
         public void Update(Point point)
         {
-            endPt = point;
-        }
+            EndPt = point;
+        } // Update
+
 
         public void Update(double x, double y, bool offset)
         {
             if (offset)
             {
-                endPt.Offset(x, y);
+                EndPt.Offset(x, y);
             }
             else
             {
-                endPt = new Point(x, y);
+                EndPt = new Point(x, y);
             }
-        }
+        } // Update
+
 
         public void Reset()
         {
-            startPt = new Point();
-            endPt = new Point();
-        }
+            StartPt = new Point();
+            EndPt = new Point();
+        } // Reset
     }
 }

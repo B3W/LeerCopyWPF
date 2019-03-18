@@ -61,7 +61,7 @@ namespace LeerCopyWPF.Strings.en_US {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to  - Use arrow keys to resize selection.
+        ///   Looks up a localized string similar to  Use arrow keys to resize selection.
         /// </summary>
         public static string ArrowKeysLblStr {
             get {
@@ -120,6 +120,15 @@ namespace LeerCopyWPF.Strings.en_US {
         public static string SaveLblStr {
             get {
                 return ResourceManager.GetString("SaveLblStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  - Select entire screen.
+        /// </summary>
+        public static string SelectAllLblStr {
+            get {
+                return ResourceManager.GetString("SelectAllLblStr", resourceCulture);
             }
         }
         

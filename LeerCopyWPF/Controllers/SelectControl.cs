@@ -7,86 +7,121 @@ using System.Windows.Media;
 
 namespace LeerCopyWPF.Controllers
 {
+    /// <summary>
+    /// Controller logic between the UI and underlying selection data structure
+    /// </summary>
     public class SelectControl
     {
         /// <summary>
         /// Bitmap of the screen
         /// </summary>
-        public BitmapSource bitmap { get; private set; }
+        public BitmapSource Bitmap { get; private set; }
         /// <summary>
         /// Tracks user's selection area
         /// </summary>
-        public Selection selection { get; private set; }
+        public Selection Selection { get; private set; }
         /// <summary>
         /// Determines if user has made a selection
         /// </summary>
-        public bool isSelected { get; private set; }
+        public bool IsSelected { get; private set; }
         /// <summary>
         /// Determines if user is currently making a selection
         /// </summary>
-        public bool isSelecting { get; private set; }
+        public bool IsSelecting { get; private set; }
+
 
         public SelectControl(BitmapSource bm)
         {
-            bitmap = bm;
-            selection = new Selection();
-            isSelecting = false;
-            isSelected = false;
+            Bitmap = bm;
+            Selection = new Selection();
+            IsSelecting = false;
+            IsSelected = false;
         }
+
 
         public void StartSelection(Point start)
         {
-            if (isSelected)
+            if (IsSelected)
             {
-                selection.Update(start);
+                Selection.Update(start);
             } else
             {
-                selection.SetStart(start);
+                Selection.SetStart(start);
             }
-            isSelecting = true;
-        }
+            IsSelecting = true;
+        } // StartSelection
+
 
         public void UpdateSelection(Point point)
         {
-            selection.Update(point);
-        }
+            Selection.Update(point);
+        } // UpdateSelection
+
 
         public void UpdateSelection(double x, double y)
         {
-            if (isSelected && !isSelecting)
+            if (IsSelected && !IsSelecting)
             {
-                selection.Update(x, y, true);
+                Selection.Update(x, y, true);
             }
-        }
+        } // UpdateSelection
+
 
         public void StopSelection(Point point)
         {
-            if (isSelecting && !selection.startPt.Equals(point))
+            if (IsSelecting && !Selection.StartPt.Equals(point))
             {
                 UpdateSelection(point);
-                isSelected = true;
+                IsSelected = true;
             } else
             {
-                isSelected = false;
+                IsSelected = false;
             }
-            isSelecting = false;
-        }
+            IsSelecting = false;
+        } // StopSelection
+
 
         public Rect GetSelectionRect()
         {
-            return new Rect(selection.startPt, selection.endPt);
-        }
+            return new Rect(Selection.StartPt, Selection.EndPt);
+        } // GetSelectionRect
+
 
         public RectangleGeometry GetSelectionGeometry()
         {
-            return new RectangleGeometry(new Rect(selection.startPt, selection.endPt));
-        }
+            return new RectangleGeometry(new Rect(Selection.StartPt, Selection.EndPt));
+        } // GetSelectionGeometry
+
+
+        public void CopySelection()
+        {
+
+        } // CopySelection
+
+
+        public void EditSelection()
+        {
+
+        } // EditSelection
+
+
+        public void SaveSelection()
+        {
+
+        } // SaveSelection
+
+
+        public void MaximizeSelection()
+        {
+
+        } // MaximizeSelection
+
 
         public void ClearSelection()
         {
-            isSelecting = false;
-            isSelected = false;
-            selection.Reset();
-        }
+            IsSelecting = false;
+            IsSelected = false;
+            Selection.Reset();
+        } // ClearSelection
     }
 }

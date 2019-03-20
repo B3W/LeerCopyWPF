@@ -211,7 +211,7 @@ namespace LeerCopyWPF.Controllers
                     eImage.SaveToFile(filePath);
 
                     // Update last save directory
-                    int fileNamePos = filePath.LastIndexOf('\\');
+                    int fileNamePos = filePath.LastIndexOf(System.IO.Path.DirectorySeparatorChar);
                     if (fileNamePos != -1)  // If somehow backslash not found do nothing
                     {
                         string lastSavePath = filePath.Substring(0, fileNamePos + 1);

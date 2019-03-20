@@ -146,10 +146,8 @@ namespace LeerCopyWPF.Controllers
 
                 // Save to temp file
                 EncodedImage eImage = new EncodedImage(finalBitmap, Properties.Settings.Default.DefaultSaveExt);
-                string tmpFilePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + 
-                    System.IO.Path.DirectorySeparatorChar + Application.ResourceAssembly.GetName().Name +
-                    System.IO.Path.DirectorySeparatorChar + "Edit_L33R_Tmp" + Properties.Settings.Default.DefaultSaveExt;
-
+                string tmpFileName = "Edit_L33R_Tmp_" + DateTime.Now.Millisecond;  // Use DateTime to avoid name collisions
+                string tmpFilePath = Properties.Settings.Default.AppDataLoc + tmpFileName + Properties.Settings.Default.DefaultSaveExt;
                 eImage.SaveToFile(tmpFilePath);
 
                 // Open in editor

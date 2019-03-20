@@ -167,7 +167,22 @@ namespace LeerCopyWPF
 
         private void SelectionWindow_Initialized(object sender, EventArgs e)
         {
+            // Capture screen
             bitmapSource = BitmapUtilities.CaptureScreen();
+
+            // Initialize AppData setting
+            try
+            {
+                Properties.Settings.Default.AppDataLoc = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) +
+                        System.IO.Path.DirectorySeparatorChar + Application.ResourceAssembly.GetName().Name + System.IO.Path.DirectorySeparatorChar;
+                Properties.Settings.Default.Save();
+            } catch (PlatformNotSupportedException)
+            {
+                // TODO exception logging
+            } catch (InvalidOperationException)
+            {
+                // TODO exception logging
+            }
         } // SelectionWindow_Initialized
 
 

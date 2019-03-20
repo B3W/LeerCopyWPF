@@ -46,5 +46,8 @@
     <Setting Name="LastSavePath" Type="System.String" Scope="User">
       <Value Profile="(Default)">.</Value>
     </Setting>
+    <Setting Name="DefaultSaveExt" Type="System.String" Scope="User">
+      <Value Profile="(Default)">.bmp</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

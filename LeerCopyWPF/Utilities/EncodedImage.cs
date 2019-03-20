@@ -128,9 +128,27 @@ namespace LeerCopyWPF.Utilities
         /// Saves image to disk at given path in specified encoding
         /// </summary>
         /// <param name="path"></param>
-        public void SaveToFile(string path)
+        public void SaveToFile(string fullPath)
         {
-            using (Stream fStream = new FileStream(path, FileMode.Create))
+            // Remove file name from path
+            int fileNamePos = fullPath.LastIndexOf(Path.DirectorySeparatorChar);
+            string extractedPath = fullPath.Substring(0, fileNamePos + 1);
+
+            // Create the path if it does not exist
+            try
+            {
+                if (!Directory.Exists(extractedPath))
+                {
+                    Directory.CreateDirectory(extractedPath);
+                }
+            } catch (Exception)
+            {
+                // TODO Exception logging
+                throw;
+            }
+
+            // Save file
+            using (Stream fStream = new FileStream(fullPath, FileMode.Create))
             {
                 // Create local deep copy to write to stream
                 BitmapSource clone = Image.Clone();
@@ -151,8 +169,12 @@ namespace LeerCopyWPF.Utilities
         private Nullable<Encoding> StrToEncoding(string str)
         {
             Nullable<Encoding> retEnc;
+
+            // Clean inputted string
+            str = str.Trim('.');
             str = str.ToLower();
 
+            // Determine extension for encoder
             if (str.Equals("bmp"))
             {
                 retEnc = Encoding.BMP;

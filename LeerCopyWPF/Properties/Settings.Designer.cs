@@ -177,5 +177,17 @@ namespace LeerCopyWPF.Properties {
                 this["DefaultSaveExt"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(".")]
+        public string AppDataLoc {
+            get {
+                return ((string)(this["AppDataLoc"]));
+            }
+            set {
+                this["AppDataLoc"] = value;
+            }
+        }
     }
 }

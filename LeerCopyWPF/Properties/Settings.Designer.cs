@@ -165,5 +165,29 @@ namespace LeerCopyWPF.Properties {
                 this["LastSavePath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(".bmp")]
+        public string DefaultSaveExt {
+            get {
+                return ((string)(this["DefaultSaveExt"]));
+            }
+            set {
+                this["DefaultSaveExt"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(".")]
+        public string AppDataLoc {
+            get {
+                return ((string)(this["AppDataLoc"]));
+            }
+            set {
+                this["AppDataLoc"] = value;
+            }
+        }
     }
 }

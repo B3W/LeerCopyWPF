@@ -137,7 +137,33 @@ namespace LeerCopyWPF.Controllers
         /// </summary>
         public void EditSelection()
         {
+            if(!IsSelecting && IsSelected && !Selection.StartPt.Equals(Selection.EndPt))
+            {
+                // Crop bitmap to selection area
+                Rect area = new Rect(Selection.StartPt, Selection.EndPt);
+                CroppedBitmap finalBitmap =
+                    new CroppedBitmap(Bitmap, new Int32Rect((int)area.X, (int)area.Y, (int)area.Width, (int)area.Height));
 
+                // Save to temp file
+                EncodedImage eImage = new EncodedImage(finalBitmap, Properties.Settings.Default.DefaultSaveExt);
+                string tmpFileName = "Edit_L33R_" + DateTime.Now.Ticks;  // Use DateTime to avoid name collisions
+                string tmpFilePath = Properties.Settings.Default.AppDataLoc + tmpFileName + Properties.Settings.Default.DefaultSaveExt;
+                eImage.SaveToFile(tmpFilePath);
+
+                // Open in editor
+                System.Diagnostics.ProcessStartInfo stInfo = new System.Diagnostics.ProcessStartInfo(tmpFilePath)
+                {
+                    Verb = "edit"
+                };
+                try
+                {
+                    System.Diagnostics.Process.Start(stInfo);
+                }
+                catch (Exception)
+                {
+                    // TODO Error logging
+                }
+            }
         } // EditSelection
 
 
@@ -153,7 +179,7 @@ namespace LeerCopyWPF.Controllers
                 Microsoft.Win32.SaveFileDialog saveDialog = new Microsoft.Win32.SaveFileDialog
                 {
                     AddExtension = true,
-                    DefaultExt = ".bmp",
+                    DefaultExt = Properties.Settings.Default.DefaultSaveExt,
                     FileName = "L33R",
                     Filter = "BMP (.bmp)|*.bmp|GIF (.gif)|*.gif|JPEG (.jpg)|*.jpg;*.jpeg|PNG (.png)|*.png|TIFF (.tif)|*.tif;*.tiff|WMP (.wmp)|*.wmp",
                     InitialDirectory = Properties.Settings.Default.LastSavePath,
@@ -183,7 +209,7 @@ namespace LeerCopyWPF.Controllers
                     eImage.SaveToFile(filePath);
 
                     // Update last save directory
-                    int fileNamePos = filePath.LastIndexOf('\\');
+                    int fileNamePos = filePath.LastIndexOf(System.IO.Path.DirectorySeparatorChar);
                     if (fileNamePos != -1)  // If somehow backslash not found do nothing
                     {
                         string lastSavePath = filePath.Substring(0, fileNamePos + 1);

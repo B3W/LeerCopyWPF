@@ -153,5 +153,17 @@ namespace LeerCopyWPF.Properties {
                 this["SelectAll"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(".")]
+        public string LastSavePath {
+            get {
+                return ((string)(this["LastSavePath"]));
+            }
+            set {
+                this["LastSavePath"] = value;
+            }
+        }
     }
 }

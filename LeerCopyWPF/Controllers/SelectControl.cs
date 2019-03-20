@@ -156,10 +156,11 @@ namespace LeerCopyWPF.Controllers
                     DefaultExt = ".bmp",
                     FileName = "L33R",
                     Filter = "BMP (.bmp)|*.bmp|GIF (.gif)|*.gif|JPEG (.jpg)|*.jpg;*.jpeg|PNG (.png)|*.png|TIFF (.tif)|*.tif;*.tiff|WMP (.wmp)|*.wmp",
-                    InitialDirectory = "./", // TODO: Retrieve last save directory from app settings
+                    InitialDirectory = Properties.Settings.Default.LastSavePath,
                     OverwritePrompt = true,
                     Title = "Save Leer"
                 };
+
                 // Show dialog
                 Nullable<bool> res = saveDialog.ShowDialog(owner);
                 if (res == true)
@@ -168,12 +169,27 @@ namespace LeerCopyWPF.Controllers
                     Rect area = new Rect(Selection.StartPt, Selection.EndPt);
                     CroppedBitmap finalBitmap = 
                         new CroppedBitmap(Bitmap, new Int32Rect((int)area.X, (int)area.Y, (int)area.Width, (int)area.Height));
+
                     // Save as requested format
-                    string fileName = saveDialog.FileName;
-                    string[] splitFN = fileName.Split('.');
-                    string extension = splitFN[splitFN.Length - 1]; // Not possible for split array to have 'Length' < 2 w/valid file name
+                    string filePath = saveDialog.FileName;
+                    int extPos = filePath.LastIndexOf('.');  // 'IndexOf' methods more performant than 'Split'
+                    if (extPos == -1)
+                    {
+                        // TODO exception logging
+                        throw new ArgumentException("Invalid filename during save", "fileName");
+                    }
+                    string extension = filePath.Substring(extPos + 1);
                     EncodedImage eImage = new EncodedImage(finalBitmap, extension);
-                    eImage.SaveToFile(fileName);
+                    eImage.SaveToFile(filePath);
+
+                    // Update last save directory
+                    int fileNamePos = filePath.LastIndexOf('\\');
+                    if (fileNamePos != -1)  // If somehow backslash not found do nothing
+                    {
+                        string lastSavePath = filePath.Substring(0, fileNamePos + 1);
+                        Properties.Settings.Default.LastSavePath = lastSavePath;
+                        Properties.Settings.Default.Save();
+                    }
                 }
             }
         } // SaveSelection

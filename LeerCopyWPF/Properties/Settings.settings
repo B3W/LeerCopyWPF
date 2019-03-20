@@ -43,5 +43,8 @@
     <Setting Name="SelectAll" Type="System.String" Scope="User">
       <Value Profile="(Default)">A</Value>
     </Setting>
+    <Setting Name="LastSavePath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">.</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

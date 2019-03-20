@@ -27,11 +27,11 @@ namespace LeerCopyWPF.Properties {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute(@"<?xml version=""1.0"" encoding=""utf-16""?>
 <ArrayOfString xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
-  <string>Copy</string>
-  <string>Edit</string>
-  <string>Save</string>
-  <string>Clear</string>
-  <string>Quit</string>
+  <string>CopyKey</string>
+  <string>EditKey</string>
+  <string>SaveKey</string>
+  <string>ClearKey</string>
+  <string>QuitKey</string>
   <string>Tips</string>
   <string>NewLeer</string>
   <string>SettingsWin</string>
@@ -49,60 +49,60 @@ namespace LeerCopyWPF.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("C")]
-        public string Copy {
+        public string CopyKey {
             get {
-                return ((string)(this["Copy"]));
+                return ((string)(this["CopyKey"]));
             }
             set {
-                this["Copy"] = value;
+                this["CopyKey"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("E")]
-        public string Edit {
+        public string EditKey {
             get {
-                return ((string)(this["Edit"]));
+                return ((string)(this["EditKey"]));
             }
             set {
-                this["Edit"] = value;
+                this["EditKey"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("S")]
-        public string Save {
+        public string SaveKey {
             get {
-                return ((string)(this["Save"]));
+                return ((string)(this["SaveKey"]));
             }
             set {
-                this["Save"] = value;
+                this["SaveKey"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Z")]
-        public string Clear {
+        public string ClearKey {
             get {
-                return ((string)(this["Clear"]));
+                return ((string)(this["ClearKey"]));
             }
             set {
-                this["Clear"] = value;
+                this["ClearKey"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Q")]
-        public string Quit {
+        public string QuitKey {
             get {
-                return ((string)(this["Quit"]));
+                return ((string)(this["QuitKey"]));
             }
             set {
-                this["Quit"] = value;
+                this["QuitKey"] = value;
             }
         }
         
@@ -151,6 +151,18 @@ namespace LeerCopyWPF.Properties {
             }
             set {
                 this["SelectAll"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(".")]
+        public string LastSavePath {
+            get {
+                return ((string)(this["LastSavePath"]));
+            }
+            set {
+                this["LastSavePath"] = value;
             }
         }
     }

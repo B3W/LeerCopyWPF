@@ -107,7 +107,7 @@ namespace LeerCopyWPF
                         break;
                     case Actions.ActionEnum.Save:
                         // Save the selection to disk
-                        selectControl.SaveSelection();
+                        selectControl.SaveSelection(this);
                         break;
                     case Actions.ActionEnum.SelectAll:
                         // Select the entire screen

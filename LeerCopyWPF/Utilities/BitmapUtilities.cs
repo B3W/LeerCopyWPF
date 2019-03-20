@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Media;
@@ -81,11 +82,9 @@ namespace LeerCopyWPF.Utilities
             Bitmap bitmap = null;
             try
             {
-                using (System.IO.MemoryStream outStream = new System.IO.MemoryStream())
+                EncodedImage encodedImage = new EncodedImage(bmSrc, EncodedImage.Encoding.BMP);
+                using (MemoryStream outStream = encodedImage.GetMemoryStream())
                 {
-                    BitmapEncoder enc = new BmpBitmapEncoder();
-                    enc.Frames.Add(BitmapFrame.Create(bmSrc));
-                    enc.Save(outStream);
                     bitmap = new Bitmap(outStream);
                 }
             }
@@ -136,12 +135,13 @@ namespace LeerCopyWPF.Utilities
         {
             try
             {
+                // Crop bitmap to the selected area
                 int x = (int)area.X;
                 int y = (int)area.Y;
                 int width = (int)area.Width;
                 int height = (int)area.Height;
                 BitmapSource croppedBm = new CroppedBitmap(bmSrc, new Int32Rect(x, y, width, height));
-
+                // Use 'Clipboard' class to set image to selected area
                 Clipboard.SetImage(croppedBm);
             }
             catch (ExternalException)

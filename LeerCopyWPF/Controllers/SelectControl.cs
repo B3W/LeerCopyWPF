@@ -1,5 +1,6 @@
 ﻿using LeerCopyWPF.Models;
 using LeerCopyWPF.Utilities;
+using System;
 using System.Windows;
 using System.Collections.Generic;
 using System.Text;
@@ -40,6 +41,10 @@ namespace LeerCopyWPF.Controllers
         }
 
 
+        /// <summary>
+        /// Start new selection or continue previous
+        /// </summary>
+        /// <param name="start"></param>
         public void StartSelection(Point start)
         {
             if (IsSelected)
@@ -53,12 +58,21 @@ namespace LeerCopyWPF.Controllers
         } // StartSelection
 
 
+        /// <summary>
+        /// Update current selection
+        /// </summary>
+        /// <param name="point"></param>
         public void UpdateSelection(Point point)
         {
             Selection.UpdateEnd(point);
         } // UpdateSelection
 
 
+        /// <summary>
+        /// Update current selection
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
         public void UpdateSelection(double x, double y)
         {
             if (IsSelected && !IsSelecting)
@@ -68,6 +82,10 @@ namespace LeerCopyWPF.Controllers
         } // UpdateSelection
 
 
+        /// <summary>
+        /// Stop current selection
+        /// </summary>
+        /// <param name="point"></param>
         public void StopSelection(Point point)
         {
             if (IsSelecting && !Selection.StartPt.Equals(point))
@@ -82,18 +100,29 @@ namespace LeerCopyWPF.Controllers
         } // StopSelection
 
 
+        /// <summary>
+        /// Retrieve rectangle represeneting current selection area
+        /// </summary>
+        /// <returns></returns>
         public Rect GetSelectionRect()
         {
             return new Rect(Selection.StartPt, Selection.EndPt);
         } // GetSelectionRect
 
 
+        /// <summary>
+        /// Retrieve rectangular geometry object representing current selection area
+        /// </summary>
+        /// <returns></returns>
         public RectangleGeometry GetSelectionGeometry()
         {
             return new RectangleGeometry(new Rect(Selection.StartPt, Selection.EndPt));
         } // GetSelectionGeometry
 
 
+        /// <summary>
+        /// Copy current selection to the clipboard
+        /// </summary>
         public void CopySelection()
         {
             if (!IsSelecting && IsSelected && !Selection.StartPt.Equals(Selection.EndPt))
@@ -103,18 +132,72 @@ namespace LeerCopyWPF.Controllers
         } // CopySelection
 
 
+        /// <summary>
+        /// Edit current selection in default text editor
+        /// </summary>
         public void EditSelection()
         {
 
         } // EditSelection
 
 
-        public void SaveSelection()
+        /// <summary>
+        /// Save the current selection to disk
+        /// </summary>
+        /// <param name="owner"></param>
+        public void SaveSelection(Window owner)
         {
+            if (!IsSelecting && IsSelected && !Selection.StartPt.Equals(Selection.EndPt))
+            {
+                // Configure save dialog
+                Microsoft.Win32.SaveFileDialog saveDialog = new Microsoft.Win32.SaveFileDialog
+                {
+                    AddExtension = true,
+                    DefaultExt = ".bmp",
+                    FileName = "L33R",
+                    Filter = "BMP (.bmp)|*.bmp|GIF (.gif)|*.gif|JPEG (.jpg)|*.jpg;*.jpeg|PNG (.png)|*.png|TIFF (.tif)|*.tif;*.tiff|WMP (.wmp)|*.wmp",
+                    InitialDirectory = Properties.Settings.Default.LastSavePath,
+                    OverwritePrompt = true,
+                    Title = "Save Leer"
+                };
 
+                // Show dialog
+                Nullable<bool> res = saveDialog.ShowDialog(owner);
+                if (res == true)
+                {
+                    // Crop bitmap to selection area
+                    Rect area = new Rect(Selection.StartPt, Selection.EndPt);
+                    CroppedBitmap finalBitmap = 
+                        new CroppedBitmap(Bitmap, new Int32Rect((int)area.X, (int)area.Y, (int)area.Width, (int)area.Height));
+
+                    // Save as requested format
+                    string filePath = saveDialog.FileName;
+                    int extPos = filePath.LastIndexOf('.');  // 'IndexOf' methods more performant than 'Split'
+                    if (extPos == -1)
+                    {
+                        // TODO exception logging
+                        throw new ArgumentException("Invalid filename during save", "fileName");
+                    }
+                    string extension = filePath.Substring(extPos + 1);
+                    EncodedImage eImage = new EncodedImage(finalBitmap, extension);
+                    eImage.SaveToFile(filePath);
+
+                    // Update last save directory
+                    int fileNamePos = filePath.LastIndexOf('\\');
+                    if (fileNamePos != -1)  // If somehow backslash not found do nothing
+                    {
+                        string lastSavePath = filePath.Substring(0, fileNamePos + 1);
+                        Properties.Settings.Default.LastSavePath = lastSavePath;
+                        Properties.Settings.Default.Save();
+                    }
+                }
+            }
         } // SaveSelection
 
 
+        /// <summary>
+        /// Select the entire screen
+        /// </summary>
         public void MaximizeSelection()
         {
             IsSelecting = false;
@@ -124,6 +207,9 @@ namespace LeerCopyWPF.Controllers
         } // MaximizeSelection
 
 
+        /// <summary>
+        /// Clear the current selection
+        /// </summary>
         public void ClearSelection()
         {
             IsSelecting = false;

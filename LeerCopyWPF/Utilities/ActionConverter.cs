@@ -13,15 +13,15 @@ namespace LeerCopyWPF.Utilities
         {
             Actions.ActionEnum retEnum;
 
-            if (Key.Equals("Copy"))
+            if (Key.Equals("CopyKey"))
             {
                 retEnum = Actions.ActionEnum.Copy;
             }
-            else if (Key.Equals("Edit"))
+            else if (Key.Equals("EditKey"))
             {
                 retEnum = Actions.ActionEnum.Edit;
             }
-            else if (Key.Equals("Save"))
+            else if (Key.Equals("SaveKey"))
             {
                 retEnum = Actions.ActionEnum.Save;
             }
@@ -29,7 +29,7 @@ namespace LeerCopyWPF.Utilities
             {
                 retEnum = Actions.ActionEnum.SelectAll;
             }
-            else if (Key.Equals("Clear"))
+            else if (Key.Equals("ClearKey"))
             {
                 retEnum = Actions.ActionEnum.Clear;
             }
@@ -37,7 +37,7 @@ namespace LeerCopyWPF.Utilities
             {
                 retEnum = Actions.ActionEnum.Tips;
             }
-            else if (Key.Equals("Quit"))
+            else if (Key.Equals("QuitKey"))
             {
                 retEnum = Actions.ActionEnum.Quit;
             }
@@ -73,22 +73,22 @@ namespace LeerCopyWPF.Utilities
                     retStr = null;
                     break;
                 case Actions.ActionEnum.Copy:
-                    retStr = "Copy";
+                    retStr = "CopyKey";
                     break;
                 case Actions.ActionEnum.Edit:
-                    retStr = "Edit";
+                    retStr = "EditKey";
                     break;
                 case Actions.ActionEnum.Save:
-                    retStr = "Save";
+                    retStr = "SaveKey";
                     break;
                 case Actions.ActionEnum.SelectAll:
                     retStr = "SelectAll";
                     break;
                 case Actions.ActionEnum.Clear:
-                    retStr = "Clear";
+                    retStr = "ClearKey";
                     break;
                 case Actions.ActionEnum.New:
-                    retStr = "NewLeery";
+                    retStr = "NewLeer";
                     break;
                 case Actions.ActionEnum.Settings:
                     retStr = "SettingWin";
@@ -97,7 +97,7 @@ namespace LeerCopyWPF.Utilities
                     retStr = "Tips";
                     break;
                 case Actions.ActionEnum.Quit:
-                    retStr = "Quit";
+                    retStr = "QuitKey";
                     break;
                 default:
                     retStr = null;

@@ -5,6 +5,7 @@ using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -101,26 +102,26 @@ namespace LeerCopyWPF.Utilities
         /// Captures the screen as a bitmap
         /// </summary>
         /// <returns>Screen bitmap converted to BitmapSource object</returns>
-        public static BitmapSource CaptureScreen()
+        public static BitmapSource CaptureScreen(Screen screen)
         {
             BitmapSource bmSrc;
-            int vScreenLeft = (int) SystemParameters.VirtualScreenLeft;
-            int vScreenTop = (int) SystemParameters.VirtualScreenTop;
-            int vScreenWidth = (int) SystemParameters.VirtualScreenWidth;
-            int vScreenHeight = (int) SystemParameters.VirtualScreenHeight;
+            int screenLeft = screen.Bounds.Left;
+            int screenTop = screen.Bounds.Top;
+            int screenWidth = screen.Bounds.Width;
+            int screenHeight = screen.Bounds.Height;
 
-            using (Bitmap bitmap = new Bitmap(vScreenWidth, vScreenHeight, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
+            using (Bitmap bitmap = new Bitmap(screenWidth, screenHeight, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
             {
                 using (Graphics g = Graphics.FromImage(bitmap))
                 {
-                    g.CopyFromScreen(vScreenLeft, vScreenTop, 0, 0, bitmap.Size, CopyPixelOperation.SourceCopy);
+                    g.CopyFromScreen(screenLeft, screenTop, 0, 0, bitmap.Size, CopyPixelOperation.SourceCopy);
                 }
                 bmSrc = ToBitmapSource(bitmap);
             }
             if (bmSrc == null)
             {
                 // TODO exception logging
-                throw new ApplicationException("BitmapUtilities.CaptureScreen: Unable to convert \'Bitmap\' to \'BitmapSouce\'.");
+                throw new ApplicationException("BitmapUtilities.CaptureScreen: Unable to convert \'Bitmap\' to \'BitmapSouce\' for screen " + screen.DeviceName);
             }
             return bmSrc;
         } // CaptureScreen
@@ -142,7 +143,7 @@ namespace LeerCopyWPF.Utilities
                 int height = (int)area.Height;
                 BitmapSource croppedBm = new CroppedBitmap(bmSrc, new Int32Rect(x, y, width, height));
                 // Use 'Clipboard' class to set image to selected area
-                Clipboard.SetImage(croppedBm);
+                System.Windows.Clipboard.SetImage(croppedBm);
             }
             catch (ExternalException)
             {

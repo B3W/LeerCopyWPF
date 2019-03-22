@@ -189,5 +189,53 @@ namespace LeerCopyWPF.Properties {
                 this["AppDataLoc"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double MainWinX {
+            get {
+                return ((double)(this["MainWinX"]));
+            }
+            set {
+                this["MainWinX"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double MainWinY {
+            get {
+                return ((double)(this["MainWinY"]));
+            }
+            set {
+                this["MainWinY"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("150")]
+        public double MainWinHeight {
+            get {
+                return ((double)(this["MainWinHeight"]));
+            }
+            set {
+                this["MainWinHeight"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("250")]
+        public double MainWinWidth {
+            get {
+                return ((double)(this["MainWinWidth"]));
+            }
+            set {
+                this["MainWinWidth"] = value;
+            }
+        }
     }
 }

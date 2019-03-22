@@ -119,32 +119,66 @@
   </resheader>
   <data name="ArrowKeysLblStr" xml:space="preserve">
     <value> Use arrow keys to resize selection</value>
+    <comment>Tip String</comment>
+  </data>
+  <data name="CaptureOptionsStr" xml:space="preserve">
+    <value>CAPTURE OPTIONS</value>
+    <comment>Main Window String</comment>
   </data>
   <data name="ClearLblStr" xml:space="preserve">
     <value> - Clear selection</value>
+    <comment>Tip String</comment>
   </data>
   <data name="CopyLblStr" xml:space="preserve">
     <value> - Copy selection to clipboard</value>
+    <comment>Tip String</comment>
   </data>
   <data name="EditLblStr" xml:space="preserve">
     <value> - Edit selection with default editor</value>
+    <comment>Tip String</comment>
+  </data>
+  <data name="MenuAboutStr" xml:space="preserve">
+    <value>About</value>
+    <comment>Menu String</comment>
+  </data>
+  <data name="MenuExitStr" xml:space="preserve">
+    <value>Exit</value>
+    <comment>Menu String</comment>
+  </data>
+  <data name="MenuFileStr" xml:space="preserve">
+    <value>File</value>
+    <comment>Menu String</comment>
+  </data>
+  <data name="MenuSettingsStr" xml:space="preserve">
+    <value>Settings</value>
+    <comment>Menu String</comment>
   </data>
   <data name="NewLeerLblStr" xml:space="preserve">
     <value> - Take new Leer</value>
+    <comment>Tip String</comment>
   </data>
   <data name="QuitLblStr" xml:space="preserve">
-    <value> - Exit Leer Copy</value>
+    <value> - Quit Selection</value>
+    <comment>Tip String</comment>
   </data>
   <data name="SaveLblStr" xml:space="preserve">
     <value> - Save selection to file</value>
+    <comment>Tip String</comment>
   </data>
   <data name="SelectAllLblStr" xml:space="preserve">
     <value> - Select entire screen</value>
+    <comment>Tip String</comment>
+  </data>
+  <data name="SelectCaptureBtnStr" xml:space="preserve">
+    <value>Selection Capture</value>
+    <comment>Main Window String</comment>
   </data>
   <data name="SettingsWinLblStr" xml:space="preserve">
     <value> - Open settings</value>
+    <comment>Tip String</comment>
   </data>
   <data name="TipsLblStr" xml:space="preserve">
     <value> - Toggle tips on/off</value>
+    <comment>Tip String</comment>
   </data>
 </root>

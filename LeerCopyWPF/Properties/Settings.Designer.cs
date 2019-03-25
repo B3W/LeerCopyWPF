@@ -36,6 +36,7 @@ namespace LeerCopyWPF.Properties {
   <string>NewLeer</string>
   <string>SettingsWin</string>
   <string>SelectAll</string>
+  <string>SwitchScreenKey</string>
 </ArrayOfString>")]
         public string[] KeyNames {
             get {
@@ -211,6 +212,18 @@ namespace LeerCopyWPF.Properties {
             }
             set {
                 this["MainWinY"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Tab")]
+        public string SwitchScreenKey {
+            get {
+                return ((string)(this["SwitchScreenKey"]));
+            }
+            set {
+                this["SwitchScreenKey"] = value;
             }
         }
     }

@@ -20,6 +20,7 @@ namespace LeerCopyWPF.Enums
             New,
             Settings,
             Tips,
+            Switch,
             Quit
         }
     }

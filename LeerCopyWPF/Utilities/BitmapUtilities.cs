@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32.SafeHandles;
+﻿using LeerCopyWPF.Models;
+using Microsoft.Win32.SafeHandles;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -98,11 +99,33 @@ namespace LeerCopyWPF.Utilities
         } // ToBitmap
 
 
+        public static BitmapSource CaptureRect(Rect bounds)
+        {
+            BitmapSource bmSrc;
+
+            using (Bitmap bitmap = new Bitmap((int)bounds.Width, (int)bounds.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
+            {
+                using (Graphics g = Graphics.FromImage(bitmap))
+                {
+                    g.CopyFromScreen((int)bounds.Left, (int)bounds.Top, 0, 0, bitmap.Size, CopyPixelOperation.SourceCopy);
+                }
+                bmSrc = ToBitmapSource(bitmap);
+            }
+            if (bmSrc == null)
+            {
+                // TODO exception logging
+                throw new ApplicationException("BitmapUtilities.CaptureRect: Unable to convert \'Bitmap\' to \'BitmapSouce\'");
+            }
+
+            return bmSrc;
+        }
+
+
         /// <summary>
         /// Captures the screen as a bitmap
         /// </summary>
         /// <returns>Screen bitmap converted to BitmapSource object</returns>
-        public static BitmapSource CaptureScreen(Screen screen)
+        public static ExtBitmapSource CaptureScreen(Screen screen)
         {
             BitmapSource bmSrc;
             int screenLeft = screen.Bounds.Left;
@@ -123,8 +146,27 @@ namespace LeerCopyWPF.Utilities
                 // TODO exception logging
                 throw new ApplicationException("BitmapUtilities.CaptureScreen: Unable to convert \'Bitmap\' to \'BitmapSouce\' for screen " + screen.DeviceName);
             }
-            return bmSrc;
+
+            return new ExtBitmapSource(bmSrc, new Rect(screenLeft, screenTop, screenWidth, screenHeight));
         } // CaptureScreen
+
+
+        /// <summary>
+        /// Returns sorted list all screens as bitmaps
+        /// </summary>
+        /// <returns>List of BitmapSource objects representing each screen</returns>
+        public static List<ExtBitmapSource> CaptureScreens()
+        {
+            List<ExtBitmapSource> captureList = new List<ExtBitmapSource>();
+
+            foreach (Screen screen in Screen.AllScreens)
+            {
+                captureList.Add(CaptureScreen(screen));
+            }
+
+            captureList.Sort();
+            return captureList;
+        } // CaptureScreens
 
 
         /// <summary>

@@ -177,6 +177,10 @@
     <value> - Open settings</value>
     <comment>Tip String</comment>
   </data>
+  <data name="SwitchLblStr" xml:space="preserve">
+    <value> - Switch screens</value>
+    <comment>Tip String</comment>
+  </data>
   <data name="TipsLblStr" xml:space="preserve">
     <value> - Toggle tips on/off</value>
     <comment>Tip String</comment>

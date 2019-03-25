@@ -196,6 +196,15 @@ namespace LeerCopyWPF.Strings.en_US {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to  - Switch screens.
+        /// </summary>
+        public static string SwitchLblStr {
+            get {
+                return ResourceManager.GetString("SwitchLblStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to  - Toggle tips on/off.
         /// </summary>
         public static string TipsLblStr {

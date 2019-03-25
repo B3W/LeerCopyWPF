@@ -53,6 +53,7 @@
     <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
@@ -63,6 +64,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Views\MainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\SelectionWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -73,11 +78,15 @@
     </Compile>
     <Compile Include="Controllers\SelectControl.cs" />
     <Compile Include="Enums\Actions.cs" />
+    <Compile Include="Models\ExtBitmapSource.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Utilities\ActionConverter.cs" />
     <Compile Include="Utilities\BitmapUtilities.cs" />
     <Compile Include="Models\Selection.cs" />
     <Compile Include="Utilities\EncodedImage.cs" />
+    <Compile Include="Views\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\SelectionWindow.xaml.cs">
       <DependentUpon>SelectionWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

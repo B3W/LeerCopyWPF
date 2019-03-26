@@ -50,26 +50,45 @@ namespace LeerCopyWPF.Utilities
         /// </summary>
         /// <param name="bitmap">Bitmap to convert</param>
         /// <returns>BitmapSource representing original bitmap</returns>
-        public static BitmapSource ToBitmapSource(Bitmap bitmap)
+        public static BitmapSource BitmapToBitmapSource(Bitmap bitmap)
         {
             BitmapSource bmSrc;
-            IntPtr hBitmap = bitmap.GetHbitmap();
-            SafeHBitmapHandle safeHBitmapHandle = new SafeHBitmapHandle(hBitmap, true);
+            System.Drawing.Imaging.BitmapData bmpData = null;
 
-            using (safeHBitmapHandle)
+            if (bitmap == null)
             {
-                try
+                throw new ArgumentNullException("bitmap");
+            }
+
+            try
+            {
+                Rectangle bmpRect = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
+                bmpData = bitmap.LockBits(bmpRect, System.Drawing.Imaging.ImageLockMode.ReadOnly, bitmap.PixelFormat);
+                bmSrc = BitmapSource.Create(
+                    bitmap.Width,
+                    bitmap.Height,
+                    bitmap.HorizontalResolution,
+                    bitmap.VerticalResolution,
+                    PixelFormats.Bgra32,
+                    null,
+                    bmpData.Scan0,
+                    bmpData.Stride * bmpData.Height,
+                    bmpData.Stride
+                    );
+            }
+            catch (Exception)
+            {
+                // TODO: Exception logging
+                throw;
+            }
+            finally
+            {
+                if (bmpData != null)
                 {
-                    bmSrc = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
-                            hBitmap,
-                            IntPtr.Zero,
-                            Int32Rect.Empty,
-                            BitmapSizeOptions.FromEmptyOptions());
-                } catch
-                {
-                    bmSrc = null;
+                    bitmap.UnlockBits(bmpData);
                 }
             }
+
             return bmSrc;
         } // ToBitmapSource
 
@@ -79,7 +98,7 @@ namespace LeerCopyWPF.Utilities
         /// </summary>
         /// <param name="bmSrc"></param>
         /// <returns></returns>
-        public static Bitmap ToBitmap(BitmapSource bmSrc)
+        public static Bitmap BitmapSourceToBitmap(BitmapSource bmSrc)
         {
             Bitmap bitmap = null;
             try
@@ -109,7 +128,7 @@ namespace LeerCopyWPF.Utilities
                 {
                     g.CopyFromScreen((int)bounds.Left, (int)bounds.Top, 0, 0, bitmap.Size, CopyPixelOperation.SourceCopy);
                 }
-                bmSrc = ToBitmapSource(bitmap);
+                bmSrc = BitmapToBitmapSource(bitmap);
             }
             if (bmSrc == null)
             {
@@ -139,7 +158,7 @@ namespace LeerCopyWPF.Utilities
                 {
                     g.CopyFromScreen(screenLeft, screenTop, 0, 0, bitmap.Size, CopyPixelOperation.SourceCopy);
                 }
-                bmSrc = ToBitmapSource(bitmap);
+                bmSrc = BitmapToBitmapSource(bitmap);
             }
             if (bmSrc == null)
             {
@@ -147,7 +166,8 @@ namespace LeerCopyWPF.Utilities
                 throw new ApplicationException("BitmapUtilities.CaptureScreen: Unable to convert \'Bitmap\' to \'BitmapSouce\' for screen " + screen.DeviceName);
             }
 
-            return new ExtBitmapSource(bmSrc, new Rect(screenLeft, screenTop, screenWidth, screenHeight));
+            Rect scrBounds = new Rect(screenLeft, screenTop, screenWidth, screenHeight);
+            return new ExtBitmapSource(bmSrc, scrBounds);
         } // CaptureScreen
 
 
@@ -174,18 +194,12 @@ namespace LeerCopyWPF.Utilities
         /// </summary>
         /// <param name="bm"></param>
         /// <returns>True on success, false otherwise</returns>
-        public static bool CopyToClipboard(BitmapSource bmSrc, Rect area)
+        public static bool CopyToClipboard(BitmapSource bmSrc)
         {
             try
             {
-                // Crop bitmap to the selected area
-                int x = (int)area.X;
-                int y = (int)area.Y;
-                int width = (int)area.Width;
-                int height = (int)area.Height;
-                BitmapSource croppedBm = new CroppedBitmap(bmSrc, new Int32Rect(x, y, width, height));
                 // Use 'Clipboard' class to set image to selected area
-                System.Windows.Clipboard.SetImage(croppedBm);
+                System.Windows.Clipboard.SetImage(bmSrc);
             }
             catch (ExternalException)
             {
@@ -194,5 +208,19 @@ namespace LeerCopyWPF.Utilities
             }
             return false;
         } // CopyToClipboard
+
+
+        public static CroppedBitmap GetCroppedBitmap(BitmapSource src, Rect area)
+        {
+            // Determine normalization factors
+            double factorX = src.PixelWidth / src.Width;
+            double factorY = src.PixelHeight / src.Height;
+            // Create normalized selection area
+            Int32Rect convertedArea = new Int32Rect(
+                (int)Math.Round(area.X * factorX), (int)Math.Round(area.Y * factorY),
+                (int)Math.Round(area.Width * factorX), (int)Math.Round(area.Height * factorY));
+            // Create normalized cropped bitmap
+            return new CroppedBitmap(src, convertedArea);
+        }
     }
 }

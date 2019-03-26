@@ -118,6 +118,11 @@ namespace LeerCopyWPF.Utilities
         } // ToBitmap
 
 
+        /// <summary>
+        /// Captures portion of the screen represented by passed in Rect
+        /// </summary>
+        /// <param name="bounds"></param>
+        /// <returns></returns>
         public static BitmapSource CaptureRect(Rect bounds)
         {
             BitmapSource bmSrc;
@@ -137,7 +142,7 @@ namespace LeerCopyWPF.Utilities
             }
 
             return bmSrc;
-        }
+        } // CaptureRect
 
 
         /// <summary>
@@ -210,6 +215,12 @@ namespace LeerCopyWPF.Utilities
         } // CopyToClipboard
 
 
+        /// <summary>
+        /// Crops inputted BitmapSource to specified Rect
+        /// </summary>
+        /// <param name="src"></param>
+        /// <param name="area"></param>
+        /// <returns></returns>
         public static CroppedBitmap GetCroppedBitmap(BitmapSource src, Rect area)
         {
             // Determine normalization factors
@@ -221,6 +232,6 @@ namespace LeerCopyWPF.Utilities
                 (int)Math.Round(area.Width * factorX), (int)Math.Round(area.Height * factorY));
             // Create normalized cropped bitmap
             return new CroppedBitmap(src, convertedArea);
-        }
+        } // GetCroppedBitmap
     }
 }

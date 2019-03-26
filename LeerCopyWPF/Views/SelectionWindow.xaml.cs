@@ -47,9 +47,13 @@ namespace LeerCopyWPF
         /// Flag to prevent loaded event from firing multiple times
         /// </summary>
         private bool winLoaded = false;
-
+        /// <summary>
+        /// Bounds of the screen this window is placed on
+        /// </summary>
         private Rect screenBounds;
-
+        /// <summary>
+        /// Event for signaling the MainWindow
+        /// </summary>
         public event EventHandler SignalMain;
 
         public SelectionWindow(Rect bounds, ref bool switchFlag, bool switchValid)
@@ -78,6 +82,9 @@ namespace LeerCopyWPF
         } // SelectionWindow
 
 
+        /// <summary>
+        /// Initialize key bindings
+        /// </summary>
         private void InitKeyMappings()
         {
             // Retrieve app settings
@@ -100,18 +107,27 @@ namespace LeerCopyWPF
         } // InitKeyMappings
 
 
+        /// <summary>
+        /// 'Repaint' the updated portion of the selected image
+        /// </summary>
         private void UpdateDisplayedImage()
         {
             SelectionImg.Clip = selectControl.GetSelectionGeometry();
         } // UpdateDisplayedImage
 
 
+        /// <summary>
+        /// Raise the event to signal MainWindow
+        /// </summary>
         private void RaiseSignal()
         {
             this.SignalMain?.Invoke(this, EventArgs.Empty);
         } // RaiseSignal
 
 
+        /// <summary>
+        /// Switch screen if possible
+        /// </summary>
         private void SwitchScreens()
         {
             if (switchValid)

@@ -22,7 +22,7 @@ namespace LeerCopyWPF.Views
         /// <summary>
         /// All screens in user's environment
         /// </summary>
-        private List<ExtBitmapSource> screens;
+        private List<SimpleScreen> screens;
         /// <summary>
         /// Currently displayed screen for capture
         /// </summary>

@@ -49,6 +49,10 @@ namespace LeerCopyWPF.Utilities
             {
                 retEnum = Actions.ActionEnum.Settings;
             }
+            else if (Key.Equals("SwitchScreenKey"))
+            {
+                retEnum = Actions.ActionEnum.Switch;
+            }
             else
             {
                 retEnum = Actions.ActionEnum.Invalid;
@@ -95,6 +99,9 @@ namespace LeerCopyWPF.Utilities
                     break;
                 case Actions.ActionEnum.Tips:
                     retStr = "Tips";
+                    break;
+                case Actions.ActionEnum.Switch:
+                    retStr = "SwitchScreenKey";
                     break;
                 case Actions.ActionEnum.Quit:
                     retStr = "QuitKey";

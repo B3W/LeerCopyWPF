@@ -70,6 +70,15 @@ namespace LeerCopyWPF.Strings.en_US {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to CAPTURE OPTIONS.
+        /// </summary>
+        public static string CaptureOptionsStr {
+            get {
+                return ResourceManager.GetString("CaptureOptionsStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to  - Clear selection.
         /// </summary>
         public static string ClearLblStr {
@@ -97,6 +106,42 @@ namespace LeerCopyWPF.Strings.en_US {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to About.
+        /// </summary>
+        public static string MenuAboutStr {
+            get {
+                return ResourceManager.GetString("MenuAboutStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exit.
+        /// </summary>
+        public static string MenuExitStr {
+            get {
+                return ResourceManager.GetString("MenuExitStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File.
+        /// </summary>
+        public static string MenuFileStr {
+            get {
+                return ResourceManager.GetString("MenuFileStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings.
+        /// </summary>
+        public static string MenuSettingsStr {
+            get {
+                return ResourceManager.GetString("MenuSettingsStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to  - Take new Leer.
         /// </summary>
         public static string NewLeerLblStr {
@@ -106,7 +151,7 @@ namespace LeerCopyWPF.Strings.en_US {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to  - Exit Leer Copy.
+        ///   Looks up a localized string similar to  - Quit Selection.
         /// </summary>
         public static string QuitLblStr {
             get {
@@ -133,11 +178,29 @@ namespace LeerCopyWPF.Strings.en_US {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Selection Capture.
+        /// </summary>
+        public static string SelectCaptureBtnStr {
+            get {
+                return ResourceManager.GetString("SelectCaptureBtnStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to  - Open settings.
         /// </summary>
         public static string SettingsWinLblStr {
             get {
                 return ResourceManager.GetString("SettingsWinLblStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  - Switch screens.
+        /// </summary>
+        public static string SwitchLblStr {
+            get {
+                return ResourceManager.GetString("SwitchLblStr", resourceCulture);
             }
         }
         

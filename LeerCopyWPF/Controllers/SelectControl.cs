@@ -18,6 +18,8 @@ namespace LeerCopyWPF.Controllers
         /// Bitmap of the screen
         /// </summary>
         public BitmapSource Bitmap { get; private set; }
+
+        public Rect ScreenBounds { get; private set; }
         /// <summary>
         /// Tracks user's selection area
         /// </summary>
@@ -32,9 +34,10 @@ namespace LeerCopyWPF.Controllers
         public bool IsSelecting { get; private set; }
 
 
-        public SelectControl(BitmapSource bm)
+        public SelectControl(BitmapSource bm, Rect scrBounds)
         {
             Bitmap = bm;
+            ScreenBounds = scrBounds;
             Selection = new Selection();
             IsSelecting = false;
             IsSelected = false;
@@ -127,7 +130,7 @@ namespace LeerCopyWPF.Controllers
         {
             if (!IsSelecting && IsSelected && !Selection.StartPt.Equals(Selection.EndPt))
             {
-                BitmapUtilities.CopyToClipboard(Bitmap, new Rect(Selection.StartPt, Selection.EndPt));
+                BitmapUtilities.CopyToClipboard(BitmapUtilities.GetCroppedBitmap(Bitmap, new Rect(Selection.StartPt, Selection.EndPt)));
             }
         } // CopySelection
 
@@ -139,10 +142,8 @@ namespace LeerCopyWPF.Controllers
         {
             if(!IsSelecting && IsSelected && !Selection.StartPt.Equals(Selection.EndPt))
             {
-                // Crop bitmap to selection area
-                Rect area = new Rect(Selection.StartPt, Selection.EndPt);
-                CroppedBitmap finalBitmap =
-                    new CroppedBitmap(Bitmap, new Int32Rect((int)area.X, (int)area.Y, (int)area.Width, (int)area.Height));
+                // Crop bitmap to selection area 
+                CroppedBitmap finalBitmap = BitmapUtilities.GetCroppedBitmap(Bitmap, new Rect(Selection.StartPt, Selection.EndPt));
 
                 // Save to temp file
                 EncodedImage eImage = new EncodedImage(finalBitmap, Properties.Settings.Default.DefaultSaveExt);
@@ -192,9 +193,7 @@ namespace LeerCopyWPF.Controllers
                 if (res == true)
                 {
                     // Crop bitmap to selection area
-                    Rect area = new Rect(Selection.StartPt, Selection.EndPt);
-                    CroppedBitmap finalBitmap = 
-                        new CroppedBitmap(Bitmap, new Int32Rect((int)area.X, (int)area.Y, (int)area.Width, (int)area.Height));
+                    CroppedBitmap finalBitmap = BitmapUtilities.GetCroppedBitmap(Bitmap, new Rect(Selection.StartPt, Selection.EndPt));
 
                     // Save as requested format
                     string filePath = saveDialog.FileName;

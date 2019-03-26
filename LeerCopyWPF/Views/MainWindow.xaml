@@ -1,0 +1,69 @@
+﻿<Window x:Name="MainWin" x:Class="LeerCopyWPF.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:resx="clr-namespace:LeerCopyWPF.Strings.en_US"
+        xmlns:local="clr-namespace:LeerCopyWPF.Views"
+        mc:Ignorable="d"
+        Title="Leer Copy" SizeToContent="WidthAndHeight"
+        MinHeight="150" MinWidth="250">
+    <Window.Resources>
+        <Style x:Name="TxtBlkStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Foreground" Value="#FF000000"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+        <Style x:Name="BtnStyle" TargetType="Button">
+            <Setter Property="Margin" Value="5,5,5,5"/>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <!-- Main grid definitions -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- App menu -->
+        <Menu Name="MainMenu" Grid.Row="0">
+            <MenuItem Header="{x:Static resx:Resources.MenuFileStr}">
+                <MenuItem Header="{x:Static resx:Resources.MenuSettingsStr}"/>
+                <Separator/>
+                <MenuItem Header="{x:Static resx:Resources.MenuExitStr}" Click="ExitMenuItem_Click"/>
+            </MenuItem>
+            <MenuItem Header="{x:Static resx:Resources.MenuAboutStr}">
+                
+            </MenuItem>
+        </Menu>
+        
+        <!-- Selection mode group box -->
+        <GroupBox Header="{x:Static resx:Resources.CaptureOptionsStr}"
+                  Grid.Row="1" Margin="5,5,5,5">
+            <Grid Name="CaptureOptGrid">
+                <!-- Grid initializations -->
+                <Grid.ColumnDefinitions>
+                    <!-- Add columns with growing functionality-->
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <!-- Add rows with growing functionality -->
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Grid content -->
+                <!-- Selection capture mode -->
+                <Button Name="SelectCaptureBtn" Grid.Row="0" Grid.Column="0"
+                        TabIndex="1" ToolTip="Select Area of Screen to Capture"
+                        Click="SelectCaptureBtn_Click">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal" >
+                            <!-- Populate with icons later -->
+                            <TextBlock Text="{x:Static resx:Resources.SelectCaptureBtnStr}"/>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+            </Grid>
+        </GroupBox>
+    </Grid>
+</Window>

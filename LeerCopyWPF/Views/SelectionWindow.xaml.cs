@@ -30,34 +30,61 @@ namespace LeerCopyWPF
         /// <summary>
         /// Bitmap of the screen
         /// </summary>
-        private BitmapSource bitmapSource;
-        /// <summary>
-        /// Guard against load firing multiple times
-        /// </summary>
-        private static bool loaded = false;
+        private BitmapSource bitmap;
         /// <summary>
         /// Dictionary for quick lookup of key mappings
         /// </summary>
         private IDictionary<Key, Actions.ActionEnum> keyMappings;
+        /// <summary>
+        /// Flag to set when screen switch requested
+        /// </summary>
+        private bool switchFlag;
+        /// <summary>
+        /// Flag indicating whether switch is possible
+        /// </summary>
+        private bool switchValid;
+        /// <summary>
+        /// Flag to prevent loaded event from firing multiple times
+        /// </summary>
+        private bool winLoaded = false;
+        /// <summary>
+        /// Bounds of the screen this window is placed on
+        /// </summary>
+        private Rect screenBounds;
+        /// <summary>
+        /// Event for signaling the MainWindow
+        /// </summary>
+        public event EventHandler SignalMain;
 
-
-        public SelectionWindow()
+        public SelectionWindow(Rect bounds, ref bool switchFlag, bool switchValid)
         {
-            this.Initialized += SelectionWindow_Initialized;
+            // Register window lifetime events
             this.Loaded += SelectionWindow_Loaded;
 
             InitializeComponent();
 
-            SelectionImg.Clip = new RectangleGeometry();
-            SelectionImg.Visibility = Visibility.Visible;
+            this.switchFlag = switchFlag;
+            this.switchValid = switchValid;
+            this.screenBounds = bounds;
 
+            // Place form on correct screen
+            this.Left = bounds.Left;
+            this.Top = bounds.Top;
+
+            // Bind keys to actions
+            InitKeyMappings();
+
+            // Register event handlers
             this.PreviewKeyDown += SelectionWindow_PreviewKeyDown;
             this.PreviewMouseLeftButtonDown += SelectionWindow_MouseLeftButtonDown;
             this.PreviewMouseLeftButtonUp += SelectionWindow_MouseLeftButtonUp;
             this.PreviewMouseMove += SelectionWindow_MouseMove;
         } // SelectionWindow
 
-        
+
+        /// <summary>
+        /// Initialize key bindings
+        /// </summary>
         private void InitKeyMappings()
         {
             // Retrieve app settings
@@ -71,19 +98,65 @@ namespace LeerCopyWPF
                 try
                 {
                     keyMappings.Add((Key)converter.ConvertFromString((string)settings[name]), ActionConverter.KeyStrToEnum(name));
-                } catch (SettingsPropertyNotFoundException e)
+                } catch (SettingsPropertyNotFoundException)
                 {
                     // TODO exception logging
-                    throw e;
+                    throw;
                 }
             }
         } // InitKeyMappings
 
 
+        /// <summary>
+        /// 'Repaint' the updated portion of the selected image
+        /// </summary>
         private void UpdateDisplayedImage()
         {
             SelectionImg.Clip = selectControl.GetSelectionGeometry();
         } // UpdateDisplayedImage
+
+
+        /// <summary>
+        /// Raise the event to signal MainWindow
+        /// </summary>
+        private void RaiseSignal()
+        {
+            this.SignalMain?.Invoke(this, EventArgs.Empty);
+        } // RaiseSignal
+
+
+        /// <summary>
+        /// Switch screen if possible
+        /// </summary>
+        private void SwitchScreens()
+        {
+            if (switchValid)
+            {
+                switchFlag = true;
+                this.Hide();
+                RaiseSignal();
+            }
+        } // SwitchScreens
+
+
+        private void SelectionWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (!winLoaded)
+            {
+                // Capture screen
+                bitmap = BitmapUtilities.CaptureRect(screenBounds);
+
+                // Initialize user selection view
+                ScreenImg.Source = bitmap;
+                SelectionImg.Source = bitmap;
+                SelectionImg.Clip = new RectangleGeometry();
+                SelectionImg.Visibility = Visibility.Visible;
+
+                selectControl = new SelectControl(bitmap, screenBounds);
+
+                winLoaded = true;
+            }
+        } // SelectionWindow_Loaded
 
 
         private void SelectionWindow_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -131,8 +204,13 @@ namespace LeerCopyWPF
                         // Show/Hide tip labels
                         LabelPanel.Visibility = (LabelPanel.Visibility == Visibility.Visible) ? Visibility.Hidden : Visibility.Visible;
                         break;
+                    case Actions.ActionEnum.Switch:
+                        SwitchScreens();
+                        break;
                     case Actions.ActionEnum.Quit:
-                        // Close application
+                        // Quit selection
+                        switchFlag = false;
+                        RaiseSignal();
                         this.Close();
                         break;
                     default:
@@ -163,40 +241,5 @@ namespace LeerCopyWPF
                 UpdateDisplayedImage();
             }
         } // SelectionWindow_MouseMove
-
-
-        private void SelectionWindow_Initialized(object sender, EventArgs e)
-        {
-            // Capture screen
-            bitmapSource = BitmapUtilities.CaptureScreen();
-
-            // Initialize AppData setting
-            try
-            {
-                Properties.Settings.Default.AppDataLoc = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) +
-                        System.IO.Path.DirectorySeparatorChar + Application.ResourceAssembly.GetName().Name + System.IO.Path.DirectorySeparatorChar;
-                Properties.Settings.Default.Save();
-            } catch (PlatformNotSupportedException)
-            {
-                // TODO exception logging
-            } catch (InvalidOperationException)
-            {
-                // TODO exception logging
-            }
-        } // SelectionWindow_Initialized
-
-
-        private void SelectionWindow_Loaded(object sender, RoutedEventArgs e)
-        {
-            if (!loaded)
-            {
-                ScreenImg.Source = bitmapSource;
-                SelectionImg.Source = bitmapSource;
-                selectControl = new SelectControl(bitmapSource);
-                InitKeyMappings();
-
-                loaded = true;
-            }
-        } // SelectionWindow_Loaded
     }
 }

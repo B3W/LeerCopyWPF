@@ -81,7 +81,7 @@
     </Compile>
     <Compile Include="Controllers\SelectControl.cs" />
     <Compile Include="Enums\Actions.cs" />
-    <Compile Include="Models\ExtBitmapSource.cs" />
+    <Compile Include="Models\SimpleScreen.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Utilities\ActionConverter.cs" />
     <Compile Include="Utilities\BitmapUtilities.cs" />

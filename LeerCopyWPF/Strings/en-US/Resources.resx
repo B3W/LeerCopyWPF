@@ -153,10 +153,6 @@
     <value>Settings</value>
     <comment>Menu String</comment>
   </data>
-  <data name="NewLeerLblStr" xml:space="preserve">
-    <value> - Take new Leer</value>
-    <comment>Tip String</comment>
-  </data>
   <data name="QuitLblStr" xml:space="preserve">
     <value> - Quit Selection</value>
     <comment>Tip String</comment>

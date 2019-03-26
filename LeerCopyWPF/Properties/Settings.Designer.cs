@@ -25,30 +25,6 @@ namespace LeerCopyWPF.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute(@"<?xml version=""1.0"" encoding=""utf-16""?>
-<ArrayOfString xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
-  <string>CopyKey</string>
-  <string>EditKey</string>
-  <string>SaveKey</string>
-  <string>ClearKey</string>
-  <string>QuitKey</string>
-  <string>Tips</string>
-  <string>NewLeer</string>
-  <string>SettingsWin</string>
-  <string>SelectAll</string>
-  <string>SwitchScreenKey</string>
-</ArrayOfString>")]
-        public string[] KeyNames {
-            get {
-                return ((string[])(this["KeyNames"]));
-            }
-            set {
-                this["KeyNames"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("C")]
         public string CopyKey {
             get {
@@ -116,18 +92,6 @@ namespace LeerCopyWPF.Properties {
             }
             set {
                 this["Tips"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("N")]
-        public string NewLeer {
-            get {
-                return ((string)(this["NewLeer"]));
-            }
-            set {
-                this["NewLeer"] = value;
             }
         }
         
@@ -224,6 +188,29 @@ namespace LeerCopyWPF.Properties {
             }
             set {
                 this["SwitchScreenKey"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(@"<?xml version=""1.0"" encoding=""utf-16""?>
+<ArrayOfString xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
+  <string>CopyKey</string>
+  <string>EditKey</string>
+  <string>SaveKey</string>
+  <string>ClearKey</string>
+  <string>QuitKey</string>
+  <string>Tips</string>
+  <string>SettingsWin</string>
+  <string>SelectAll</string>
+  <string>SwitchScreenKey</string>
+</ArrayOfString>")]
+        public string[] KeyNames {
+            get {
+                return ((string[])(this["KeyNames"]));
+            }
+            set {
+                this["KeyNames"] = value;
             }
         }
     }

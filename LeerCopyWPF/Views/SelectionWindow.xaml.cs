@@ -136,7 +136,7 @@ namespace LeerCopyWPF
                 SelectionImg.Clip = new RectangleGeometry();
                 SelectionImg.Visibility = Visibility.Visible;
 
-                selectControl = new SelectControl(bitmap);
+                selectControl = new SelectControl(bitmap, screenBounds);
 
                 winLoaded = true;
             }

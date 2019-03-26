@@ -148,14 +148,14 @@ namespace LeerCopyWPF.Utilities
         /// <summary>
         /// Captures the screen as a bitmap
         /// </summary>
-        /// <returns>Screen bitmap converted to BitmapSource object</returns>
-        public static ExtBitmapSource CaptureScreen(Screen screen)
+        /// <returns>Screen Bitmap converted to BitmapSource object</returns>
+        public static BitmapSource CaptureScreen(SimpleScreen screen)
         {
             BitmapSource bmSrc;
-            int screenLeft = screen.Bounds.Left;
-            int screenTop = screen.Bounds.Top;
-            int screenWidth = screen.Bounds.Width;
-            int screenHeight = screen.Bounds.Height;
+            int screenLeft = (int)screen.Bounds.Left;
+            int screenTop = (int)screen.Bounds.Top;
+            int screenWidth = (int)screen.Bounds.Width;
+            int screenHeight = (int)screen.Bounds.Height;
 
             using (Bitmap bitmap = new Bitmap(screenWidth, screenHeight, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
             {
@@ -171,26 +171,29 @@ namespace LeerCopyWPF.Utilities
                 throw new ApplicationException("BitmapUtilities.CaptureScreen: Unable to convert \'Bitmap\' to \'BitmapSouce\' for screen " + screen.DeviceName);
             }
 
-            Rect scrBounds = new Rect(screenLeft, screenTop, screenWidth, screenHeight);
-            return new ExtBitmapSource(bmSrc, scrBounds);
+            return bmSrc;
         } // CaptureScreen
 
 
         /// <summary>
-        /// Returns sorted list all screens as bitmaps
+        /// Returns sorted list all screens
         /// </summary>
-        /// <returns>List of BitmapSource objects representing each screen</returns>
-        public static List<ExtBitmapSource> CaptureScreens()
+        /// <returns>List of SimpleScreen objects representing each screen</returns>
+        public static List<SimpleScreen> CaptureScreens()
         {
-            List<ExtBitmapSource> captureList = new List<ExtBitmapSource>();
+            SimpleScreen tmpScr;
+            Rect tmpBounds;
+            List<SimpleScreen> screenList = new List<SimpleScreen>();
 
             foreach (Screen screen in Screen.AllScreens)
             {
-                captureList.Add(CaptureScreen(screen));
+                tmpBounds = new Rect(screen.Bounds.Left, screen.Bounds.Top, screen.Bounds.Width, screen.Bounds.Height);
+                tmpScr = new SimpleScreen(screen.BitsPerPixel, tmpBounds, screen.DeviceName);
+                screenList.Add(tmpScr);
             }
 
-            captureList.Sort();
-            return captureList;
+            screenList.Sort();
+            return screenList;
         } // CaptureScreens
 
 

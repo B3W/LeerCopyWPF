@@ -193,9 +193,7 @@ namespace LeerCopyWPF.Controllers
                 if (res == true)
                 {
                     // Crop bitmap to selection area
-                    Rect area = new Rect(Selection.StartPt, Selection.EndPt);
-                    CroppedBitmap finalBitmap = 
-                        new CroppedBitmap(Bitmap, new Int32Rect((int)area.X, (int)area.Y, (int)area.Width, (int)area.Height));
+                    CroppedBitmap finalBitmap = BitmapUtilities.GetCroppedBitmap(Bitmap, new Rect(Selection.StartPt, Selection.EndPt));
 
                     // Save as requested format
                     string filePath = saveDialog.FileName;

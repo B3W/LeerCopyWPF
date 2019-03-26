@@ -15,6 +15,7 @@ namespace LeerCopyWPF.Utilities
     public static class BitmapUtilities
     {
         /// <summary>
+        /// DELETE ONCE SAFEHBITMAPHANDLE IS NO LONGER NEEDED
         /// Internal class for all marshalled functions
         /// </summary>
         internal static class NativeMethods
@@ -26,8 +27,8 @@ namespace LeerCopyWPF.Utilities
 
 
         /// <summary>
-        /// Wrapper for creating safe handles from unmanaged handles
-        /// Reference: https://stackoverflow.com/a/7035036
+        /// DELETE LATER ONCE CONFIRMED NO HANDLES NEEDED THROUGHOUT APPLICATION
+        /// Wrapper for creating safe handles from unmanaged handles (Reference: https://stackoverflow.com/a/7035036)
         /// </summary>
         private class SafeHBitmapHandle : SafeHandleZeroOrMinusOneIsInvalid
         {

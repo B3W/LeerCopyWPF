@@ -7,32 +7,38 @@ using System.Windows.Media.Imaging;
 namespace LeerCopyWPF.Models
 {
     /// <summary>
-    /// Extends functionality of BitmapSource data structure to include
-    /// extra metadata from structures such as the Screen class
+    /// 'Wrapper' class for System.Windows.Forms.Screen to hold relevant
+    /// screen data for screen capturing
     /// </summary>
-    public class ExtBitmapSource : IEquatable<ExtBitmapSource>, IComparable<ExtBitmapSource>
+    public class SimpleScreen : IEquatable<SimpleScreen>, IComparable<SimpleScreen>
     {
         /// <summary>
-        /// Bitmap source object
+        /// The number of bits of memory, associated with one pixel of data
         /// </summary>
-        public BitmapSource Bitmap { get; set; }
+        public int BitsPerPixel { get; set; }
         /// <summary>
         /// Bounds of the Bitmap relative to screen captured on
         /// </summary>
         public Rect Bounds { get; set; }
+        /// <summary>
+        /// Name of the device associated with screen
+        /// </summary>
+        public string DeviceName { get; set; }
 
 
-        public ExtBitmapSource()
+        public SimpleScreen()
         {
-            Bitmap = null;
+            BitsPerPixel = -1;
             Bounds = new Rect();
+            DeviceName = "<none>";
         }
 
 
-        public ExtBitmapSource(BitmapSource bms, Rect rect)
+        public SimpleScreen(int bpp, Rect bounds, string name)
         {
-            Bitmap = bms;
-            Bounds = rect;
+            BitsPerPixel = bpp;
+            Bounds = bounds;
+            DeviceName = name;
         }
 
 
@@ -48,13 +54,13 @@ namespace LeerCopyWPF.Models
                 return false;
             }
 
-            if (!(obj is ExtBitmapSource ebs))
+            if (!(obj is SimpleScreen ss))
             {
                 return false;
             }
 
-            return this.Equals(obj as ExtBitmapSource);
-        }
+            return this.Equals(obj as SimpleScreen);
+        } // Equals
 
 
         /// <summary>
@@ -62,25 +68,29 @@ namespace LeerCopyWPF.Models
         /// </summary>
         /// <param name="other"></param>
         /// <returns>True if equal, false otherwise</returns>
-        public bool Equals(ExtBitmapSource other)
+        public bool Equals(SimpleScreen other)
         {
             if (other == null)
             {
                 return false;
             }
 
-            return (Bounds.Equals(other.Bounds)) && (Bitmap == other.Bitmap);
-        }
-
-
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
+            return (Bounds.Equals(other.Bounds)) && (DeviceName.Equals(other.DeviceName));
+        } // Equals
 
 
         /// <summary>
-        /// Compares this ExtBitmapSource object with other. Top, left is least while bottom, right is greatest value.
+        /// Calculates object's hash code
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        } // GetHashCode
+
+
+        /// <summary>
+        /// Compares this SimpleScreen object with other. Top, left is least while bottom, right is greatest value.
         /// Vertical positioning has greater priority than horizontal positioning.
         /// -1 -1 -1
         /// -1  x  1
@@ -92,7 +102,7 @@ namespace LeerCopyWPF.Models
         /// 0 if this object occurs in the same position in the sort order as other,
         /// or greater than 0 if this object follows other in sort order
         /// </returns>
-        public int CompareTo(ExtBitmapSource other)
+        public int CompareTo(SimpleScreen other)
         {
             Rect oBounds = other.Bounds;
 
@@ -152,6 +162,6 @@ namespace LeerCopyWPF.Models
                     }
                 }
             }
-        }
+        } // CompareTo
     }
 }

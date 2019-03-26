@@ -192,10 +192,6 @@ namespace LeerCopyWPF
                         selectControl.ClearSelection();
                         UpdateDisplayedImage();
                         break;
-                    case Actions.ActionEnum.New:
-                        // Reset for new Leer
-                        // TODO
-                        break;
                     case Actions.ActionEnum.Settings:
                         // Open up settings window
                         // TODO

@@ -142,15 +142,6 @@ namespace LeerCopyWPF.Strings.en_US {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to  - Take new Leer.
-        /// </summary>
-        public static string NewLeerLblStr {
-            get {
-                return ResourceManager.GetString("NewLeerLblStr", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to  - Quit Selection.
         /// </summary>
         public static string QuitLblStr {

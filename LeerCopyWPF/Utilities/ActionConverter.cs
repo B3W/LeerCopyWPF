@@ -41,10 +41,6 @@ namespace LeerCopyWPF.Utilities
             {
                 retEnum = Actions.ActionEnum.Quit;
             }
-            else if (Key.Equals("NewLeer"))
-            {
-                retEnum = Actions.ActionEnum.New;
-            }
             else if (Key.Equals("SettingsWin"))
             {
                 retEnum = Actions.ActionEnum.Settings;
@@ -90,9 +86,6 @@ namespace LeerCopyWPF.Utilities
                     break;
                 case Actions.ActionEnum.Clear:
                     retStr = "ClearKey";
-                    break;
-                case Actions.ActionEnum.New:
-                    retStr = "NewLeer";
                     break;
                 case Actions.ActionEnum.Settings:
                     retStr = "SettingWin";

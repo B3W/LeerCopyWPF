@@ -17,7 +17,6 @@ namespace LeerCopyWPF.Enums
             Save,
             SelectAll,
             Clear,
-            New,
             Settings,
             Tips,
             Switch,

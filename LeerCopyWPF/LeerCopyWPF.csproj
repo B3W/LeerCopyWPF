@@ -87,6 +87,7 @@
     <Compile Include="Utilities\BitmapUtilities.cs" />
     <Compile Include="Models\Selection.cs" />
     <Compile Include="Utilities\EncodedImage.cs" />
+    <Compile Include="Utilities\FlagEventArgs.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>

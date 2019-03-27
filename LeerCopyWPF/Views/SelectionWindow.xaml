@@ -8,7 +8,7 @@
         xmlns:local="clr-namespace:LeerCopyWPF"
         mc:Ignorable="d"
         Title="Leer Copy" ResizeMode="NoResize"
-        WindowState="Maximized" WindowStyle="None"
+        WindowState="Normal" WindowStyle="None"
         AllowsTransparency="True" Width="750" Height="500">
     <Window.Resources>
         <Style x:Name="TxtBlkStyle" TargetType="TextBlock">

@@ -36,10 +36,6 @@ namespace LeerCopyWPF
         /// </summary>
         private IDictionary<Key, Actions.ActionEnum> keyMappings;
         /// <summary>
-        /// Flag to set when screen switch requested
-        /// </summary>
-        private bool switchFlag;
-        /// <summary>
         /// Flag indicating whether switch is possible
         /// </summary>
         private bool switchValid;
@@ -54,16 +50,16 @@ namespace LeerCopyWPF
         /// <summary>
         /// Event for signaling the MainWindow
         /// </summary>
-        public event EventHandler SignalMain;
+        public event EventHandler<FlagEventArgs> SignalMain;
 
-        public SelectionWindow(Rect bounds, ref bool switchFlag, bool switchValid)
+
+        public SelectionWindow(Rect bounds, bool switchValid)
         {
             // Register window lifetime events
             this.Loaded += SelectionWindow_Loaded;
 
             InitializeComponent();
 
-            this.switchFlag = switchFlag;
             this.switchValid = switchValid;
             this.screenBounds = bounds;
 
@@ -119,9 +115,9 @@ namespace LeerCopyWPF
         /// <summary>
         /// Raise the event to signal MainWindow
         /// </summary>
-        private void RaiseSignal()
+        private void RaiseSignal(bool switchFlag)
         {
-            this.SignalMain?.Invoke(this, EventArgs.Empty);
+            this.SignalMain?.Invoke(this, new FlagEventArgs { Flag = switchFlag });
         } // RaiseSignal
 
 
@@ -132,9 +128,8 @@ namespace LeerCopyWPF
         {
             if (switchValid)
             {
-                switchFlag = true;
                 this.Hide();
-                RaiseSignal();
+                RaiseSignal(true);
             }
         } // SwitchScreens
 
@@ -156,6 +151,7 @@ namespace LeerCopyWPF
 
                 winLoaded = true;
             }
+            this.WindowState = WindowState.Maximized;
         } // SelectionWindow_Loaded
 
 
@@ -201,12 +197,12 @@ namespace LeerCopyWPF
                         LabelPanel.Visibility = (LabelPanel.Visibility == Visibility.Visible) ? Visibility.Hidden : Visibility.Visible;
                         break;
                     case Actions.ActionEnum.Switch:
+                        e.Handled = true;
                         SwitchScreens();
                         break;
                     case Actions.ActionEnum.Quit:
                         // Quit selection
-                        switchFlag = false;
-                        RaiseSignal();
+                        RaiseSignal(false);
                         this.Close();
                         break;
                     default:

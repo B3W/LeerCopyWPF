@@ -35,10 +35,6 @@ namespace LeerCopyWPF.Views
         /// Flag to prevent loaded event handler logic firing multiple times
         /// </summary>
         private bool winLoaded = false;
-        /// <summary>
-        /// Flag indicating if screen switch should occur
-        /// </summary>
-        private bool switchFlag = false;
 
 
         public MainWindow()
@@ -108,7 +104,7 @@ namespace LeerCopyWPF.Views
         /// <returns></returns>
         private SelectionWindow InitSelectWindow(Rect bounds)
         {
-            SelectionWindow sWin = new SelectionWindow(bounds, ref switchFlag, (screens.Count > 1));
+            SelectionWindow sWin = new SelectionWindow(bounds, (screens.Count > 1));
             sWin.SignalMain += Selection_SignalMain;
             sWin.Owner = this;
 
@@ -121,9 +117,9 @@ namespace LeerCopyWPF.Views
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public void Selection_SignalMain(object sender, EventArgs e)
+        public void Selection_SignalMain(object sender, FlagEventArgs e)
         {
-            if (switchFlag)
+            if (e.Flag)
             {
                 // Increment screen index
                 curScreenIndex = (curScreenIndex + 1) % screens.Count;

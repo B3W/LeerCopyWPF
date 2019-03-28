@@ -9,49 +9,49 @@ namespace LeerCopyWPF.Utilities
         /// </summary>
         /// <param name="Key"></param>
         /// <returns></returns>
-        public static Actions.ActionEnum KeyStrToEnum(string Key)
+        public static KeyActions.KeyUp KeyUpStrToEnum(string Key)
         {
-            Actions.ActionEnum retEnum;
+            KeyActions.KeyUp retEnum;
 
             if (Key.Equals("CopyKey"))
             {
-                retEnum = Actions.ActionEnum.Copy;
+                retEnum = KeyActions.KeyUp.Copy;
             }
             else if (Key.Equals("EditKey"))
             {
-                retEnum = Actions.ActionEnum.Edit;
+                retEnum = KeyActions.KeyUp.Edit;
             }
             else if (Key.Equals("SaveKey"))
             {
-                retEnum = Actions.ActionEnum.Save;
+                retEnum = KeyActions.KeyUp.Save;
             }
             else if (Key.Equals("SelectAll"))
             {
-                retEnum = Actions.ActionEnum.SelectAll;
+                retEnum = KeyActions.KeyUp.SelectAll;
             }
             else if (Key.Equals("ClearKey"))
             {
-                retEnum = Actions.ActionEnum.Clear;
+                retEnum = KeyActions.KeyUp.Clear;
             }
             else if (Key.Equals("Tips"))
             {
-                retEnum = Actions.ActionEnum.Tips;
+                retEnum = KeyActions.KeyUp.Tips;
             }
             else if (Key.Equals("QuitKey"))
             {
-                retEnum = Actions.ActionEnum.Quit;
+                retEnum = KeyActions.KeyUp.Quit;
             }
             else if (Key.Equals("SettingsWin"))
             {
-                retEnum = Actions.ActionEnum.Settings;
+                retEnum = KeyActions.KeyUp.Settings;
             }
             else if (Key.Equals("SwitchScreenKey"))
             {
-                retEnum = Actions.ActionEnum.Switch;
+                retEnum = KeyActions.KeyUp.Switch;
             }
             else
             {
-                retEnum = Actions.ActionEnum.Invalid;
+                retEnum = KeyActions.KeyUp.Invalid;
             }
 
             return retEnum;
@@ -63,40 +63,40 @@ namespace LeerCopyWPF.Utilities
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public static string EnumToKeyStr(Actions.ActionEnum action)
+        public static string EnumToKeyUpStr(KeyActions.KeyUp action)
         {
             string retStr;
 
             switch (action)
             {
-                case Actions.ActionEnum.Invalid:
+                case KeyActions.KeyUp.Invalid:
                     retStr = null;
                     break;
-                case Actions.ActionEnum.Copy:
+                case KeyActions.KeyUp.Copy:
                     retStr = "CopyKey";
                     break;
-                case Actions.ActionEnum.Edit:
+                case KeyActions.KeyUp.Edit:
                     retStr = "EditKey";
                     break;
-                case Actions.ActionEnum.Save:
+                case KeyActions.KeyUp.Save:
                     retStr = "SaveKey";
                     break;
-                case Actions.ActionEnum.SelectAll:
+                case KeyActions.KeyUp.SelectAll:
                     retStr = "SelectAll";
                     break;
-                case Actions.ActionEnum.Clear:
+                case KeyActions.KeyUp.Clear:
                     retStr = "ClearKey";
                     break;
-                case Actions.ActionEnum.Settings:
+                case KeyActions.KeyUp.Settings:
                     retStr = "SettingWin";
                     break;
-                case Actions.ActionEnum.Tips:
+                case KeyActions.KeyUp.Tips:
                     retStr = "Tips";
                     break;
-                case Actions.ActionEnum.Switch:
+                case KeyActions.KeyUp.Switch:
                     retStr = "SwitchScreenKey";
                     break;
-                case Actions.ActionEnum.Quit:
+                case KeyActions.KeyUp.Quit:
                     retStr = "QuitKey";
                     break;
                 default:

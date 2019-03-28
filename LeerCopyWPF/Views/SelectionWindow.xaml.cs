@@ -149,6 +149,12 @@ namespace LeerCopyWPF
 
                 selectControl = new SelectControl(bitmap, screenBounds);
 
+                // Don't show the tip if you cannot switch screens
+                if (!switchValid)
+                {
+                    LabelPanel.Children.Remove(SwitchLblPanel);
+                }
+
                 winLoaded = true;
             }
             this.WindowState = WindowState.Maximized;

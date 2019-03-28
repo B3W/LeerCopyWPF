@@ -80,7 +80,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Controllers\SelectControl.cs" />
-    <Compile Include="Enums\Actions.cs" />
+    <Compile Include="Enums\KeyActions.cs" />
     <Compile Include="Models\SimpleScreen.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Utilities\ActionConverter.cs" />

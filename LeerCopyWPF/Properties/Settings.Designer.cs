@@ -205,12 +205,12 @@ namespace LeerCopyWPF.Properties {
   <string>SelectAll</string>
   <string>SwitchScreenKey</string>
 </ArrayOfString>")]
-        public string[] KeyNames {
+        public string[] KeyUpNames {
             get {
-                return ((string[])(this["KeyNames"]));
+                return ((string[])(this["KeyUpNames"]));
             }
             set {
-                this["KeyNames"] = value;
+                this["KeyUpNames"] = value;
             }
         }
     }

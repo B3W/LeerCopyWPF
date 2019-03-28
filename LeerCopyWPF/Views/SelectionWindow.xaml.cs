@@ -32,9 +32,13 @@ namespace LeerCopyWPF
         /// </summary>
         private BitmapSource bitmap;
         /// <summary>
-        /// Dictionary for quick lookup of key mappings
+        /// Dictionary for quick lookup of key up mappings
         /// </summary>
-        private IDictionary<Key, Actions.ActionEnum> keyMappings;
+        private IDictionary<Key, KeyActions.KeyUp> keyUpMappings;
+        /// <summary>
+        /// Dictionary for quick lookup of key up mappings
+        /// </summary>
+        private IDictionary<Key, KeyActions.KeyDown> keyDownMappings;
         /// <summary>
         /// Flag indicating whether switch is possible
         /// </summary>
@@ -68,9 +72,11 @@ namespace LeerCopyWPF
             this.Top = bounds.Top;
 
             // Bind keys to actions
-            InitKeyMappings();
+            InitKeyUpMappings();
+            InitKeyDownMappings();
 
             // Register event handlers
+            this.PreviewKeyUp += SelectionWindow_PreviewKeyUp;
             this.PreviewKeyDown += SelectionWindow_PreviewKeyDown;
             this.PreviewMouseLeftButtonDown += SelectionWindow_MouseLeftButtonDown;
             this.PreviewMouseLeftButtonUp += SelectionWindow_MouseLeftButtonUp;
@@ -79,28 +85,48 @@ namespace LeerCopyWPF
 
 
         /// <summary>
-        /// Initialize key bindings
+        /// Initialize key bindings for the key up event
         /// </summary>
-        private void InitKeyMappings()
+        private void InitKeyUpMappings()
         {
             // Retrieve app settings
             Properties.Settings settings = Properties.Settings.Default;
+
             // Populate key mappings into dictionary
-            keyMappings = new Dictionary<Key, Actions.ActionEnum>();
-            string[] keyNames = settings.KeyNames;
+            keyUpMappings = new Dictionary<Key, KeyActions.KeyUp>();
+            string[] keyUpNames = settings.KeyUpNames;
             KeyConverter converter = new KeyConverter();
-            foreach (string name in keyNames)
+
+            foreach (string name in keyUpNames)
             {
                 try
                 {
-                    keyMappings.Add((Key)converter.ConvertFromString((string)settings[name]), ActionConverter.KeyStrToEnum(name));
+                    keyUpMappings.Add((Key)converter.ConvertFromString((string)settings[name]), ActionConverter.KeyUpStrToEnum(name));
                 } catch (SettingsPropertyNotFoundException)
                 {
                     // TODO exception logging
                     throw;
                 }
             }
-        } // InitKeyMappings
+        } // InitKeyUpMappings
+
+
+        /// <summary>
+        /// Initialize key bindings for the key down event
+        /// </summary>
+        private void InitKeyDownMappings()
+        {
+            // Populate key mappings into dictionary
+            keyDownMappings = new Dictionary<Key, KeyActions.KeyDown>
+            {
+                // Add arrow keys
+                { Key.Up, KeyActions.KeyDown.Up },
+                { Key.Down, KeyActions.KeyDown.Down },
+                { Key.Left, KeyActions.KeyDown.Left },
+                { Key.Right, KeyActions.KeyDown.Right }
+            };
+
+        } // InitKeyDownMappings
 
 
         /// <summary>
@@ -161,57 +187,140 @@ namespace LeerCopyWPF
         } // SelectionWindow_Loaded
 
 
-        private void SelectionWindow_PreviewKeyDown(object sender, KeyEventArgs e)
+        private void SelectionWindow_PreviewKeyUp(object sender, KeyEventArgs e)
         {
-            Actions.ActionEnum action;
+            KeyActions.KeyUp action;
 
-            if (keyMappings.ContainsKey(e.Key))
+            if (keyUpMappings.ContainsKey(e.Key))
             {
-                action = keyMappings[e.Key];
+                action = keyUpMappings[e.Key];
                 switch (action)
                 {
-                    case Actions.ActionEnum.Invalid:
-                        break;
-                    case Actions.ActionEnum.Copy:
+                    case KeyActions.KeyUp.Copy:
                         // Copy selection to the clipboard
                         selectControl.CopySelection();
                         break;
-                    case Actions.ActionEnum.Edit:
+                    case KeyActions.KeyUp.Edit:
                         // Edit the selection in default image editor
                         selectControl.EditSelection();
                         break;
-                    case Actions.ActionEnum.Save:
+                    case KeyActions.KeyUp.Save:
                         // Save the selection to disk
                         selectControl.SaveSelection(this);
                         break;
-                    case Actions.ActionEnum.SelectAll:
+                    case KeyActions.KeyUp.SelectAll:
                         // Select the entire screen
                         selectControl.MaximizeSelection();
                         UpdateDisplayedImage();
                         break;
-                    case Actions.ActionEnum.Clear:
+                    case KeyActions.KeyUp.Clear:
                         // Clear the current selection
                         selectControl.ClearSelection();
                         UpdateDisplayedImage();
                         break;
-                    case Actions.ActionEnum.Settings:
+                    case KeyActions.KeyUp.Settings:
                         // Open up settings window
                         // TODO
                         break;
-                    case Actions.ActionEnum.Tips:
+                    case KeyActions.KeyUp.Tips:
                         // Show/Hide tip labels
                         LabelPanel.Visibility = (LabelPanel.Visibility == Visibility.Visible) ? Visibility.Hidden : Visibility.Visible;
                         break;
-                    case Actions.ActionEnum.Switch:
+                    case KeyActions.KeyUp.Switch:
                         e.Handled = true;
                         SwitchScreens();
                         break;
-                    case Actions.ActionEnum.Quit:
+                    case KeyActions.KeyUp.Quit:
                         // Quit selection
                         RaiseSignal(false);
                         this.Close();
                         break;
+                    case KeyActions.KeyUp.Invalid:
                     default:
+                        break;
+                }
+            }
+        } // SelectionWindow_PreviewKeyDown
+
+
+        private void ResizeSelection(KeyActions.KeyDown dir)
+        {
+            if (selectControl.IsSelected && !selectControl.IsSelecting)
+            {
+                double shftMod = 2.0;
+                bool vert = false;
+                double offsetX = 0.0;
+                double offsetY = 0.0;
+
+                // Set base offset
+                switch (dir)
+                {
+                    case KeyActions.KeyDown.Up:
+                        offsetY = -1.0;
+                        vert = true;
+                        break;
+                    case KeyActions.KeyDown.Down:
+                        offsetY = 1.0;
+                        vert = true;
+                        break;
+                    case KeyActions.KeyDown.Left:
+                        offsetX = -1.0;
+                        break;
+                    case KeyActions.KeyDown.Right:
+                        offsetX = 1.0;
+                        break;
+                    case KeyActions.KeyDown.Invalid:
+                    default:
+                        break;
+                }
+
+                // Check modifier keys
+                if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
+                {
+                    // Speed up resizing
+                    if (vert)
+                    {
+                        offsetY *= shftMod;
+                    }
+                    else
+                    {
+                        offsetX *= shftMod;
+                    }
+                }
+
+                if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.LeftCtrl))
+                {
+                    // Reverse direction
+                    if (vert)
+                    {
+                        offsetY = -offsetY;
+                    }
+                    else
+                    {
+                        offsetX = -offsetX;
+                    }
+                }
+
+                selectControl.Selection.Resize(offsetX, offsetY, dir, screenBounds);
+                UpdateDisplayedImage();
+            }
+        } // ResizeSelection
+
+
+        private void SelectionWindow_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            KeyActions.KeyDown action;
+
+            if (keyDownMappings.ContainsKey(e.Key))
+            {
+                action = keyDownMappings[e.Key];
+                switch (action)
+                {
+                    case KeyActions.KeyDown.Invalid:
+                        break;
+                    default:
+                        // Arrow keys pressed
+                        ResizeSelection(action);
                         break;
                 }
             }

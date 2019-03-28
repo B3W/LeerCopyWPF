@@ -72,7 +72,7 @@ namespace LeerCopyWPF.Controllers
 
 
         /// <summary>
-        /// Update current selection
+        /// Offsets current selection by given x, y values
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>

@@ -204,6 +204,7 @@ namespace LeerCopyWPF.Properties {
   <string>SettingsWin</string>
   <string>SelectAll</string>
   <string>SwitchScreenKey</string>
+  <string>BorderKey</string>
 </ArrayOfString>")]
         public string[] KeyUpNames {
             get {
@@ -211,6 +212,18 @@ namespace LeerCopyWPF.Properties {
             }
             set {
                 this["KeyUpNames"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("B")]
+        public string BorderKey {
+            get {
+                return ((string)(this["BorderKey"]));
+            }
+            set {
+                this["BorderKey"] = value;
             }
         }
     }

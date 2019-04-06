@@ -56,7 +56,11 @@
   &lt;string&gt;SettingsWin&lt;/string&gt;
   &lt;string&gt;SelectAll&lt;/string&gt;
   &lt;string&gt;SwitchScreenKey&lt;/string&gt;
+  &lt;string&gt;BorderKey&lt;/string&gt;
 &lt;/ArrayOfString&gt;</Value>
+    </Setting>
+    <Setting Name="BorderKey" Type="System.String" Scope="User">
+      <Value Profile="(Default)">B</Value>
     </Setting>
   </Settings>
 </SettingsFile>

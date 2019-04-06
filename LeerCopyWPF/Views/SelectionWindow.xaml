@@ -73,5 +73,9 @@
         </StackPanel>
         <!-- For displaying users selection -->
         <Image x:Name="SelectionImg" Visibility="Hidden" Panel.ZIndex="3"/>
+        <!-- For drawing the border -->
+        <Canvas x:Name="BorderCanvas" Background="Transparent" Visibility="Hidden" Panel.ZIndex="4">
+            <Rectangle x:Name="BorderRect" StrokeThickness="3" Stroke="HotPink"/>
+        </Canvas>
     </Grid>
 </Window>

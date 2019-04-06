@@ -160,33 +160,6 @@ namespace LeerCopyWPF
         } // SwitchScreens
 
 
-        private void SelectionWindow_Loaded(object sender, RoutedEventArgs e)
-        {
-            if (!winLoaded)
-            {
-                // Capture screen
-                bitmap = BitmapUtilities.CaptureRect(screenBounds);
-
-                // Initialize user selection view
-                ScreenImg.Source = bitmap;
-                SelectionImg.Source = bitmap;
-                SelectionImg.Clip = new RectangleGeometry();
-                SelectionImg.Visibility = Visibility.Visible;
-
-                selectControl = new SelectControl(bitmap, screenBounds);
-
-                // Don't show the tip if you cannot switch screens
-                if (!switchValid)
-                {
-                    LabelPanel.Children.Remove(SwitchLblPanel);
-                }
-
-                winLoaded = true;
-            }
-            this.WindowState = WindowState.Maximized;
-        } // SelectionWindow_Loaded
-
-
         private void SelectionWindow_PreviewKeyUp(object sender, KeyEventArgs e)
         {
             KeyActions.KeyUp action;
@@ -243,6 +216,10 @@ namespace LeerCopyWPF
         } // SelectionWindow_PreviewKeyDown
 
 
+        /// <summary>
+        /// Resizes the user's selection based on arrow key presses
+        /// </summary>
+        /// <param name="dir"></param>
         private void ResizeSelection(KeyActions.KeyDown dir)
         {
             if (selectControl.IsSelected && !selectControl.IsSelecting)
@@ -325,6 +302,33 @@ namespace LeerCopyWPF
                 }
             }
         } // SelectionWindow_PreviewKeyDown
+
+
+        private void SelectionWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (!winLoaded)
+            {
+                // Capture screen
+                bitmap = BitmapUtilities.CaptureRect(screenBounds);
+
+                // Initialize user selection view
+                ScreenImg.Source = bitmap;
+                SelectionImg.Source = bitmap;
+                SelectionImg.Clip = new RectangleGeometry();
+                SelectionImg.Visibility = Visibility.Visible;
+
+                selectControl = new SelectControl(bitmap, screenBounds);
+
+                // Don't show the tip if you cannot switch screens
+                if (!switchValid)
+                {
+                    LabelPanel.Children.Remove(SwitchLblPanel);
+                }
+
+                winLoaded = true;
+            }
+            this.WindowState = WindowState.Maximized;
+        } // SelectionWindow_Loaded
 
 
         private void SelectionWindow_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

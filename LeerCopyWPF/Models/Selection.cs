@@ -52,13 +52,13 @@ namespace LeerCopyWPF.Models
         {
             EndPt = point;
         } // UpdateEnd
-
+        
 
         public void UpdateEnd(double x, double y, bool offset)
         {
             if (offset)
             {
-                EndPt.Offset(x, y);
+                EndPt = new Point(EndPt.X + x, EndPt.Y + y);
             }
             else
             {

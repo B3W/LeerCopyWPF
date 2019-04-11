@@ -59,12 +59,16 @@
                 <TextBlock x:Name="SwitchLbl" Text="{x:Static resx:Resources.SwitchLblStr}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{Binding Source={x:Static prop:Settings.Default}, Path=SettingsWin, Mode=OneWay}"/>
-                <TextBlock x:Name="SettingsWinLbl" Text="{x:Static resx:Resources.SettingsWinLblStr}"/>
+                <TextBlock Text="{Binding Source={x:Static prop:Settings.Default}, Path=BorderKey, Mode=OneWay}"/>
+                <TextBlock x:Name="BorderLbl" Text="{x:Static resx:Resources.BorderLblStr}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{Binding Source={x:Static prop:Settings.Default}, Path=Tips, Mode=OneWay}"/>
+                <TextBlock Text="{Binding Source={x:Static prop:Settings.Default}, Path=TipsKey, Mode=OneWay}"/>
                 <TextBlock x:Name="TipsLbl" Text="{x:Static resx:Resources.TipsLblStr}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding Source={x:Static prop:Settings.Default}, Path=SettingsWin, Mode=OneWay}"/>
+                <TextBlock x:Name="SettingsWinLbl" Text="{x:Static resx:Resources.SettingsWinLblStr}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="{Binding Source={x:Static prop:Settings.Default}, Path=QuitKey, Mode=OneWay}"/>

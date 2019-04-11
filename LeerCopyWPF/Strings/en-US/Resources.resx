@@ -121,6 +121,10 @@
     <value> Use arrow keys to resize selection</value>
     <comment>Tip String</comment>
   </data>
+  <data name="BorderLblStr" xml:space="preserve">
+    <value> - Toggle border on/off</value>
+    <comment>Tip String</comment>
+  </data>
   <data name="CaptureOptionsStr" xml:space="preserve">
     <value>CAPTURE OPTIONS</value>
     <comment>Main Window String</comment>

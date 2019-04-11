@@ -86,12 +86,12 @@ namespace LeerCopyWPF.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("T")]
-        public string Tips {
+        public string TipsKey {
             get {
-                return ((string)(this["Tips"]));
+                return ((string)(this["TipsKey"]));
             }
             set {
-                this["Tips"] = value;
+                this["TipsKey"] = value;
             }
         }
         
@@ -200,10 +200,11 @@ namespace LeerCopyWPF.Properties {
   <string>SaveKey</string>
   <string>ClearKey</string>
   <string>QuitKey</string>
-  <string>Tips</string>
+  <string>TipsKey</string>
   <string>SettingsWin</string>
   <string>SelectAll</string>
   <string>SwitchScreenKey</string>
+  <string>BorderKey</string>
 </ArrayOfString>")]
         public string[] KeyUpNames {
             get {
@@ -211,6 +212,18 @@ namespace LeerCopyWPF.Properties {
             }
             set {
                 this["KeyUpNames"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("B")]
+        public string BorderKey {
+            get {
+                return ((string)(this["BorderKey"]));
+            }
+            set {
+                this["BorderKey"] = value;
             }
         }
     }

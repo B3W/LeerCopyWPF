@@ -70,6 +70,15 @@ namespace LeerCopyWPF.Strings.en_US {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to  - Toggle border on/off.
+        /// </summary>
+        public static string BorderLblStr {
+            get {
+                return ResourceManager.GetString("BorderLblStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to CAPTURE OPTIONS.
         /// </summary>
         public static string CaptureOptionsStr {

@@ -17,7 +17,7 @@
     <Setting Name="QuitKey" Type="System.String" Scope="User">
       <Value Profile="(Default)">Q</Value>
     </Setting>
-    <Setting Name="Tips" Type="System.String" Scope="User">
+    <Setting Name="TipsKey" Type="System.String" Scope="User">
       <Value Profile="(Default)">T</Value>
     </Setting>
     <Setting Name="SettingsWin" Type="System.String" Scope="User">
@@ -52,11 +52,15 @@
   &lt;string&gt;SaveKey&lt;/string&gt;
   &lt;string&gt;ClearKey&lt;/string&gt;
   &lt;string&gt;QuitKey&lt;/string&gt;
-  &lt;string&gt;Tips&lt;/string&gt;
+  &lt;string&gt;TipsKey&lt;/string&gt;
   &lt;string&gt;SettingsWin&lt;/string&gt;
   &lt;string&gt;SelectAll&lt;/string&gt;
   &lt;string&gt;SwitchScreenKey&lt;/string&gt;
+  &lt;string&gt;BorderKey&lt;/string&gt;
 &lt;/ArrayOfString&gt;</Value>
+    </Setting>
+    <Setting Name="BorderKey" Type="System.String" Scope="User">
+      <Value Profile="(Default)">B</Value>
     </Setting>
   </Settings>
 </SettingsFile>

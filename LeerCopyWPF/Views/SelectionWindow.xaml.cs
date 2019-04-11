@@ -201,9 +201,9 @@ namespace LeerCopyWPF
                         selectControl.ClearSelection();
                         UpdateDisplayedImage();
                         break;
-                    case KeyActions.KeyUp.Settings:
-                        // Open up settings window
-                        // TODO
+                    case KeyActions.KeyUp.Border:
+                        // Show/Hide border
+                        BorderCanvas.Visibility = (BorderCanvas.Visibility == Visibility.Visible) ? Visibility.Hidden : Visibility.Visible;
                         break;
                     case KeyActions.KeyUp.Tips:
                         // Show/Hide tip labels
@@ -212,6 +212,10 @@ namespace LeerCopyWPF
                     case KeyActions.KeyUp.Switch:
                         e.Handled = true;
                         SwitchScreens();
+                        break;
+                    case KeyActions.KeyUp.Settings:
+                        // Open up settings window
+                        // TODO
                         break;
                     case KeyActions.KeyUp.Quit:
                         // Quit selection
@@ -335,10 +339,11 @@ namespace LeerCopyWPF
                     LabelPanel.Children.Remove(SwitchLblPanel);
                 }
 
-                BorderCanvas.Visibility = Visibility.Visible;
-
                 winLoaded = true;
             }
+            BorderCanvas.Visibility = Visibility.Visible;
+            LabelPanel.Visibility = Visibility.Visible;
+
             this.WindowState = WindowState.Maximized;
         } // SelectionWindow_Loaded
 

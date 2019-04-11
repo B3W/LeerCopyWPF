@@ -33,7 +33,11 @@ namespace LeerCopyWPF.Utilities
             {
                 retEnum = KeyActions.KeyUp.Clear;
             }
-            else if (Key.Equals("Tips"))
+            else if (Key.Equals("BorderKey"))
+            {
+                retEnum = KeyActions.KeyUp.Border;
+            }
+            else if (Key.Equals("TipsKey"))
             {
                 retEnum = KeyActions.KeyUp.Tips;
             }
@@ -87,14 +91,17 @@ namespace LeerCopyWPF.Utilities
                 case KeyActions.KeyUp.Clear:
                     retStr = "ClearKey";
                     break;
-                case KeyActions.KeyUp.Settings:
-                    retStr = "SettingWin";
+                case KeyActions.KeyUp.Border:
+                    retStr = "BorderKey";
                     break;
                 case KeyActions.KeyUp.Tips:
-                    retStr = "Tips";
+                    retStr = "TipsKey";
                     break;
                 case KeyActions.KeyUp.Switch:
                     retStr = "SwitchScreenKey";
+                    break;
+                case KeyActions.KeyUp.Settings:
+                    retStr = "SettingWin";
                     break;
                 case KeyActions.KeyUp.Quit:
                     retStr = "QuitKey";

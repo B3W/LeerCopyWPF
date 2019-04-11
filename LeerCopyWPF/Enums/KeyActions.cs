@@ -17,9 +17,10 @@ namespace LeerCopyWPF.Enums
             Save,
             SelectAll,
             Clear,
-            Settings,
+            Border,
             Tips,
             Switch,
+            Settings,
             Quit
         }
 

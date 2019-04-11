@@ -134,7 +134,17 @@ namespace LeerCopyWPF
         /// </summary>
         private void UpdateDisplayedImage()
         {
-            SelectionImg.Clip = selectControl.GetSelectionGeometry();
+            RectangleGeometry selectionArea = selectControl.GetSelectionGeometry();
+
+            // Clip displayed image
+            SelectionImg.Clip = selectionArea;
+
+            // Set border outside of the clipped image
+            double offset = BorderRect.StrokeThickness;
+            Canvas.SetLeft(BorderRect, selectionArea.Rect.Left - offset);
+            Canvas.SetTop(BorderRect, selectionArea.Rect.Top - offset);
+            BorderRect.Width = selectionArea.Rect.Width + (offset * 2);
+            BorderRect.Height = selectionArea.Rect.Height + (offset * 2);
         } // UpdateDisplayedImage
 
 
@@ -324,6 +334,8 @@ namespace LeerCopyWPF
                 {
                     LabelPanel.Children.Remove(SwitchLblPanel);
                 }
+
+                BorderCanvas.Visibility = Visibility.Visible;
 
                 winLoaded = true;
             }

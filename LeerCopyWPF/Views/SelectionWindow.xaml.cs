@@ -4,6 +4,7 @@ using LeerCopyWPF.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Configuration;
 using System.Text;
 using System.Windows;
@@ -173,6 +174,7 @@ namespace LeerCopyWPF
         private void SelectionWindow_PreviewKeyUp(object sender, KeyEventArgs e)
         {
             KeyActions.KeyUp action;
+            Visibility vis;
 
             if (keyUpMappings.ContainsKey(e.Key))
             {
@@ -203,11 +205,13 @@ namespace LeerCopyWPF
                         break;
                     case KeyActions.KeyUp.Border:
                         // Show/Hide border
-                        BorderCanvas.Visibility = (BorderCanvas.Visibility == Visibility.Visible) ? Visibility.Hidden : Visibility.Visible;
+                        vis = (Properties.Settings.Default.BorderVisibility == Visibility.Visible) ? Visibility.Hidden : Visibility.Visible;
+                        Properties.Settings.Default.BorderVisibility = vis;
                         break;
                     case KeyActions.KeyUp.Tips:
                         // Show/Hide tip labels
-                        LabelPanel.Visibility = (LabelPanel.Visibility == Visibility.Visible) ? Visibility.Hidden : Visibility.Visible;
+                        vis = (Properties.Settings.Default.TipsVisibility == Visibility.Visible) ? Visibility.Hidden : Visibility.Visible;
+                        Properties.Settings.Default.TipsVisibility = vis;
                         break;
                     case KeyActions.KeyUp.Switch:
                         e.Handled = true;
@@ -341,8 +345,6 @@ namespace LeerCopyWPF
 
                 winLoaded = true;
             }
-            BorderCanvas.Visibility = Visibility.Visible;
-            LabelPanel.Visibility = Visibility.Visible;
 
             this.WindowState = WindowState.Maximized;
         } // SelectionWindow_Loaded
@@ -369,5 +371,14 @@ namespace LeerCopyWPF
                 UpdateDisplayedImage();
             }
         } // SelectionWindow_MouseMove
+
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            // Save settings
+            Properties.Settings.Default.Save();
+
+            base.OnClosing(e);
+        }
     }
 }

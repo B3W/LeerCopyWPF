@@ -226,5 +226,29 @@ namespace LeerCopyWPF.Properties {
                 this["BorderKey"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Visible")]
+        public global::System.Windows.Visibility BorderVisibility {
+            get {
+                return ((global::System.Windows.Visibility)(this["BorderVisibility"]));
+            }
+            set {
+                this["BorderVisibility"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Visible")]
+        public global::System.Windows.Visibility TipsVisibility {
+            get {
+                return ((global::System.Windows.Visibility)(this["TipsVisibility"]));
+            }
+            set {
+                this["TipsVisibility"] = value;
+            }
+        }
     }
 }

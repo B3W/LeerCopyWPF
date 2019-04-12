@@ -2,6 +2,7 @@
 using LeerCopyWPF.Utilities;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -65,9 +66,6 @@ namespace LeerCopyWPF.Views
 
             // Initialize container for selection windows
             selectionWindows = new SelectionWindow[screens.Count];
-
-            // Register event handlers
-            this.Closing += MainWindow_Closing;
         }
 
 
@@ -195,12 +193,14 @@ namespace LeerCopyWPF.Views
         } // MainWindow_Loaded
 
 
-        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        protected override void OnClosing(CancelEventArgs e)
         {
-            // Save window location 
+            // Save settings
             Properties.Settings.Default.MainWinX = this.Left;
             Properties.Settings.Default.MainWinY = this.Top;
             Properties.Settings.Default.Save();
+
+            base.OnClosing(e);
         } // MainWindow_Closing
     }
 }

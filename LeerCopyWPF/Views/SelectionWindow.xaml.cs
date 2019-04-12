@@ -231,6 +231,7 @@ namespace LeerCopyWPF
                         break;
                 }
             }
+            e.Handled = true;
         } // SelectionWindow_PreviewKeyDown
 
 
@@ -319,6 +320,7 @@ namespace LeerCopyWPF
                         break;
                 }
             }
+            e.Handled = true;
         } // SelectionWindow_PreviewKeyDown
 
 
@@ -354,12 +356,16 @@ namespace LeerCopyWPF
         {
             selectControl.StartSelection(e.GetPosition(this));
             UpdateDisplayedImage();
+
+            e.Handled = true;
         } // SelectionWindow_MouseLeftButtonDown
 
 
         private void SelectionWindow_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             selectControl.StopSelection(e.GetPosition(this));
+
+            e.Handled = true;
         } // SelectionWindow_MouseLeftButtonUp
 
 
@@ -370,6 +376,8 @@ namespace LeerCopyWPF
                 selectControl.UpdateSelection(e.GetPosition(this));
                 UpdateDisplayedImage();
             }
+
+            e.Handled = true;
         } // SelectionWindow_MouseMove
 
 

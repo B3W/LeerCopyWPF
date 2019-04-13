@@ -3,6 +3,7 @@ using LeerCopyWPF.Utilities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -195,6 +196,29 @@ namespace LeerCopyWPF.Views
 
         protected override void OnClosing(CancelEventArgs e)
         {
+            // Clean up temporary 'edit' files in AppData
+            string appDataPath = Properties.Settings.Default.AppDataLoc;
+
+            if (Directory.Exists(appDataPath))
+            {
+                // Get files which have default file name
+                string searchPattern = "Edit_L33R_*.bmp";
+                string[] files = Directory.GetFiles(appDataPath, searchPattern);
+
+                // Delete 'default' files that are 1+ days old
+                DateTime fileDT;
+                DateTime currentDT = DateTime.Now;
+
+                foreach (string file in files)
+                {
+                    fileDT = File.GetCreationTime(file);
+                    if (fileDT.AddDays(1.0) < currentDT)
+                    {
+                        File.Delete(file);
+                    }
+                }
+            }
+
             // Save settings
             Properties.Settings.Default.MainWinX = this.Left;
             Properties.Settings.Default.MainWinY = this.Top;

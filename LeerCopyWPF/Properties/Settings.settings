@@ -71,5 +71,8 @@
     <Setting Name="DefaultFileName" Type="System.String" Scope="User">
       <Value Profile="(Default)">L33R</Value>
     </Setting>
+    <Setting Name="BorderBrush" Type="System.Windows.Media.SolidColorBrush" Scope="User">
+      <Value Profile="(Default)">#FF32CD32</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

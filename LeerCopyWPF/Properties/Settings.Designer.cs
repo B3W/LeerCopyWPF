@@ -262,5 +262,17 @@ namespace LeerCopyWPF.Properties {
                 this["DefaultFileName"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("#FF32CD32")]
+        public global::System.Windows.Media.SolidColorBrush BorderBrush {
+            get {
+                return ((global::System.Windows.Media.SolidColorBrush)(this["BorderBrush"]));
+            }
+            set {
+                this["BorderBrush"] = value;
+            }
+        }
     }
 }

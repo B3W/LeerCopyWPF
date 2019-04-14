@@ -147,7 +147,7 @@ namespace LeerCopyWPF.Controllers
 
                 // Save to temp file
                 EncodedImage eImage = new EncodedImage(finalBitmap, Properties.Settings.Default.DefaultSaveExt);
-                string tmpFileName = "Edit_L33R_" + DateTime.Now.Ticks;  // Use DateTime to avoid name collisions
+                string tmpFileName = Properties.Settings.Default.DefaultFileName + "_" + DateTime.Now.Ticks;  // Use DateTime to avoid name collisions
                 string tmpFilePath = Properties.Settings.Default.AppDataLoc + tmpFileName + Properties.Settings.Default.DefaultSaveExt;
                 eImage.SaveToFile(tmpFilePath);
 
@@ -181,7 +181,7 @@ namespace LeerCopyWPF.Controllers
                 {
                     AddExtension = true,
                     DefaultExt = Properties.Settings.Default.DefaultSaveExt,
-                    FileName = "L33R",
+                    FileName = Properties.Settings.Default.DefaultFileName,
                     Filter = "BMP (.bmp)|*.bmp|GIF (.gif)|*.gif|JPEG (.jpg)|*.jpg;*.jpeg|PNG (.png)|*.png|TIFF (.tif)|*.tif;*.tiff|WMP (.wmp)|*.wmp",
                     InitialDirectory = Properties.Settings.Default.LastSavePath,
                     OverwritePrompt = true,
@@ -213,7 +213,6 @@ namespace LeerCopyWPF.Controllers
                     {
                         string lastSavePath = filePath.Substring(0, fileNamePos + 1);
                         Properties.Settings.Default.LastSavePath = lastSavePath;
-                        Properties.Settings.Default.Save();
                     }
                 }
             }

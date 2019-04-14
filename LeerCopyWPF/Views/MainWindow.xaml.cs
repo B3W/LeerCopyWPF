@@ -201,8 +201,8 @@ namespace LeerCopyWPF.Views
 
             if (Directory.Exists(appDataPath))
             {
-                // Get files which have default file name
-                string searchPattern = "Edit_L33R_*.bmp";
+                // Get files which have default file name/extension
+                string searchPattern = Properties.Settings.Default.DefaultFileName + "*" + Properties.Settings.Default.DefaultSaveExt;
                 string[] files = Directory.GetFiles(appDataPath, searchPattern);
 
                 // Delete 'default' files that are 1+ days old

@@ -250,5 +250,17 @@ namespace LeerCopyWPF.Properties {
                 this["TipsVisibility"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("L33R")]
+        public string DefaultFileName {
+            get {
+                return ((string)(this["DefaultFileName"]));
+            }
+            set {
+                this["DefaultFileName"] = value;
+            }
+        }
     }
 }

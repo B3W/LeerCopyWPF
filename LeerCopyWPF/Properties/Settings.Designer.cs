@@ -191,7 +191,7 @@ namespace LeerCopyWPF.Properties {
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute(@"<?xml version=""1.0"" encoding=""utf-16""?>
 <ArrayOfString xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
@@ -209,9 +209,6 @@ namespace LeerCopyWPF.Properties {
         public string[] KeyUpNames {
             get {
                 return ((string[])(this["KeyUpNames"]));
-            }
-            set {
-                this["KeyUpNames"] = value;
             }
         }
         

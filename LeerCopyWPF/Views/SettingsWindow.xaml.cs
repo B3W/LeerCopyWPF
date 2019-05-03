@@ -24,7 +24,7 @@ namespace LeerCopyWPF.Views
         {
             InitializeComponent();
 
-            _viewModel = new SettingsViewModel();
+            _viewModel = new SettingsViewModel(param => this.Close());
             DataContext = _viewModel;
         }
     }

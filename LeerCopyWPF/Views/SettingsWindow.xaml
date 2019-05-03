@@ -3,10 +3,56 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:resx="clr-namespace:LeerCopyWPF.Strings.en_US"
+        xmlns:prop="clr-namespace:LeerCopyWPF.Properties"
         xmlns:local="clr-namespace:LeerCopyWPF.Views"
         mc:Ignorable="d"
-        Title="Settings" Height="450" Width="800">
-    <Grid>
-        
+        Title="{Binding Path=DisplayName}" MinWidth="800" MinHeight="600" WindowStartupLocation="CenterOwner">
+    <Window.Resources>
+        <Style x:Key="FinalizationBtnStyle" TargetType="Button">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Setter Property="VerticalAlignment" Value="Bottom"/>
+            <Setter Property="MinWidth" Value="85"/>
+            <Setter Property="MinHeight" Value="20"/>
+        </Style>
+    </Window.Resources>
+    <Grid x:Name="SettingsWinGrid">
+        <!-- Row/Col Definitions -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <!-- 'Finalization' Buttons -->
+        <Button x:Name="CancleBtn" Style="{StaticResource FinalizationBtnStyle}" Content="Cancel" Margin="0,5,40,20" 
+                Grid.Row="3" Grid.Column="1" IsCancel="True" Command="{Binding Path=CloseCommand}"/>
+        <Button x:Name="SaveBtn" Style="{StaticResource FinalizationBtnStyle}" Content="Save" Margin="0,5,170,20" 
+                Grid.Row="3" Grid.Column="1" IsDefault="True" Command="{Binding Path=SaveCommand}"/>
+        <!-- Area containing settings to edit -->
+        <GroupBox Grid.Row="0" Grid.Column="0" Grid.RowSpan="3">
+            <GroupBox.Header>
+                <Label Content="Key Bindings" FontSize="14" FontWeight="SemiBold"/>
+            </GroupBox.Header>
+            <!-- Key Binding Settings -->
+        </GroupBox>
+        <GroupBox Grid.Row="0" Grid.Column="1">
+            <GroupBox.Header>
+                <Label Content="Colors" FontSize="14" FontWeight="SemiBold"/>
+            </GroupBox.Header>
+            <!-- Color Settings -->
+        </GroupBox>
+        <GroupBox Grid.Row="1" Grid.Column="1" Grid.RowSpan="2">
+            <GroupBox.Header>
+                <Label Content="Misc" FontSize="14" FontWeight="SemiBold"/>
+            </GroupBox.Header>
+            <!-- Misc Settings -->
+        </GroupBox>
     </Grid>
 </Window>

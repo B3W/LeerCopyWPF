@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LeerCopyWPF.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -17,9 +18,14 @@ namespace LeerCopyWPF.Views
     /// </summary>
     public partial class SettingsWindow : Window
     {
+        private readonly SettingsViewModel _viewModel;
+
         public SettingsWindow()
         {
             InitializeComponent();
+
+            _viewModel = new SettingsViewModel();
+            DataContext = _viewModel;
         }
     }
 }

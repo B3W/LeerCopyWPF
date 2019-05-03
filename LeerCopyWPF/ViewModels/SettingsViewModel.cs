@@ -1,14 +1,16 @@
-﻿using System;
+﻿using LeerCopyWPF.Commands;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
+using System.Windows.Input;
 
 namespace LeerCopyWPF.ViewModels
 {
     public class SettingsViewModel : BaseViewModel
     {
         #region Fields
-        private string _displayName = "Settings";
+        private const string _displayName = "Settings";
         /// <summary>
         /// Instance of application settings
         /// </summary>
@@ -21,9 +23,32 @@ namespace LeerCopyWPF.ViewModels
         /// Default file save setting
         /// </summary>
         private string _defaultExt, _defaultFileName;
+        /// <summary>
+        /// Keeps track of changes made to the settings with type string
+        /// </summary>
+        private IDictionary<string, string> _strSettingsChanges = new Dictionary<string, string>(12);
+        /// <summary>
+        /// Command to run to save settings
+        /// </summary>
+        private ICommand _saveCommand;
         #endregion // Fields
 
-        #region FieldEncapsulation
+        #region PropertyNames
+        private const string _copyPropName = "CopyKey";
+        private const string _editPropName = "EditKey";
+        private const string _savePropName = "SaveKey";
+        private const string _clearPropName = "ClearKey";
+        private const string _selectAllPropName = "SelectAll";
+        private const string _borderPropName = "BorderKey";
+        private const string _tipsPropName = "TipsKey";
+        private const string _swtchScrnPropName = "SwitchScreenKey";
+        private const string _settingsPropName = "SettingsWin";
+        private const string _quitPropName = "QuitKey";
+        private const string _defFileExtPropName = "DefaultSaveExt";
+        private const string _defFileNamePropName = "DefaultFileName";
+        #endregion // PropertyNames
+
+        #region Properties
         public override string DisplayName
         {
             get => _displayName;
@@ -37,7 +62,8 @@ namespace LeerCopyWPF.ViewModels
                 if (_copy != value)
                 {
                     _copy = value;
-                    OnPropertyChanged("CopyKey");
+                    OnPropertyChanged(_copyPropName);
+                    RecordStrPropertyChange(_copyPropName, value);
                 }
             }
         }
@@ -50,7 +76,8 @@ namespace LeerCopyWPF.ViewModels
                 if (_edit != value)
                 {
                     _edit = value;
-                    OnPropertyChanged("EditKey");
+                    OnPropertyChanged(_editPropName);
+                    RecordStrPropertyChange(_editPropName, value);
                 }
             }
         }
@@ -63,7 +90,8 @@ namespace LeerCopyWPF.ViewModels
                 if (_save != value)
                 {
                     _save = value;
-                    OnPropertyChanged("SaveKey");
+                    OnPropertyChanged(_savePropName);
+                    RecordStrPropertyChange(_savePropName, value);
                 }
             }
         }
@@ -76,7 +104,8 @@ namespace LeerCopyWPF.ViewModels
                 if (_clear != value)
                 {
                     _clear = value;
-                    OnPropertyChanged("ClearKey");
+                    OnPropertyChanged(_clearPropName);
+                    RecordStrPropertyChange(_clearPropName, value);
                 }
             }
         }
@@ -89,7 +118,8 @@ namespace LeerCopyWPF.ViewModels
                 if (_selectAll != value)
                 {
                     _selectAll = value;
-                    OnPropertyChanged("SelectAll");
+                    OnPropertyChanged(_selectAllPropName);
+                    RecordStrPropertyChange(_selectAllPropName, value);
                 }
             }
         }
@@ -102,7 +132,8 @@ namespace LeerCopyWPF.ViewModels
                 if (_border != value)
                 {
                     _border = value;
-                    OnPropertyChanged("BorderKey");
+                    OnPropertyChanged(_borderPropName);
+                    RecordStrPropertyChange(_borderPropName, value);
                 }
             }
         }
@@ -115,7 +146,8 @@ namespace LeerCopyWPF.ViewModels
                 if (_tips != value)
                 {
                     _tips = value;
-                    OnPropertyChanged("TipsKey");
+                    OnPropertyChanged(_tipsPropName);
+                    RecordStrPropertyChange(_tipsPropName, value);
                 }
             }
         }
@@ -128,7 +160,8 @@ namespace LeerCopyWPF.ViewModels
                 if (_swtchScrn != value)
                 {
                     _swtchScrn = value;
-                    OnPropertyChanged("SwitchScreenKey");
+                    OnPropertyChanged(_swtchScrnPropName);
+                    RecordStrPropertyChange(_swtchScrnPropName, value);
                 }
             }
         }
@@ -141,7 +174,8 @@ namespace LeerCopyWPF.ViewModels
                 if (_settings != value)
                 {
                     _settings = value;
-                    OnPropertyChanged("SettingsWin");
+                    OnPropertyChanged(_settingsPropName);
+                    RecordStrPropertyChange(_settingsPropName, value);
                 }
             }
         }
@@ -154,18 +188,96 @@ namespace LeerCopyWPF.ViewModels
                 if (_quit != value)
                 {
                     _quit = value;
-                    OnPropertyChanged("QuitKey");
+                    OnPropertyChanged(_quitPropName);
+                    RecordStrPropertyChange(_quitPropName, value);
                 }
             }
         }
-        #endregion // FieldEncapsulation
+
+        public string DefaultSaveExt
+        {
+            get => _defaultExt;
+            set
+            {
+                if (_defaultExt != value)
+                {
+                    _defaultExt = value;
+                    OnPropertyChanged(_defFileExtPropName);
+                    RecordStrPropertyChange(_defFileExtPropName, value);
+                }
+            }
+        }
+
+        public string DefaultFileName
+        {
+            get => _defaultFileName;
+            set
+            {
+                if (_defaultFileName != value)
+                {
+                    _defaultFileName = value;
+                    OnPropertyChanged(_defFileNamePropName);
+                    RecordStrPropertyChange(_defFileNamePropName, value);
+                }
+            }
+        }
+
+        public bool CanSave
+        {
+            get
+            {
+                return _strSettingsChanges != null && _strSettingsChanges.Count > 0;
+            }
+        }
+
+        public ICommand SaveCommand
+        {
+            get
+            {
+                if (_saveCommand == null)
+                {
+                    _saveCommand = new RelayCommand(param => SaveSettings(), param => CanSave);
+                }
+                return _saveCommand;
+            }
+        }
+        #endregion // Properties
 
         #region Constructors
         public SettingsViewModel()
         {
             _settingsInst = Properties.Settings.Default;
+
         }
         #endregion // Constructors
 
+        #region Methods/Functions
+        /// <summary>
+        /// Adds or updates string type property change
+        /// </summary>
+        /// <param name="propertyName">Name of property changed</param>
+        /// <param name="value">Value of property</param>
+        private void RecordStrPropertyChange(string propertyName, string value)
+        {
+            // Adds new KeyValue pair if key doesn't exist, or updates existing
+            _strSettingsChanges[propertyName] = value;
+        }
+
+
+        /// <summary>
+        /// Logic for save command
+        /// </summary>
+        public void SaveSettings()
+        {
+            foreach (KeyValuePair<string, string> keyValuePair in _strSettingsChanges)
+            {
+                _settingsInst[keyValuePair.Key] = keyValuePair.Value;
+            }
+            _settingsInst.Save();
+            OnPropertyChanged(_displayName);
+
+            _strSettingsChanges.Clear();
+        }
+        #endregion // Methods/Functions
     }
 }

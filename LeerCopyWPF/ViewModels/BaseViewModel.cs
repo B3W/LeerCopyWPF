@@ -17,7 +17,7 @@ namespace LeerCopyWPF.ViewModels
 
         #region Methods
         /// <summary>
-        /// Called when a property value changes
+        /// Call when a property value changes
         /// </summary>
         /// <param name="propertyName">Name of property which changed</param>
         protected virtual void OnPropertyChanged(string propertyName)

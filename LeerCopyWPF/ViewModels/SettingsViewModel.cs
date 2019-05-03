@@ -21,6 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Input;
 
 namespace LeerCopyWPF.ViewModels
@@ -271,16 +272,14 @@ namespace LeerCopyWPF.ViewModels
         {
             get
             {
-                if (_saveCommand == null)
-                {
-                    _saveCommand = new RelayCommand(param => SaveSettings(), param => CanSave);
-                }
-                return _saveCommand;
+                return _saveCommand ?? (_saveCommand = new RelayCommand(param => SaveSettings(), param => CanSave));
             }
         }
 
+        public ICommand CloseCommand { get; }
+
         /// <summary>
-        /// This property is not called by WPF framework so no implementation needed
+        /// This property is not used by WPF framework so no implementation needed
         /// </summary>
         public string Error
         {
@@ -311,15 +310,26 @@ namespace LeerCopyWPF.ViewModels
                     case _settingsPropName:
                     case _quitPropName:
                         // Validate key bindings
+                        // TODO
 
                         break;
                     case _defFileExtPropName:
                         // Validate file extension
-
+                        if (Array.IndexOf<string>(_extOptions, _defaultExt) == -1)
+                        {
+                            error = "File extension not supported";
+                        }
                         break;
                     case _defFileNamePropName:
                         // Validate file name
-
+                        if (_defaultFileName.Length == 0 || _defaultFileName.Length > 100)
+                        {
+                            error = "Default file name must be between 1 and 100 characters long";
+                        }
+                        else if (IsInvalidFileName(_defaultFileName))
+                        {
+                            error = "Invalid file name";
+                        }
                         break;
                     default:
                         break;
@@ -331,7 +341,7 @@ namespace LeerCopyWPF.ViewModels
         #endregion // Properties
 
         #region Constructors
-        public SettingsViewModel()
+        public SettingsViewModel(Action<object> closeAction)
         {
             _settingsInst = Properties.Settings.Default;
             // Fetch initial values from settings
@@ -347,10 +357,27 @@ namespace LeerCopyWPF.ViewModels
             _quit = (string)_settingsInst[_quitPropName];
             _defaultExt = (string)_settingsInst[_defFileExtPropName];
             _defaultFileName = (string)_settingsInst[_defFileNamePropName];
+
+            CloseCommand = new RelayCommand(closeAction);
         }
         #endregion // Constructors
 
         #region Methods/Functions
+        /// <summary>
+        /// Logic for save command
+        /// </summary>
+        public void SaveSettings()
+        {
+            foreach (KeyValuePair<string, string> keyValuePair in _strSettingsChanges)
+            {
+                _settingsInst[keyValuePair.Key] = keyValuePair.Value;
+            }
+            _settingsInst.Save();
+
+            _strSettingsChanges.Clear();
+        }
+
+
         /// <summary>
         /// Adds or updates string type property change
         /// </summary>
@@ -364,17 +391,20 @@ namespace LeerCopyWPF.ViewModels
 
 
         /// <summary>
-        /// Logic for save command
+        /// Validates the file name provided by the user
         /// </summary>
-        public void SaveSettings()
+        /// <param name="filename">File name to validate</param>
+        /// <returns>True if invalid, false otherwise</returns>
+        private bool IsInvalidFileName(string filename)
         {
-            foreach (KeyValuePair<string, string> keyValuePair in _strSettingsChanges)
-            {
-                _settingsInst[keyValuePair.Key] = keyValuePair.Value;
-            }
-            _settingsInst.Save();
+            string regexPattern = "^(?!^(?:PRN|AUX|CLOCK\\$|NUL|CON|COM\\d|LPT\\d)(?:\\..+)?$)(?:\\.*?(?!\\.))[^\x00-\x1f\\?*:\";|\\/<>]+(?<![\\s.])$";
+            Regex invalRegex = new Regex(regexPattern, RegexOptions.IgnoreCase);
 
-            _strSettingsChanges.Clear();
+            if (invalRegex.IsMatch(filename))
+            {
+                return true;
+            }
+            return false;
         }
         #endregion // Methods/Functions
     }

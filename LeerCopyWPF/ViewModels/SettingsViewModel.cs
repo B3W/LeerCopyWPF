@@ -247,7 +247,19 @@ namespace LeerCopyWPF.ViewModels
         public SettingsViewModel()
         {
             _settingsInst = Properties.Settings.Default;
-
+            // Fetch initial values from settings
+            _copy = (string)_settingsInst[_copyPropName];
+            _edit = (string)_settingsInst[_editPropName];
+            _save = (string)_settingsInst[_savePropName];
+            _clear = (string)_settingsInst[_clearPropName];
+            _selectAll = (string)_settingsInst[_selectAllPropName];
+            _border = (string)_settingsInst[_borderPropName];
+            _tips = (string)_settingsInst[_tipsPropName];
+            _swtchScrn = (string)_settingsInst[_swtchScrnPropName];
+            _settings = (string)_settingsInst[_settingsPropName];
+            _quit = (string)_settingsInst[_quitPropName];
+            _defaultExt = (string)_settingsInst[_defFileExtPropName];
+            _defaultFileName = (string)_settingsInst[_defFileNamePropName];
         }
         #endregion // Constructors
 

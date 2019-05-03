@@ -82,7 +82,7 @@
         <Canvas x:Name="BorderCanvas" Background="Transparent" Panel.ZIndex="4"
                 Visibility="{Binding Source={x:Static prop:Settings.Default}, Path=BorderVisibility, Mode=TwoWay}">
             <Rectangle x:Name="BorderRect" StrokeThickness="3" 
-                       Stroke="{Binding Source={x:Static prop:Settings.Default}, Path=BorderBrush, Mode=TwoWay}"/>
+                       Stroke="{Binding Source={x:Static prop:Settings.Default}, Path=SelectionBorderBrush, Mode=TwoWay}"/>
         </Canvas>
     </Grid>
 </Window>

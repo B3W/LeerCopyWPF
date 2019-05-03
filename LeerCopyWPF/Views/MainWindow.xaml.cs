@@ -181,6 +181,13 @@ namespace LeerCopyWPF.Views
         } // SelectCaptureBtn_Click
 
 
+        private void SettingsMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            SettingsWindow settings = new SettingsWindow();
+            settings.ShowDialog();
+        } // SettingsMenuItem_Click
+
+
         private void ExitMenuItem_Click(object sender, RoutedEventArgs e)
         {
             this.Close();

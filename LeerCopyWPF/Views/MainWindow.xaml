@@ -28,7 +28,7 @@
         <!-- App menu -->
         <Menu Name="MainMenu" Grid.Row="0">
             <MenuItem Header="{x:Static resx:Resources.MenuFileStr}">
-                <MenuItem Header="{x:Static resx:Resources.MenuSettingsStr}"/>
+                <MenuItem Header="{x:Static resx:Resources.MenuSettingsStr}" Click="SettingsMenuItem_Click"/>
                 <Separator/>
                 <MenuItem Header="{x:Static resx:Resources.MenuExitStr}" Click="ExitMenuItem_Click"/>
             </MenuItem>

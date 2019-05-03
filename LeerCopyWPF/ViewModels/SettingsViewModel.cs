@@ -286,7 +286,6 @@ namespace LeerCopyWPF.ViewModels
                 _settingsInst[keyValuePair.Key] = keyValuePair.Value;
             }
             _settingsInst.Save();
-            OnPropertyChanged(_displayName);
 
             _strSettingsChanges.Clear();
         }

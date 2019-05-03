@@ -1,4 +1,22 @@
-﻿using LeerCopyWPF.Commands;
+﻿/*
+ *  Leer Copy - Quick and Accurate Screen Capturing Application
+ *  Copyright (C) 2019  Weston Berg
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+using LeerCopyWPF.Commands;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -7,7 +25,7 @@ using System.Windows.Input;
 
 namespace LeerCopyWPF.ViewModels
 {
-    public class SettingsViewModel : BaseViewModel
+    public class SettingsViewModel : BaseViewModel, IDataErrorInfo
     {
         #region Fields
         private const string _displayName = "Settings";
@@ -23,6 +41,10 @@ namespace LeerCopyWPF.ViewModels
         /// Default file save setting
         /// </summary>
         private string _defaultExt, _defaultFileName;
+        /// <summary>
+        /// Set of options for default extension value
+        /// </summary>
+        private string[] _extOptions;
         /// <summary>
         /// Keeps track of changes made to the settings with type string
         /// </summary>
@@ -222,6 +244,21 @@ namespace LeerCopyWPF.ViewModels
             }
         }
 
+        public string[] ExtOptions
+        {
+            get
+            {
+                if (_extOptions == null)
+                {
+                    _extOptions = new string[] { ".bmp", ".png", ".jpg", ".gif", ".tif", ".wmp" };
+                }
+                return _extOptions;
+            }
+        }
+
+        /// <summary>
+        /// Allow saving only if changes have been made
+        /// </summary>
         public bool CanSave
         {
             get
@@ -239,6 +276,56 @@ namespace LeerCopyWPF.ViewModels
                     _saveCommand = new RelayCommand(param => SaveSettings(), param => CanSave);
                 }
                 return _saveCommand;
+            }
+        }
+
+        /// <summary>
+        /// This property is not called by WPF framework so no implementation needed
+        /// </summary>
+        public string Error
+        {
+            get => throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Validates given property data binding data
+        /// </summary>
+        /// <param name="columnName">Name of property to validate</param>
+        /// <returns>null or empty string if valid, error message otherwise</returns>
+        public string this[string columnName]
+        { 
+            get
+            {
+                string error = string.Empty;
+
+                switch (columnName)
+                {
+                    case _copyPropName:
+                    case _editPropName:
+                    case _savePropName:
+                    case _clearPropName:
+                    case _selectAllPropName:
+                    case _borderPropName:
+                    case _tipsPropName:
+                    case _swtchScrnPropName:
+                    case _settingsPropName:
+                    case _quitPropName:
+                        // Validate key bindings
+
+                        break;
+                    case _defFileExtPropName:
+                        // Validate file extension
+
+                        break;
+                    case _defFileNamePropName:
+                        // Validate file name
+
+                        break;
+                    default:
+                        break;
+                }
+
+                return error;
             }
         }
         #endregion // Properties

@@ -74,5 +74,8 @@
     <Setting Name="SelectionBorderBrush" Type="System.Windows.Media.SolidColorBrush" Scope="User">
       <Value Profile="(Default)">#FF32CD32</Value>
     </Setting>
+    <Setting Name="SelectionWinOpacity" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0.1</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

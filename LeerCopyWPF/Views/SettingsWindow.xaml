@@ -7,7 +7,7 @@
         xmlns:prop="clr-namespace:LeerCopyWPF.Properties"
         xmlns:local="clr-namespace:LeerCopyWPF.Views"
         mc:Ignorable="d"
-        Title="{Binding Path=DisplayName}" MinWidth="800" MinHeight="600" WindowStartupLocation="CenterOwner">
+        Title="{Binding Path=DisplayName}" MinWidth="1000" MinHeight="600" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Style x:Key="FinalizationBtnStyle" TargetType="Button">
             <Setter Property="FontSize" Value="16"/>
@@ -16,6 +16,17 @@
             <Setter Property="VerticalAlignment" Value="Bottom"/>
             <Setter Property="MinWidth" Value="85"/>
             <Setter Property="MinHeight" Value="20"/>
+        </Style>
+        <Style x:Key="GroupBoxHeaderLblStyle" TargetType="Label">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+        <Style x:Key="SettingLblStyle" TargetType="Label">
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+        <Style x:Key="SettingChkBoxStyle" TargetType="CheckBox">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
         </Style>
     </Window.Resources>
     <Grid x:Name="SettingsWinGrid">
@@ -38,21 +49,68 @@
         <!-- Area containing settings to edit -->
         <GroupBox Grid.Row="0" Grid.Column="0" Grid.RowSpan="3">
             <GroupBox.Header>
-                <Label Content="Key Bindings" FontSize="14" FontWeight="SemiBold"/>
+                <Label Content="{x:Static resx:Resources.SettingsKeyBindingsStr}" Style="{StaticResource GroupBoxHeaderLblStyle}"/>
             </GroupBox.Header>
             <!-- Key Binding Settings -->
         </GroupBox>
         <GroupBox Grid.Row="0" Grid.Column="1">
             <GroupBox.Header>
-                <Label Content="Colors" FontSize="14" FontWeight="SemiBold"/>
+                <Label Content="{x:Static resx:Resources.SettingsColorStr}" Style="{StaticResource GroupBoxHeaderLblStyle}"/>
             </GroupBox.Header>
             <!-- Color Settings -->
+            <Grid x:Name="ColorSettingsGrid">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <!-- Selection Border Color -->
+                <Label Grid.Row="0" Grid.Column="0" Content="{x:Static resx:Resources.SettingsBorderColorStr}" Style="{StaticResource SettingLblStyle}"/>
+
+                <!-- Selection Window Transparency -->
+                <Label Grid.Row="1" Grid.Column="0" Content="{x:Static resx:Resources.SettingsWinOpacityStr}" Style="{StaticResource SettingLblStyle}"/>
+                <DockPanel VerticalAlignment="Center" Grid.Row="1" Grid.Column="1">
+                    <TextBox Text="{Binding ElementName=TransparencySlider, Path=Value, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
+                             IsReadOnly="True" DockPanel.Dock="Right"/>
+                    <Slider Name="TransparencySlider" Value="{Binding Path=SelectionWinOpacity, Mode=TwoWay}" Maximum="0.3" Minimum="0.0"
+                            TickFrequency="0.01" TickPlacement="BottomRight" IsSnapToTickEnabled="True"/>
+                </DockPanel>
+            </Grid>
         </GroupBox>
         <GroupBox Grid.Row="1" Grid.Column="1" Grid.RowSpan="2">
             <GroupBox.Header>
-                <Label Content="Misc" FontSize="14" FontWeight="SemiBold"/>
+                <Label Content="{x:Static resx:Resources.SettingsMiscStr}" Style="{StaticResource GroupBoxHeaderLblStyle}"/>
             </GroupBox.Header>
             <!-- Misc Settings -->
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <!-- File Name -->
+                <Label Grid.Row="0" Grid.Column="0" Content="{x:Static resx:Resources.SettingsFileNameStr}" Style="{StaticResource SettingLblStyle}"/>
+                <TextBox  Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" MinWidth="150" TextAlignment="Left"
+                          Text="{Binding Path=DefaultFileName, Mode=TwoWay}"/>
+                <!-- File Extension -->
+                <Label Grid.Row="1" Grid.Column="0" Content="{x:Static resx:Resources.SettingsFileExtStr}" Style="{StaticResource SettingLblStyle}"/>
+                <ComboBox Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" MinWidth="75" MaxWidth="100" IsReadOnly="True" IsEditable="False"
+                          SelectedItem="{Binding Path=DefaultSaveExt, Mode=TwoWay}" ItemsSource="{Binding Path=ExtOptions, Mode=OneWay}"/>
+                <!-- Border Visibility -->
+                <Label Grid.Row="2" Grid.Column="0" Content="{x:Static resx:Resources.SettingsBorderVisStr}" Style="{StaticResource SettingLblStyle}"/>
+                <CheckBox Grid.Row="2" Grid.Column="1" Style="{StaticResource SettingChkBoxStyle}" IsChecked="{Binding Path=BorderVisibility, Mode=TwoWay}"/>
+                <!-- Tips Visibility -->
+                <Label Grid.Row="3" Grid.Column="0" Content="{x:Static resx:Resources.SettingsTipsVisStr}" Style="{StaticResource SettingLblStyle}"/>
+                <CheckBox Grid.Row="3" Grid.Column="1" Style="{StaticResource SettingChkBoxStyle}" IsChecked="{Binding Path=TipsVisibility, Mode=TwoWay}"/>
+            </Grid>
         </GroupBox>
     </Grid>
 </Window>

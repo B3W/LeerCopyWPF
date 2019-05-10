@@ -173,9 +173,44 @@
     <value>Selection Capture</value>
     <comment>Main Window String</comment>
   </data>
+  <data name="SettingsBorderColorStr" xml:space="preserve">
+    <value>Selection Border Color:</value>
+    <comment>Settings String</comment>
+  </data>
+  <data name="SettingsBorderVisStr" xml:space="preserve">
+    <value>Selection Border Visible:</value>
+    <comment>Settings String</comment>
+  </data>
+  <data name="SettingsColorStr" xml:space="preserve">
+    <value>Color</value>
+    <comment>Settings String</comment>
+  </data>
+  <data name="SettingsFileExtStr" xml:space="preserve">
+    <value>Default File Ext:</value>
+    <comment>Settings String</comment>
+  </data>
+  <data name="SettingsFileNameStr" xml:space="preserve">
+    <value>Default File Name:</value>
+    <comment>Settings String</comment>
+  </data>
+  <data name="SettingsKeyBindingsStr" xml:space="preserve">
+    <value>Key Bindings</value>
+    <comment>Settings String</comment>
+  </data>
+  <data name="SettingsMiscStr" xml:space="preserve">
+    <value>Misc</value>
+    <comment>Settings String</comment>
+  </data>
+  <data name="SettingsTipsVisStr" xml:space="preserve">
+    <value>Tips Visible:</value>
+  </data>
   <data name="SettingsWinLblStr" xml:space="preserve">
     <value> - Open settings</value>
     <comment>Tip String</comment>
+  </data>
+  <data name="SettingsWinOpacityStr" xml:space="preserve">
+    <value>Selection Window Opacity:</value>
+    <comment>Settings String</comment>
   </data>
   <data name="SwitchLblStr" xml:space="preserve">
     <value> - Switch screens</value>

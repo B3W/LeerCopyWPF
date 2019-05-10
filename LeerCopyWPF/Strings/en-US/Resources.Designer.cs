@@ -187,11 +187,92 @@ namespace LeerCopyWPF.Strings.en_US {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Selection Border Color:.
+        /// </summary>
+        public static string SettingsBorderColorStr {
+            get {
+                return ResourceManager.GetString("SettingsBorderColorStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selection Border Visible:.
+        /// </summary>
+        public static string SettingsBorderVisStr {
+            get {
+                return ResourceManager.GetString("SettingsBorderVisStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Color.
+        /// </summary>
+        public static string SettingsColorStr {
+            get {
+                return ResourceManager.GetString("SettingsColorStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default File Ext:.
+        /// </summary>
+        public static string SettingsFileExtStr {
+            get {
+                return ResourceManager.GetString("SettingsFileExtStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default File Name:.
+        /// </summary>
+        public static string SettingsFileNameStr {
+            get {
+                return ResourceManager.GetString("SettingsFileNameStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Key Bindings.
+        /// </summary>
+        public static string SettingsKeyBindingsStr {
+            get {
+                return ResourceManager.GetString("SettingsKeyBindingsStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Misc.
+        /// </summary>
+        public static string SettingsMiscStr {
+            get {
+                return ResourceManager.GetString("SettingsMiscStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tips Visible:.
+        /// </summary>
+        public static string SettingsTipsVisStr {
+            get {
+                return ResourceManager.GetString("SettingsTipsVisStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to  - Open settings.
         /// </summary>
         public static string SettingsWinLblStr {
             get {
                 return ResourceManager.GetString("SettingsWinLblStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selection Window Opacity:.
+        /// </summary>
+        public static string SettingsWinOpacityStr {
+            get {
+                return ResourceManager.GetString("SettingsWinOpacityStr", resourceCulture);
             }
         }
         

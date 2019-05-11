@@ -108,8 +108,8 @@
                     <TextBox Text="{Binding ElementName=TransparencySlider, Path=Value, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
                              IsReadOnly="True" DockPanel.Dock="Right"/>
                     <Slider Name="TransparencySlider" Value="{Binding Path=SelectionWinOpacity, Mode=TwoWay, ValidatesOnDataErrors=True}"
-                            Style="{StaticResource SettingSliderStyle}"
-                            Maximum="0.3" Minimum="0.0" TickFrequency="0.01" TickPlacement="BottomRight" IsSnapToTickEnabled="True"/>
+                            Maximum="{Binding Path=OpacityMax, Mode=OneWay}" Style="{StaticResource SettingSliderStyle}"
+                            Minimum="0.0" TickFrequency="0.01" TickPlacement="BottomRight" IsSnapToTickEnabled="True"/>
                 </DockPanel>
             </Grid>
         </GroupBox>

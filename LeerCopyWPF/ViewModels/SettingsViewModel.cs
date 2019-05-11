@@ -103,13 +103,14 @@ namespace LeerCopyWPF.ViewModels
         private const string ConstSelectWinOpacityPropName = "SelectionWinOpacity";
         private const string ConstSelectBorderVisPropName = "BorderVisibility";
         private const string ConstTipsVisPropName = "TipsVisibility";
+        /// <summary>
+        /// Max opacity for the selection window's background
+        /// </summary>
+        private const double ConstSelectOpacityMax = 0.3;
         #endregion // Constants
 
         #region Properties
-        public override string DisplayName
-        {
-            get => _displayName;
-        }
+        public override string DisplayName { get => _displayName; }
 
         public string CopyKey
         {
@@ -323,51 +324,22 @@ namespace LeerCopyWPF.ViewModels
             }
         }
 
-        public string[] ExtOptions
-        {
-            get
-            {
-                if (_extOptions == null)
-                {
-                    _extOptions = new string[] { ".bmp", ".png", ".jpg", ".gif", ".tif", ".wmp" };
-                }
-                return _extOptions;
-            }
-        }
+        public string[] ExtOptions { get => _extOptions ?? (_extOptions = new string[] { ".bmp", ".png", ".jpg", ".gif", ".tif", ".wmp" }); }
 
-        public bool SettingsValid
-        {
-            get => _fileNameValid && _fileExtValid && _opacityValid;
-        }
+        public double OpacityMax { get => ConstSelectOpacityMax; }
 
-        /// <summary>
-        /// Allow saving only if changes have been made
-        /// </summary>
-        public bool CanSave
-        {
-            get
-            {
-                return SettingsValid && _settingsChanges != null && _settingsChanges.Count > 0;
-            }
-        }
+        public bool SettingsValid { get => _fileNameValid && _fileExtValid && _opacityValid; }
 
-        public ICommand SaveCommand
-        {
-            get
-            {
-                return _saveCommand ?? (_saveCommand = new RelayCommand(param => SaveSettings(), param => CanSave));
-            }
-        }
+        public bool CanSave { get => SettingsValid && _settingsChanges != null && _settingsChanges.Count > 0; }
+
+        public ICommand SaveCommand { get => _saveCommand ?? (_saveCommand = new RelayCommand(param => SaveSettings(), param => CanSave)); }
 
         public ICommand CloseCommand { get; }
 
         /// <summary>
         /// This property is not used by WPF framework so no implementation needed
         /// </summary>
-        public string Error
-        {
-            get => throw new NotImplementedException();
-        }
+        public string Error { get => throw new NotImplementedException(); }
 
         /// <summary>
         /// Validates given property data binding data
@@ -427,9 +399,9 @@ namespace LeerCopyWPF.ViewModels
                         break;
                     case ConstSelectWinOpacityPropName:
                         // Validate selection window opacity value
-                        if (_selectWinOpacity < 0.0 || _selectWinOpacity > 0.3)
+                        if (_selectWinOpacity < 0.0 || _selectWinOpacity > ConstSelectOpacityMax)
                         {
-                            error = "Selection window opacity must be between 0.0 and 0.3";
+                            error = "Selection window opacity must be between 0.0 and " + ConstSelectOpacityMax;
                             _opacityValid = false;
                         }
                         else
@@ -513,7 +485,7 @@ namespace LeerCopyWPF.ViewModels
 
 
         /// <summary>
-        /// Validates the file name provided by the user
+        /// Basic validation for the file name provided by the user
         /// </summary>
         /// <param name="filename">File name to validate</param>
         /// <returns>True if invalid, false otherwise</returns>

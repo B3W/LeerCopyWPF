@@ -17,7 +17,6 @@
  */
 
 using LeerCopyWPF.Commands;
-using LeerCopyWPF.Utilities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -73,7 +72,7 @@ namespace LeerCopyWPF.ViewModels
         /// <summary>
         /// Set of options for default extension value
         /// </summary>
-        private string[] _extOptions;
+        private string[] _extOptions = new string[] { ".bmp", ".png", ".jpg", ".gif", ".tif", ".wmp" };
         /// <summary>
         /// Keeps track of changes made to the settings with type string
         /// </summary>
@@ -82,9 +81,13 @@ namespace LeerCopyWPF.ViewModels
         /// Command to run to save settings
         /// </summary>
         private ICommand _saveCommand;
+        /// <summary>
+        /// Helper flag for validating data
+        /// </summary>
+        private bool _fileNameValid = true, _fileExtValid = true, _opacityValid = true;
         #endregion // Fields
 
-        #region PropertyNames
+        #region Constants
         private const string _copyPropName = "CopyKey";
         private const string _editPropName = "EditKey";
         private const string _savePropName = "SaveKey";
@@ -100,7 +103,7 @@ namespace LeerCopyWPF.ViewModels
         private const string _selectWinOpacityPropName = "SelectionWinOpacity";
         private const string _selectBorderVisPropName = "BorderVisibility";
         private const string _tipsVisPropName = "TipsVisibility";
-        #endregion // PropertyNames
+        #endregion // Constants
 
         #region Properties
         public override string DisplayName
@@ -332,6 +335,11 @@ namespace LeerCopyWPF.ViewModels
             }
         }
 
+        public bool SettingsValid
+        {
+            get => _fileNameValid && _fileExtValid && _opacityValid;
+        }
+
         /// <summary>
         /// Allow saving only if changes have been made
         /// </summary>
@@ -339,7 +347,7 @@ namespace LeerCopyWPF.ViewModels
         {
             get
             {
-                return _settingsChanges != null && _settingsChanges.Count > 0;
+                return SettingsValid && _settingsChanges != null && _settingsChanges.Count > 0;
             }
         }
 
@@ -390,9 +398,14 @@ namespace LeerCopyWPF.ViewModels
                         break;
                     case _defFileExtPropName:
                         // Validate file extension
-                        if (Array.IndexOf<string>(_extOptions, _defaultExt) == -1)
+                        if (Array.IndexOf<string>(ExtOptions, _defaultExt) == -1)
                         {
                             error = "File extension not supported";
+                            _fileExtValid = false;
+                        }
+                        else
+                        {
+                            _fileExtValid = true;
                         }
                         break;
                     case _defFileNamePropName:
@@ -400,17 +413,28 @@ namespace LeerCopyWPF.ViewModels
                         if (_defaultFileName.Length == 0 || _defaultFileName.Length > 100)
                         {
                             error = "Default file name must be between 1 and 100 characters long";
+                            _fileNameValid = false;
                         }
                         else if (IsInvalidFileName(_defaultFileName))
                         {
                             error = "Invalid file name";
+                            _fileNameValid = false;
+                        }
+                        else
+                        {
+                            _fileNameValid = true;
                         }
                         break;
                     case _selectWinOpacityPropName:
                         // Validate selection window opacity value
-                        if (_selectWinOpacity < 0.0 || _selectWinOpacity > 0.25)
+                        if (_selectWinOpacity < 0.0 || _selectWinOpacity > 0.3)
                         {
-                            error = "Selection Window Opacity must be between 0.0 and 0.25";
+                            error = "Selection window opacity must be between 0.0 and 0.3";
+                            _opacityValid = false;
+                        }
+                        else
+                        {
+                            _opacityValid = true;
                         }
                         break;
                     default:
@@ -428,6 +452,7 @@ namespace LeerCopyWPF.ViewModels
             _settingsInst = Properties.Settings.Default;
 
             // Fetch initial values from settings
+            // Key bindings
             _copy = (string)_settingsInst[_copyPropName];
             _edit = (string)_settingsInst[_editPropName];
             _save = (string)_settingsInst[_savePropName];
@@ -438,6 +463,8 @@ namespace LeerCopyWPF.ViewModels
             _swtchScrn = (string)_settingsInst[_swtchScrnPropName];
             _settings = (string)_settingsInst[_settingsPropName];
             _quit = (string)_settingsInst[_quitPropName];
+
+            // Other
             _defaultExt = (string)_settingsInst[_defFileExtPropName];
             _defaultFileName = (string)_settingsInst[_defFileNamePropName];
             _selectWinOpacity = (double)_settingsInst[_selectWinOpacityPropName];
@@ -456,6 +483,11 @@ namespace LeerCopyWPF.ViewModels
         /// </summary>
         public void SaveSettings()
         {
+            if (!SettingsValid)
+            {
+                throw new InvalidOperationException("Trying to save invalid settings");
+            }
+
             dynamic convertedSettingData;
             foreach (KeyValuePair<string, SettingData> keyValuePair in _settingsChanges)
             {

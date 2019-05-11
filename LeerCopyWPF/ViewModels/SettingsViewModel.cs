@@ -88,21 +88,21 @@ namespace LeerCopyWPF.ViewModels
         #endregion // Fields
 
         #region Constants
-        private const string _copyPropName = "CopyKey";
-        private const string _editPropName = "EditKey";
-        private const string _savePropName = "SaveKey";
-        private const string _clearPropName = "ClearKey";
-        private const string _selectAllPropName = "SelectAll";
-        private const string _borderPropName = "BorderKey";
-        private const string _tipsPropName = "TipsKey";
-        private const string _swtchScrnPropName = "SwitchScreenKey";
-        private const string _settingsPropName = "SettingsWin";
-        private const string _quitPropName = "QuitKey";
-        private const string _defFileExtPropName = "DefaultSaveExt";
-        private const string _defFileNamePropName = "DefaultFileName";
-        private const string _selectWinOpacityPropName = "SelectionWinOpacity";
-        private const string _selectBorderVisPropName = "BorderVisibility";
-        private const string _tipsVisPropName = "TipsVisibility";
+        private const string ConstCopyPropName = "CopyKey";
+        private const string ConstEditPropName = "EditKey";
+        private const string ConstSavePropName = "SaveKey";
+        private const string ConstClearPropName = "ClearKey";
+        private const string ConstSelectAllPropName = "SelectAll";
+        private const string ConstBorderPropName = "BorderKey";
+        private const string ConstTipsPropName = "TipsKey";
+        private const string ConstSwtchScrnPropName = "SwitchScreenKey";
+        private const string ConstSettingsPropName = "SettingsWin";
+        private const string ConstQuitPropName = "QuitKey";
+        private const string ConstFileExtPropName = "DefaultSaveExt";
+        private const string ConstFileNamePropName = "DefaultFileName";
+        private const string ConstSelectWinOpacityPropName = "SelectionWinOpacity";
+        private const string ConstSelectBorderVisPropName = "BorderVisibility";
+        private const string ConstTipsVisPropName = "TipsVisibility";
         #endregion // Constants
 
         #region Properties
@@ -119,8 +119,8 @@ namespace LeerCopyWPF.ViewModels
                 if (_copy != value)
                 {
                     _copy = value;
-                    OnPropertyChanged(_copyPropName);
-                    RecordPropertyChange(_copyPropName, value, typeof(string));
+                    OnPropertyChanged(ConstCopyPropName);
+                    RecordPropertyChange(ConstCopyPropName, value, typeof(string));
                 }
             }
         }
@@ -133,8 +133,8 @@ namespace LeerCopyWPF.ViewModels
                 if (_edit != value)
                 {
                     _edit = value;
-                    OnPropertyChanged(_editPropName);
-                    RecordPropertyChange(_editPropName, value, typeof(string));
+                    OnPropertyChanged(ConstEditPropName);
+                    RecordPropertyChange(ConstEditPropName, value, typeof(string));
                 }
             }
         }
@@ -147,8 +147,8 @@ namespace LeerCopyWPF.ViewModels
                 if (_save != value)
                 {
                     _save = value;
-                    OnPropertyChanged(_savePropName);
-                    RecordPropertyChange(_savePropName, value, typeof(string));
+                    OnPropertyChanged(ConstSavePropName);
+                    RecordPropertyChange(ConstSavePropName, value, typeof(string));
                 }
             }
         }
@@ -161,8 +161,8 @@ namespace LeerCopyWPF.ViewModels
                 if (_clear != value)
                 {
                     _clear = value;
-                    OnPropertyChanged(_clearPropName);
-                    RecordPropertyChange(_clearPropName, value, typeof(string));
+                    OnPropertyChanged(ConstClearPropName);
+                    RecordPropertyChange(ConstClearPropName, value, typeof(string));
                 }
             }
         }
@@ -175,8 +175,8 @@ namespace LeerCopyWPF.ViewModels
                 if (_selectAll != value)
                 {
                     _selectAll = value;
-                    OnPropertyChanged(_selectAllPropName);
-                    RecordPropertyChange(_selectAllPropName, value, typeof(string));
+                    OnPropertyChanged(ConstSelectAllPropName);
+                    RecordPropertyChange(ConstSelectAllPropName, value, typeof(string));
                 }
             }
         }
@@ -189,8 +189,8 @@ namespace LeerCopyWPF.ViewModels
                 if (_border != value)
                 {
                     _border = value;
-                    OnPropertyChanged(_borderPropName);
-                    RecordPropertyChange(_borderPropName, value, typeof(string));
+                    OnPropertyChanged(ConstBorderPropName);
+                    RecordPropertyChange(ConstBorderPropName, value, typeof(string));
                 }
             }
         }
@@ -203,8 +203,8 @@ namespace LeerCopyWPF.ViewModels
                 if (_tips != value)
                 {
                     _tips = value;
-                    OnPropertyChanged(_tipsPropName);
-                    RecordPropertyChange(_tipsPropName, value, typeof(string));
+                    OnPropertyChanged(ConstTipsPropName);
+                    RecordPropertyChange(ConstTipsPropName, value, typeof(string));
                 }
             }
         }
@@ -217,8 +217,8 @@ namespace LeerCopyWPF.ViewModels
                 if (_swtchScrn != value)
                 {
                     _swtchScrn = value;
-                    OnPropertyChanged(_swtchScrnPropName);
-                    RecordPropertyChange(_swtchScrnPropName, value, typeof(string));
+                    OnPropertyChanged(ConstSwtchScrnPropName);
+                    RecordPropertyChange(ConstSwtchScrnPropName, value, typeof(string));
                 }
             }
         }
@@ -231,8 +231,8 @@ namespace LeerCopyWPF.ViewModels
                 if (_settings != value)
                 {
                     _settings = value;
-                    OnPropertyChanged(_settingsPropName);
-                    RecordPropertyChange(_settingsPropName, value, typeof(string));
+                    OnPropertyChanged(ConstSettingsPropName);
+                    RecordPropertyChange(ConstSettingsPropName, value, typeof(string));
                 }
             }
         }
@@ -245,8 +245,8 @@ namespace LeerCopyWPF.ViewModels
                 if (_quit != value)
                 {
                     _quit = value;
-                    OnPropertyChanged(_quitPropName);
-                    RecordPropertyChange(_quitPropName, value, typeof(string));
+                    OnPropertyChanged(ConstQuitPropName);
+                    RecordPropertyChange(ConstQuitPropName, value, typeof(string));
                 }
             }
         }
@@ -259,8 +259,8 @@ namespace LeerCopyWPF.ViewModels
                 if (_defaultExt != value)
                 {
                     _defaultExt = value;
-                    OnPropertyChanged(_defFileExtPropName);
-                    RecordPropertyChange(_defFileExtPropName, value, typeof(string));
+                    OnPropertyChanged(ConstFileExtPropName);
+                    RecordPropertyChange(ConstFileExtPropName, value, typeof(string));
                 }
             }
         }
@@ -273,8 +273,8 @@ namespace LeerCopyWPF.ViewModels
                 if (_defaultFileName != value)
                 {
                     _defaultFileName = value;
-                    OnPropertyChanged(_defFileNamePropName);
-                    RecordPropertyChange(_defFileNamePropName, value, typeof(string));
+                    OnPropertyChanged(ConstFileNamePropName);
+                    RecordPropertyChange(ConstFileNamePropName, value, typeof(string));
                 }
             }
         }
@@ -287,8 +287,8 @@ namespace LeerCopyWPF.ViewModels
                 if(_selectWinOpacity != value)
                 {
                     _selectWinOpacity = value;
-                    OnPropertyChanged(_selectWinOpacityPropName);
-                    RecordPropertyChange(_selectWinOpacityPropName, value, typeof(double));
+                    OnPropertyChanged(ConstSelectWinOpacityPropName);
+                    RecordPropertyChange(ConstSelectWinOpacityPropName, value, typeof(double));
                 }
             }
         }
@@ -302,8 +302,8 @@ namespace LeerCopyWPF.ViewModels
                 {
                     _borderVisBool = value;
                     _selectBorderVisibility = (_borderVisBool == true) ? Visibility.Visible : Visibility.Hidden;
-                    OnPropertyChanged(_selectBorderVisPropName);
-                    RecordPropertyChange(_selectBorderVisPropName, _selectBorderVisibility, typeof(Visibility));
+                    OnPropertyChanged(ConstSelectBorderVisPropName);
+                    RecordPropertyChange(ConstSelectBorderVisPropName, _selectBorderVisibility, typeof(Visibility));
                 }
             }
         }
@@ -317,8 +317,8 @@ namespace LeerCopyWPF.ViewModels
                 {
                     _tipsVisBool = value;
                     _tipsVisibility = (_tipsVisBool == true) ? Visibility.Visible : Visibility.Hidden;
-                    OnPropertyChanged(_tipsVisPropName);
-                    RecordPropertyChange(_tipsVisPropName, _tipsVisibility, typeof(Visibility));
+                    OnPropertyChanged(ConstTipsVisPropName);
+                    RecordPropertyChange(ConstTipsVisPropName, _tipsVisibility, typeof(Visibility));
                 }
             }
         }
@@ -382,21 +382,21 @@ namespace LeerCopyWPF.ViewModels
 
                 switch (columnName)
                 {
-                    case _copyPropName:
-                    case _editPropName:
-                    case _savePropName:
-                    case _clearPropName:
-                    case _selectAllPropName:
-                    case _borderPropName:
-                    case _tipsPropName:
-                    case _swtchScrnPropName:
-                    case _settingsPropName:
-                    case _quitPropName:
+                    case ConstCopyPropName:
+                    case ConstEditPropName:
+                    case ConstSavePropName:
+                    case ConstClearPropName:
+                    case ConstSelectAllPropName:
+                    case ConstBorderPropName:
+                    case ConstTipsPropName:
+                    case ConstSwtchScrnPropName:
+                    case ConstSettingsPropName:
+                    case ConstQuitPropName:
                         // Validate key bindings
                         // TODO
 
                         break;
-                    case _defFileExtPropName:
+                    case ConstFileExtPropName:
                         // Validate file extension
                         if (Array.IndexOf<string>(ExtOptions, _defaultExt) == -1)
                         {
@@ -408,7 +408,7 @@ namespace LeerCopyWPF.ViewModels
                             _fileExtValid = true;
                         }
                         break;
-                    case _defFileNamePropName:
+                    case ConstFileNamePropName:
                         // Validate file name
                         if (_defaultFileName.Length == 0 || _defaultFileName.Length > 100)
                         {
@@ -425,7 +425,7 @@ namespace LeerCopyWPF.ViewModels
                             _fileNameValid = true;
                         }
                         break;
-                    case _selectWinOpacityPropName:
+                    case ConstSelectWinOpacityPropName:
                         // Validate selection window opacity value
                         if (_selectWinOpacity < 0.0 || _selectWinOpacity > 0.3)
                         {
@@ -453,24 +453,24 @@ namespace LeerCopyWPF.ViewModels
 
             // Fetch initial values from settings
             // Key bindings
-            _copy = (string)_settingsInst[_copyPropName];
-            _edit = (string)_settingsInst[_editPropName];
-            _save = (string)_settingsInst[_savePropName];
-            _clear = (string)_settingsInst[_clearPropName];
-            _selectAll = (string)_settingsInst[_selectAllPropName];
-            _border = (string)_settingsInst[_borderPropName];
-            _tips = (string)_settingsInst[_tipsPropName];
-            _swtchScrn = (string)_settingsInst[_swtchScrnPropName];
-            _settings = (string)_settingsInst[_settingsPropName];
-            _quit = (string)_settingsInst[_quitPropName];
+            _copy = (string)_settingsInst[ConstCopyPropName];
+            _edit = (string)_settingsInst[ConstEditPropName];
+            _save = (string)_settingsInst[ConstSavePropName];
+            _clear = (string)_settingsInst[ConstClearPropName];
+            _selectAll = (string)_settingsInst[ConstSelectAllPropName];
+            _border = (string)_settingsInst[ConstBorderPropName];
+            _tips = (string)_settingsInst[ConstTipsPropName];
+            _swtchScrn = (string)_settingsInst[ConstSwtchScrnPropName];
+            _settings = (string)_settingsInst[ConstSettingsPropName];
+            _quit = (string)_settingsInst[ConstQuitPropName];
 
             // Other
-            _defaultExt = (string)_settingsInst[_defFileExtPropName];
-            _defaultFileName = (string)_settingsInst[_defFileNamePropName];
-            _selectWinOpacity = (double)_settingsInst[_selectWinOpacityPropName];
-            _selectBorderVisibility = (Visibility)_settingsInst[_selectBorderVisPropName];
+            _defaultExt = (string)_settingsInst[ConstFileExtPropName];
+            _defaultFileName = (string)_settingsInst[ConstFileNamePropName];
+            _selectWinOpacity = (double)_settingsInst[ConstSelectWinOpacityPropName];
+            _selectBorderVisibility = (Visibility)_settingsInst[ConstSelectBorderVisPropName];
             _borderVisBool = (_selectBorderVisibility == Visibility.Visible) ? true : false;
-            _tipsVisibility = (Visibility)_settingsInst[_tipsVisPropName];
+            _tipsVisibility = (Visibility)_settingsInst[ConstTipsVisPropName];
             _tipsVisBool = (_tipsVisibility == Visibility.Visible) ? true : false;
 
             CloseCommand = new RelayCommand(closeAction);
@@ -519,10 +519,14 @@ namespace LeerCopyWPF.ViewModels
         /// <returns>True if invalid, false otherwise</returns>
         private bool IsInvalidFileName(string filename)
         {
-            string regexPattern = "^(?!^(?:PRN|AUX|CLOCK\\$|NUL|CON|COM\\d|LPT\\d)(?:\\..+)?$)(?:\\.*?(?!\\.))[^\x00-\x1f\\?*:\";|\\/<>]+(?<![\\s.])$";
-            Regex invalRegex = new Regex(regexPattern, RegexOptions.IgnoreCase);
+            string regexPattern = "^(COM[0-9]|CON|LPT[0-9]|NUL|PRN|AUX)$";
+            Regex invalRegex = new Regex(regexPattern, RegexOptions.None);
 
-            if (invalRegex.IsMatch(filename))
+            if (filename.IndexOfAny(System.IO.Path.GetInvalidFileNameChars()) != -1)
+            {
+                return true;
+            }
+            else if (invalRegex.IsMatch(filename))
             {
                 return true;
             }

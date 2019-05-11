@@ -24,6 +24,38 @@
         <Style x:Key="SettingLblStyle" TargetType="Label">
             <Setter Property="FontSize" Value="14"/>
         </Style>
+        <Style x:Key="SettingTxtBoxStyle" TargetType="TextBox">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="true">
+                    <Setter Property="ToolTip" 
+                            Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)/ErrorContent}"/>
+                </Trigger>
+            </Style.Triggers>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="TextAlignment" Value="Left"/>
+            <Setter Property="MinWidth" Value="150"/>
+        </Style>
+        <Style x:Key="SettingComboBoxStyle" TargetType="ComboBox">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="true">
+                    <Setter Property="ToolTip" 
+                            Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)/ErrorContent}"/>
+                </Trigger>
+            </Style.Triggers>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="MinWidth" Value="75"/>
+        </Style>
+        <Style x:Key="SettingSliderStyle" TargetType="Slider">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="true">
+                    <Setter Property="ToolTip" 
+                            Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)/ErrorContent}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
         <Style x:Key="SettingChkBoxStyle" TargetType="CheckBox">
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
@@ -75,8 +107,9 @@
                 <DockPanel VerticalAlignment="Center" Grid.Row="1" Grid.Column="1">
                     <TextBox Text="{Binding ElementName=TransparencySlider, Path=Value, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
                              IsReadOnly="True" DockPanel.Dock="Right"/>
-                    <Slider Name="TransparencySlider" Value="{Binding Path=SelectionWinOpacity, Mode=TwoWay}" Maximum="0.3" Minimum="0.0"
-                            TickFrequency="0.01" TickPlacement="BottomRight" IsSnapToTickEnabled="True"/>
+                    <Slider Name="TransparencySlider" Value="{Binding Path=SelectionWinOpacity, Mode=TwoWay, ValidatesOnDataErrors=True}"
+                            Style="{StaticResource SettingSliderStyle}"
+                            Maximum="0.3" Minimum="0.0" TickFrequency="0.01" TickPlacement="BottomRight" IsSnapToTickEnabled="True"/>
                 </DockPanel>
             </Grid>
         </GroupBox>
@@ -98,12 +131,12 @@
                 </Grid.ColumnDefinitions>
                 <!-- File Name -->
                 <Label Grid.Row="0" Grid.Column="0" Content="{x:Static resx:Resources.SettingsFileNameStr}" Style="{StaticResource SettingLblStyle}"/>
-                <TextBox  Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" MinWidth="150" TextAlignment="Left"
-                          Text="{Binding Path=DefaultFileName, Mode=TwoWay}"/>
+                <TextBox  Grid.Row="0" Grid.Column="1" Style="{StaticResource SettingTxtBoxStyle}"
+                          Text="{Binding Path=DefaultFileName, Mode=TwoWay, ValidatesOnDataErrors=True}"/>
                 <!-- File Extension -->
                 <Label Grid.Row="1" Grid.Column="0" Content="{x:Static resx:Resources.SettingsFileExtStr}" Style="{StaticResource SettingLblStyle}"/>
-                <ComboBox Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" MinWidth="75" MaxWidth="100" IsReadOnly="True" IsEditable="False"
-                          SelectedItem="{Binding Path=DefaultSaveExt, Mode=TwoWay}" ItemsSource="{Binding Path=ExtOptions, Mode=OneWay}"/>
+                <ComboBox Grid.Row="1" Grid.Column="1" MaxWidth="100" IsReadOnly="True" IsEditable="False" Style="{StaticResource SettingComboBoxStyle}"
+                          SelectedItem="{Binding Path=DefaultSaveExt, Mode=TwoWay, ValidatesOnDataErrors=True}" ItemsSource="{Binding Path=ExtOptions, Mode=OneWay}"/>
                 <!-- Border Visibility -->
                 <Label Grid.Row="2" Grid.Column="0" Content="{x:Static resx:Resources.SettingsBorderVisStr}" Style="{StaticResource SettingLblStyle}"/>
                 <CheckBox Grid.Row="2" Grid.Column="1" Style="{StaticResource SettingChkBoxStyle}" IsChecked="{Binding Path=BorderVisibility, Mode=TwoWay}"/>

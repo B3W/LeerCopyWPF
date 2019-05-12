@@ -27,5 +27,34 @@ namespace LeerCopyWPF.Views
             _viewModel = new SettingsViewModel(param => this.Close());
             DataContext = _viewModel;
         }
+
+
+        /// <summary>
+        /// Handles key binding validation
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void KeyBindingTxtBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            TextBox keyBindTxtBx = (TextBox)sender;
+            BindingExpression txtBindingExpr = keyBindTxtBx.GetBindingExpression(TextBox.TextProperty);
+            // Get the property name for raising NotifyPropertyChanged
+            Binding txtBinding = txtBindingExpr.ParentBinding;
+            string propertyName = txtBinding.Path.Path;
+            Key key = e.Key;
+
+            // Validate key press against valid keys
+            if ((key >= Key.Cancel && key <= Key.Return)  ||  // Cancel, Backspace, Tab, Linefeed, Clear, Enter, Return
+                (key >= Key.Space && key <= Key.Home)     ||  // Space, PageUp, PageDown, Home, End
+                (key == Key.Insert || key == Key.Delete)  ||  
+                (key >= Key.D0 && key <= Key.Z)           ||  // 0, 1, 2, ..., x, y, z
+                (key >= Key.NumPad0 && key <= Key.F24))       // 0, 1, 2, ..., *, +, ..., F22, F23, F24
+            {
+                // Validate against current bindings
+            }
+
+            
+            throw new NotImplementedException();
+        }
     }
 }

@@ -18,6 +18,7 @@
 
 using LeerCopyWPF.Models;
 using LeerCopyWPF.Utilities;
+using LeerCopyWPF.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -39,6 +40,7 @@ namespace LeerCopyWPF.Views
     /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly MainWindowViewModel _mainWindowViewModel;
         /// <summary>
         /// All screens in user's environment
         /// </summary>
@@ -63,6 +65,9 @@ namespace LeerCopyWPF.Views
             this.Loaded += MainWindow_Loaded;
 
             InitializeComponent();
+
+            _mainWindowViewModel = new MainWindowViewModel(param => this.Close());
+            DataContext = _mainWindowViewModel;
 
             // Initialize AppData setting
             try
@@ -179,6 +184,13 @@ namespace LeerCopyWPF.Views
             selectionWindows[curScreenIndex].Show();
             selectionWindows[curScreenIndex].Activate();
         } // SelectCaptureBtn_Click
+
+
+        private void SettingsMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            SettingsWindow settings = new SettingsWindow();
+            settings.ShowDialog();
+        } // SettingsMenuItem_Click
 
 
         private void ExitMenuItem_Click(object sender, RoutedEventArgs e)

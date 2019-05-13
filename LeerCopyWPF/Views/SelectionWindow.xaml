@@ -28,7 +28,8 @@
         <!-- Displays image of the screen in the background -->
         <Image x:Name="ScreenImg" Panel.ZIndex="0"/>
         <!-- Gives transparent overlay effect -->
-        <Grid x:Name="TransparentOverlay" Background="#FFCBCBCB" Opacity="0.1" Panel.ZIndex="1"/>
+        <Grid x:Name="TransparentOverlay" Background="#FFCBCBCB" 
+              Opacity="{Binding Source={x:Static prop:Settings.Default}, Path=SelectionWinOpacity, Mode=OneWay}" Panel.ZIndex="1"/>
         <!-- Tips -->
         <StackPanel x:Name="LabelPanel" HorizontalAlignment="Right" Panel.ZIndex="2"
                     Visibility="{Binding Source={x:Static prop:Settings.Default}, Path=TipsVisibility, Mode=TwoWay}">
@@ -82,7 +83,7 @@
         <Canvas x:Name="BorderCanvas" Background="Transparent" Panel.ZIndex="4"
                 Visibility="{Binding Source={x:Static prop:Settings.Default}, Path=BorderVisibility, Mode=TwoWay}">
             <Rectangle x:Name="BorderRect" StrokeThickness="3" 
-                       Stroke="{Binding Source={x:Static prop:Settings.Default}, Path=BorderBrush, Mode=TwoWay}"/>
+                       Stroke="{Binding Source={x:Static prop:Settings.Default}, Path=SelectionBorderBrush, Mode=TwoWay}"/>
         </Canvas>
     </Grid>
 </Window>

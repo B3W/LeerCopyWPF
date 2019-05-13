@@ -187,11 +187,182 @@ namespace LeerCopyWPF.Strings.en_US {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Selection Border Color.
+        /// </summary>
+        public static string SettingsBorderColorStr {
+            get {
+                return ResourceManager.GetString("SettingsBorderColorStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Toggle Border.
+        /// </summary>
+        public static string SettingsBorderKeyStr {
+            get {
+                return ResourceManager.GetString("SettingsBorderKeyStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selection Border Visible.
+        /// </summary>
+        public static string SettingsBorderVisStr {
+            get {
+                return ResourceManager.GetString("SettingsBorderVisStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear.
+        /// </summary>
+        public static string SettingsClearKeyStr {
+            get {
+                return ResourceManager.GetString("SettingsClearKeyStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Color.
+        /// </summary>
+        public static string SettingsColorStr {
+            get {
+                return ResourceManager.GetString("SettingsColorStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copy.
+        /// </summary>
+        public static string SettingsCopyKeyStr {
+            get {
+                return ResourceManager.GetString("SettingsCopyKeyStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit.
+        /// </summary>
+        public static string SettingsEditKeyStr {
+            get {
+                return ResourceManager.GetString("SettingsEditKeyStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default File Ext.
+        /// </summary>
+        public static string SettingsFileExtStr {
+            get {
+                return ResourceManager.GetString("SettingsFileExtStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default File Name.
+        /// </summary>
+        public static string SettingsFileNameStr {
+            get {
+                return ResourceManager.GetString("SettingsFileNameStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Key Bindings.
+        /// </summary>
+        public static string SettingsKeyBindingsStr {
+            get {
+                return ResourceManager.GetString("SettingsKeyBindingsStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Misc.
+        /// </summary>
+        public static string SettingsMiscStr {
+            get {
+                return ResourceManager.GetString("SettingsMiscStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open Settings.
+        /// </summary>
+        public static string SettingsOpenSettingsKeyStr {
+            get {
+                return ResourceManager.GetString("SettingsOpenSettingsKeyStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Quit.
+        /// </summary>
+        public static string SettingsQuitKeyStr {
+            get {
+                return ResourceManager.GetString("SettingsQuitKeyStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save.
+        /// </summary>
+        public static string SettingsSaveKeyStr {
+            get {
+                return ResourceManager.GetString("SettingsSaveKeyStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select All.
+        /// </summary>
+        public static string SettingsSelectAllKeyStr {
+            get {
+                return ResourceManager.GetString("SettingsSelectAllKeyStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Switch Screens.
+        /// </summary>
+        public static string SettingsSwtchScrnKeyStr {
+            get {
+                return ResourceManager.GetString("SettingsSwtchScrnKeyStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Toggle Tips.
+        /// </summary>
+        public static string SettingsTipsKeyStr {
+            get {
+                return ResourceManager.GetString("SettingsTipsKeyStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tips Visible.
+        /// </summary>
+        public static string SettingsTipsVisStr {
+            get {
+                return ResourceManager.GetString("SettingsTipsVisStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to  - Open settings.
         /// </summary>
         public static string SettingsWinLblStr {
             get {
                 return ResourceManager.GetString("SettingsWinLblStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selection Window Opacity.
+        /// </summary>
+        public static string SettingsWinOpacityStr {
+            get {
+                return ResourceManager.GetString("SettingsWinOpacityStr", resourceCulture);
             }
         }
         

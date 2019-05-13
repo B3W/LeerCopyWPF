@@ -6,7 +6,7 @@
         xmlns:resx="clr-namespace:LeerCopyWPF.Strings.en_US"
         xmlns:local="clr-namespace:LeerCopyWPF.Views"
         mc:Ignorable="d"
-        Title="Leer Copy" SizeToContent="WidthAndHeight"
+        Title="{Binding Path=DisplayName, Mode=OneWay}" SizeToContent="WidthAndHeight"
         MinHeight="150" MinWidth="250">
     <Window.Resources>
         <Style x:Name="TxtBlkStyle" TargetType="TextBlock">
@@ -28,7 +28,7 @@
         <!-- App menu -->
         <Menu Name="MainMenu" Grid.Row="0">
             <MenuItem Header="{x:Static resx:Resources.MenuFileStr}">
-                <MenuItem Header="{x:Static resx:Resources.MenuSettingsStr}"/>
+                <MenuItem Header="{x:Static resx:Resources.MenuSettingsStr}" Click="SettingsMenuItem_Click"/>
                 <Separator/>
                 <MenuItem Header="{x:Static resx:Resources.MenuExitStr}" Click="ExitMenuItem_Click"/>
             </MenuItem>

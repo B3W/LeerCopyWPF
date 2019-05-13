@@ -44,7 +44,7 @@
     <Setting Name="SwitchScreenKey" Type="System.String" Scope="User">
       <Value Profile="(Default)">Tab</Value>
     </Setting>
-    <Setting Name="KeyUpNames" Type="System.String[]" Scope="User">
+    <Setting Name="KeyUpNames" Type="System.String[]" Scope="Application">
       <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
 &lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
   &lt;string&gt;CopyKey&lt;/string&gt;
@@ -71,8 +71,11 @@
     <Setting Name="DefaultFileName" Type="System.String" Scope="User">
       <Value Profile="(Default)">L33R</Value>
     </Setting>
-    <Setting Name="BorderBrush" Type="System.Windows.Media.SolidColorBrush" Scope="User">
+    <Setting Name="SelectionBorderBrush" Type="System.Windows.Media.SolidColorBrush" Scope="User">
       <Value Profile="(Default)">#FF32CD32</Value>
+    </Setting>
+    <Setting Name="SelectionWinOpacity" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0.1</Value>
     </Setting>
   </Settings>
 </SettingsFile>

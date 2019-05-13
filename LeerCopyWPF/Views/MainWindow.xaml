@@ -6,8 +6,7 @@
         xmlns:resx="clr-namespace:LeerCopyWPF.Strings.en_US"
         xmlns:local="clr-namespace:LeerCopyWPF.Views"
         mc:Ignorable="d"
-        Title="{Binding Path=DisplayName, Mode=OneWay}" SizeToContent="WidthAndHeight"
-        MinHeight="150" MinWidth="250">
+        Title="{Binding Path=DisplayName, Mode=OneWay}" SizeToContent="WidthAndHeight" MinHeight="150" MinWidth="250">
     <Window.Resources>
         <Style x:Name="TxtBlkStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="18"/>
@@ -28,9 +27,9 @@
         <!-- App menu -->
         <Menu Name="MainMenu" Grid.Row="0">
             <MenuItem Header="{x:Static resx:Resources.MenuFileStr}">
-                <MenuItem Header="{x:Static resx:Resources.MenuSettingsStr}" Click="SettingsMenuItem_Click"/>
+                <MenuItem Header="{x:Static resx:Resources.MenuSettingsStr}" Command="{Binding Path=SettingsCommand}"/>
                 <Separator/>
-                <MenuItem Header="{x:Static resx:Resources.MenuExitStr}" Click="ExitMenuItem_Click"/>
+                <MenuItem Header="{x:Static resx:Resources.MenuExitStr}" Command="{Binding Path=CloseCommand}"/>
             </MenuItem>
             <MenuItem Header="{x:Static resx:Resources.MenuAboutStr}">
                 
@@ -38,8 +37,7 @@
         </Menu>
         
         <!-- Selection mode group box -->
-        <GroupBox Header="{x:Static resx:Resources.CaptureOptionsStr}"
-                  Grid.Row="1" Margin="5,5,5,5">
+        <GroupBox Header="{x:Static resx:Resources.CaptureOptionsStr}" Grid.Row="1" Margin="5,5,5,5">
             <Grid Name="CaptureOptGrid">
                 <!-- Grid initializations -->
                 <Grid.ColumnDefinitions>
@@ -53,8 +51,7 @@
 
                 <!-- Grid content -->
                 <!-- Selection capture mode -->
-                <Button Name="SelectCaptureBtn" Grid.Row="0" Grid.Column="0"
-                        TabIndex="1" ToolTip="Select Area of Screen to Capture"
+                <Button Name="SelectCaptureBtn" Grid.Row="0" Grid.Column="0" TabIndex="1" ToolTip="Select Area of Screen to Capture"
                         Click="SelectCaptureBtn_Click">
                     <Button.Content>
                         <StackPanel Orientation="Horizontal" >

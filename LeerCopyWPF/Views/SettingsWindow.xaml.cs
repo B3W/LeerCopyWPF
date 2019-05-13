@@ -19,6 +19,7 @@ namespace LeerCopyWPF.Views
     public partial class SettingsWindow : Window
     {
         private readonly SettingsViewModel _viewModel;
+        private readonly KeyConverter _keyConverter;
 
         public SettingsWindow()
         {
@@ -26,6 +27,7 @@ namespace LeerCopyWPF.Views
 
             _viewModel = new SettingsViewModel(param => this.Close());
             DataContext = _viewModel;
+            _keyConverter = new KeyConverter();
         }
 
 
@@ -41,19 +43,26 @@ namespace LeerCopyWPF.Views
             // Get the property name for raising NotifyPropertyChanged
             Binding txtBinding = txtBindingExpr.ParentBinding;
             string propertyName = txtBinding.Path.Path;
-            Key key = e.Key;
+            Key newKey = e.Key;
+            Key oldKey = (Key)_keyConverter.ConvertFromString(keyBindTxtBx.Text);
 
             // Validate key press against valid keys
-            if ((key >= Key.Cancel && key <= Key.Return)  ||  // Cancel, Backspace, Tab, Linefeed, Clear, Enter, Return
-                (key >= Key.Space && key <= Key.Home)     ||  // Space, PageUp, PageDown, Home, End
-                (key == Key.Insert || key == Key.Delete)  ||  
-                (key >= Key.D0 && key <= Key.Z)           ||  // 0, 1, 2, ..., x, y, z
-                (key >= Key.NumPad0 && key <= Key.F24))       // 0, 1, 2, ..., *, +, ..., F22, F23, F24
+            if ((newKey >= Key.Cancel && newKey <= Key.Return)  ||  // Cancel, Backspace, Tab, Linefeed, Clear, Enter, Return
+                (newKey >= Key.Space && newKey <= Key.Home)     ||  // Space, PageUp, PageDown, Home, End
+                (newKey == Key.Insert || newKey == Key.Delete)  ||  
+                (newKey >= Key.D0 && newKey <= Key.Z)           ||  // 0, 1, 2, ..., x, y, z
+                (newKey >= Key.NumPad0 && newKey <= Key.F24))       // 0, 1, 2, ..., *, +, ..., F22, F23, F24
             {
                 // Validate against current bindings
-            }
 
-            
+            }
+            /*
+             * How to manually add errors to Validation.Errors (https://stackoverflow.com/a/3660863)
+             * ValidationError validationError = new ValidationError( ? , txtBindingExpr);
+             * validationError.ErrorContent = "This is not a valid e-mail address";
+             * Validation.MarkInvalid(txtBindingExpr, validationError);
+             */
+
             throw new NotImplementedException();
         }
     }

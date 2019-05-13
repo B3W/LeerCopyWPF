@@ -51,7 +51,7 @@
 
                 <!-- Grid content -->
                 <!-- Selection capture mode -->
-                <Button Name="SelectCaptureBtn" Grid.Row="0" Grid.Column="0" TabIndex="1" ToolTip="Select Area of Screen to Capture"
+                <Button Name="SelectCaptureBtn" Grid.Row="0" Grid.Column="0" TabIndex="1" ToolTip="{x:Static resx:Resources.SelectCaptureBtnTooltipStr}"
                         Click="SelectCaptureBtn_Click">
                     <Button.Content>
                         <StackPanel Orientation="Horizontal" >

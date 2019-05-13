@@ -143,19 +143,19 @@
   </data>
   <data name="MenuAboutStr" xml:space="preserve">
     <value>About</value>
-    <comment>Menu String</comment>
+    <comment>Main Window Menu String</comment>
   </data>
   <data name="MenuExitStr" xml:space="preserve">
     <value>Exit</value>
-    <comment>Menu String</comment>
+    <comment>Main Window Menu String</comment>
   </data>
   <data name="MenuFileStr" xml:space="preserve">
     <value>File</value>
-    <comment>Menu String</comment>
+    <comment>Main Window Menu String</comment>
   </data>
   <data name="MenuSettingsStr" xml:space="preserve">
     <value>Settings</value>
-    <comment>Menu String</comment>
+    <comment>Main Window Menu String</comment>
   </data>
   <data name="QuitLblStr" xml:space="preserve">
     <value> - Quit Selection</value>
@@ -171,6 +171,10 @@
   </data>
   <data name="SelectCaptureBtnStr" xml:space="preserve">
     <value>Selection Capture</value>
+    <comment>Main Window String</comment>
+  </data>
+  <data name="SelectCaptureBtnTooltipStr" xml:space="preserve">
+    <value>Select Area of Screen to Capture</value>
     <comment>Main Window String</comment>
   </data>
   <data name="SettingsBorderColorStr" xml:space="preserve">

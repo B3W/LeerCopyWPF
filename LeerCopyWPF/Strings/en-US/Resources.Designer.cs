@@ -187,6 +187,15 @@ namespace LeerCopyWPF.Strings.en_US {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select Area of Screen to Capture.
+        /// </summary>
+        public static string SelectCaptureBtnTooltipStr {
+            get {
+                return ResourceManager.GetString("SelectCaptureBtnTooltipStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Selection Border Color.
         /// </summary>
         public static string SettingsBorderColorStr {

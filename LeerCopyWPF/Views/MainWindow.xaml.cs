@@ -16,7 +16,6 @@
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-using LeerCopyWPF.Models;
 using LeerCopyWPF.Utilities;
 using LeerCopyWPF.ViewModels;
 using System;
@@ -42,14 +41,6 @@ namespace LeerCopyWPF.Views
     {
         private readonly MainWindowViewModel _mainWindowViewModel;
         /// <summary>
-        /// All screens in user's environment
-        /// </summary>
-        private List<SimpleScreen> screens;
-        /// <summary>
-        /// Currently displayed screen for capture
-        /// </summary>
-        private int curScreenIndex = 0;
-        /// <summary>
         /// Selection windows for each screen
         /// </summary>
         private SelectionWindow[] selectionWindows;
@@ -67,6 +58,7 @@ namespace LeerCopyWPF.Views
             InitializeComponent();
 
             _mainWindowViewModel = new MainWindowViewModel(param => this.Close());
+            _mainWindowViewModel.OpenSettingsEvent += (s, eargs) => new SettingsWindow().ShowDialog();
             DataContext = _mainWindowViewModel;
 
             // Initialize AppData setting
@@ -85,38 +77,9 @@ namespace LeerCopyWPF.Views
                 // TODO exception handling
             }
 
-            // Capture all screens
-            screens = BitmapUtilities.CaptureScreens();
-
             // Initialize container for selection windows
-            selectionWindows = new SelectionWindow[screens.Count];
+            selectionWindows = new SelectionWindow[_mainWindowViewModel.Screens.Count];
         }
-
-
-        /// <summary>
-        /// Determines which screen the MainWindow is located on
-        /// </summary>
-        /// <returns>Index within 'screens' containing MainWindow if found, 0 otherwise</returns>
-        private int GetMainScreenIndex()
-        {
-            int i;
-            bool found = false;
-
-            for (i = 0; i < screens.Count; i++)
-            {
-                if (screens[i].Bounds.Contains(new Point(this.Left, this.Top)))
-                {
-                    found = true;
-                    break;
-                }
-            }
-
-            if (found)
-            {
-                return i;
-            }
-            return 0;
-        } // GetMainScreenIndex
 
 
         /// <summary>
@@ -126,7 +89,7 @@ namespace LeerCopyWPF.Views
         /// <returns></returns>
         private SelectionWindow InitSelectWindow(Rect bounds)
         {
-            SelectionWindow sWin = new SelectionWindow(bounds, (screens.Count > 1));
+            SelectionWindow sWin = new SelectionWindow(bounds, (_mainWindowViewModel.Screens.Count > 1));
             sWin.SignalMain += Selection_SignalMain;
             sWin.Owner = this;
 
@@ -144,11 +107,12 @@ namespace LeerCopyWPF.Views
             if (e.Flag)
             {
                 // Increment screen index
-                curScreenIndex = (curScreenIndex + 1) % screens.Count;
+                int curScreenIndex =_mainWindowViewModel.IncrementScreen();
+
                 // Create new selection window or show existing
                 if (selectionWindows[curScreenIndex] == null)
                 {
-                    selectionWindows[curScreenIndex] = InitSelectWindow(screens[curScreenIndex].Bounds);
+                    selectionWindows[curScreenIndex] = InitSelectWindow(_mainWindowViewModel.CurrentScreen.Bounds);
                 }
                 selectionWindows[curScreenIndex].Show();
                 selectionWindows[curScreenIndex].Activate();
@@ -173,30 +137,17 @@ namespace LeerCopyWPF.Views
         {
             // Determine screen MainWindow is located on
             // ***Needs to be done before window is minimized***
-            curScreenIndex = GetMainScreenIndex();
+            int curScreenIndex = _mainWindowViewModel.InitScreenIndex(this.Left, this.Top);
 
             // Hide MainWindow
             this.WindowState = WindowState.Minimized;
             this.Hide();
 
             // Open SelectionWindow
-            selectionWindows[curScreenIndex] = InitSelectWindow(screens[curScreenIndex].Bounds);
+            selectionWindows[curScreenIndex] = InitSelectWindow(_mainWindowViewModel.CurrentScreen.Bounds);
             selectionWindows[curScreenIndex].Show();
             selectionWindows[curScreenIndex].Activate();
         } // SelectCaptureBtn_Click
-
-
-        private void SettingsMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            SettingsWindow settings = new SettingsWindow();
-            settings.ShowDialog();
-        } // SettingsMenuItem_Click
-
-
-        private void ExitMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-        } // ExitMenuItem_Click
 
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)

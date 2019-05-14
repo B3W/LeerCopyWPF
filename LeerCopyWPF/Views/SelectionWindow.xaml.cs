@@ -16,9 +16,10 @@
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-using LeerCopyWPF.Controllers;
 using LeerCopyWPF.Enums;
 using LeerCopyWPF.Utilities;
+using LeerCopyWPF.ViewModels;
+using LeerCopyWPF.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -42,14 +43,8 @@ namespace LeerCopyWPF
     /// </summary>
     public partial class SelectionWindow : Window
     {
-        /// <summary>
-        /// Controller for making selections
-        /// </summary>
-        private SelectControl selectControl;
-        /// <summary>
-        /// Bitmap of the screen
-        /// </summary>
-        private BitmapSource bitmap;
+        private SelectionViewModel _selectionViewModel;
+        private SelectionViewModel tmpVM;
         /// <summary>
         /// Dictionary for quick lookup of key up mappings
         /// </summary>
@@ -67,10 +62,6 @@ namespace LeerCopyWPF
         /// </summary>
         private bool winLoaded = false;
         /// <summary>
-        /// Bounds of the screen this window is placed on
-        /// </summary>
-        private Rect screenBounds;
-        /// <summary>
         /// Event for signaling the MainWindow
         /// </summary>
         public event EventHandler<FlagEventArgs> SignalMain;
@@ -83,8 +74,11 @@ namespace LeerCopyWPF
 
             InitializeComponent();
 
+            _selectionViewModel = new SelectionViewModel(bounds);
+            _selectionViewModel.OpenSettingsEvent += (s, eargs) => new SettingsWindow().ShowDialog();
+            DataContext = _selectionViewModel;
+
             this.switchValid = switchValid;
-            this.screenBounds = bounds;
 
             // Place form on correct screen
             this.Left = bounds.Left;
@@ -92,7 +86,14 @@ namespace LeerCopyWPF
 
             // Bind keys to actions
             InitKeyUpMappings();
-            InitKeyDownMappings();
+            keyDownMappings = new Dictionary<Key, KeyActions.KeyDown>
+            {
+                // Add arrow keys
+                { Key.Up, KeyActions.KeyDown.Up },
+                { Key.Down, KeyActions.KeyDown.Down },
+                { Key.Left, KeyActions.KeyDown.Left },
+                { Key.Right, KeyActions.KeyDown.Right }
+            };
 
             // Register event handlers
             this.PreviewKeyUp += SelectionWindow_PreviewKeyUp;
@@ -131,43 +132,6 @@ namespace LeerCopyWPF
 
 
         /// <summary>
-        /// Initialize key bindings for the key down event
-        /// </summary>
-        private void InitKeyDownMappings()
-        {
-            // Populate key mappings into dictionary
-            keyDownMappings = new Dictionary<Key, KeyActions.KeyDown>
-            {
-                // Add arrow keys
-                { Key.Up, KeyActions.KeyDown.Up },
-                { Key.Down, KeyActions.KeyDown.Down },
-                { Key.Left, KeyActions.KeyDown.Left },
-                { Key.Right, KeyActions.KeyDown.Right }
-            };
-
-        } // InitKeyDownMappings
-
-
-        /// <summary>
-        /// 'Repaint' the updated portion of the selected image
-        /// </summary>
-        private void UpdateDisplayedImage()
-        {
-            RectangleGeometry selectionArea = selectControl.GetSelectionGeometry();
-
-            // Clip displayed image
-            SelectionImg.Clip = selectionArea;
-
-            // Set border outside of the clipped image
-            double offset = BorderRect.StrokeThickness;
-            Canvas.SetLeft(BorderRect, selectionArea.Rect.Left - offset);
-            Canvas.SetTop(BorderRect, selectionArea.Rect.Top - offset);
-            BorderRect.Width = selectionArea.Rect.Width + (offset * 2);
-            BorderRect.Height = selectionArea.Rect.Height + (offset * 2);
-        } // UpdateDisplayedImage
-
-
-        /// <summary>
         /// Raise the event to signal MainWindow
         /// </summary>
         private void RaiseSignal(bool switchFlag)
@@ -196,30 +160,44 @@ namespace LeerCopyWPF
 
             if (keyUpMappings.ContainsKey(e.Key))
             {
+                tmpVM = DataContext as SelectionViewModel;
                 action = keyUpMappings[e.Key];
                 switch (action)
                 {
                     case KeyActions.KeyUp.Copy:
                         // Copy selection to the clipboard
-                        selectControl.CopySelection();
+                        if (tmpVM.CopyCommand.CanExecute(null))
+                        {
+                            tmpVM.CopyCommand.Execute(null);
+                        }
                         break;
                     case KeyActions.KeyUp.Edit:
                         // Edit the selection in default image editor
-                        selectControl.EditSelection();
+                        if (tmpVM.EditCommand.CanExecute(null))
+                        {
+                            tmpVM.EditCommand.Execute(null);
+                        }
                         break;
                     case KeyActions.KeyUp.Save:
                         // Save the selection to disk
-                        selectControl.SaveSelection(this);
+                        if (tmpVM.SaveCommand.CanExecute(null))
+                        {
+                            tmpVM.SaveCommand.Execute(null);
+                        }
                         break;
                     case KeyActions.KeyUp.SelectAll:
                         // Select the entire screen
-                        selectControl.MaximizeSelection();
-                        UpdateDisplayedImage();
+                        if (tmpVM.MaximizeCommand.CanExecute(null))
+                        {
+                            tmpVM.MaximizeCommand.Execute(null);
+                        }
                         break;
                     case KeyActions.KeyUp.Clear:
                         // Clear the current selection
-                        selectControl.ClearSelection();
-                        UpdateDisplayedImage();
+                        if (tmpVM.ClearCommand.CanExecute(null))
+                        {
+                            tmpVM.ClearCommand.Execute(null);
+                        }
                         break;
                     case KeyActions.KeyUp.Border:
                         // Show/Hide border
@@ -237,7 +215,10 @@ namespace LeerCopyWPF
                         break;
                     case KeyActions.KeyUp.Settings:
                         // Open up settings window
-                        // TODO
+                        if (tmpVM.SettingsCommand.CanExecute(null))
+                        {
+                            tmpVM.SettingsCommand.Execute(null);
+                        }
                         break;
                     case KeyActions.KeyUp.Quit:
                         // Quit selection
@@ -251,92 +232,16 @@ namespace LeerCopyWPF
             }
             e.Handled = true;
         } // SelectionWindow_PreviewKeyDown
-
-
-        /// <summary>
-        /// Resizes the user's selection based on arrow key presses
-        /// </summary>
-        /// <param name="dir"></param>
-        private void ResizeSelection(KeyActions.KeyDown dir)
-        {
-            if (selectControl.IsSelected && !selectControl.IsSelecting)
-            {
-                double shftMod = 2.0;
-                bool vert = false;
-                double offsetX = 0.0;
-                double offsetY = 0.0;
-
-                // Set base offset
-                switch (dir)
-                {
-                    case KeyActions.KeyDown.Up:
-                        offsetY = -1.0;
-                        vert = true;
-                        break;
-                    case KeyActions.KeyDown.Down:
-                        offsetY = 1.0;
-                        vert = true;
-                        break;
-                    case KeyActions.KeyDown.Left:
-                        offsetX = -1.0;
-                        break;
-                    case KeyActions.KeyDown.Right:
-                        offsetX = 1.0;
-                        break;
-                    case KeyActions.KeyDown.Invalid:
-                    default:
-                        break;
-                }
-
-                // Check modifier keys
-                if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
-                {
-                    // Speed up resizing
-                    if (vert)
-                    {
-                        offsetY *= shftMod;
-                    }
-                    else
-                    {
-                        offsetX *= shftMod;
-                    }
-                }
-
-                if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.LeftCtrl))
-                {
-                    // Reverse direction
-                    if (vert)
-                    {
-                        offsetY = -offsetY;
-                    }
-                    else
-                    {
-                        offsetX = -offsetX;
-                    }
-                }
-
-                selectControl.Selection.Resize(offsetX, offsetY, dir, screenBounds);
-                UpdateDisplayedImage();
-            }
-        } // ResizeSelection
-
+        
 
         private void SelectionWindow_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            KeyActions.KeyDown action;
-
             if (keyDownMappings.ContainsKey(e.Key))
             {
-                action = keyDownMappings[e.Key];
-                switch (action)
-                {
-                    case KeyActions.KeyDown.Invalid:
-                        break;
-                    default:
-                        // Arrow keys pressed
-                        ResizeSelection(action);
-                        break;
-                }
+                tmpVM = DataContext as SelectionViewModel;
+                KeyActions.KeyDown dir = keyDownMappings[e.Key];
+
+                tmpVM.ResizeSelection(dir);                
             }
             e.Handled = true;
         } // SelectionWindow_PreviewKeyDown
@@ -346,16 +251,8 @@ namespace LeerCopyWPF
         {
             if (!winLoaded)
             {
-                // Capture screen
-                bitmap = BitmapUtilities.CaptureRect(screenBounds);
-
-                // Initialize user selection view
-                ScreenImg.Source = bitmap;
-                SelectionImg.Source = bitmap;
-                SelectionImg.Clip = new RectangleGeometry();
-                SelectionImg.Visibility = Visibility.Visible;
-
-                selectControl = new SelectControl(bitmap, screenBounds);
+                // Final configuration of user selection view
+                // SelectionImg.Visibility = Visibility.Visible;
 
                 // Don't show the tip if you cannot switch screens
                 if (!switchValid)
@@ -372,8 +269,8 @@ namespace LeerCopyWPF
 
         private void SelectionWindow_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            selectControl.StartSelection(e.GetPosition(this));
-            UpdateDisplayedImage();
+            tmpVM = DataContext as SelectionViewModel;
+            tmpVM.StartSelection(e.GetPosition(this));
 
             e.Handled = true;
         } // SelectionWindow_MouseLeftButtonDown
@@ -381,7 +278,7 @@ namespace LeerCopyWPF
 
         private void SelectionWindow_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            selectControl.StopSelection(e.GetPosition(this));
+            tmpVM?.StopSelection(e.GetPosition(this));
 
             e.Handled = true;
         } // SelectionWindow_MouseLeftButtonUp
@@ -389,11 +286,7 @@ namespace LeerCopyWPF
 
         private void SelectionWindow_MouseMove(object sender, MouseEventArgs e)
         {
-            if (selectControl.IsSelecting)
-            {
-                selectControl.UpdateSelection(e.GetPosition(this));
-                UpdateDisplayedImage();
-            }
+            tmpVM?.UpdateSelection(e.GetPosition(this));
 
             e.Handled = true;
         } // SelectionWindow_MouseMove

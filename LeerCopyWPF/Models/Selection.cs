@@ -7,7 +7,7 @@ using System.Windows.Media.Imaging;
 
 namespace LeerCopyWPF.Models
 {
-    public class SelectionRefactor
+    public class Selection
     {
         #region Members
         public Point StartPt { get; set; }
@@ -17,7 +17,7 @@ namespace LeerCopyWPF.Models
         #endregion // Members
 
         #region Constructors
-        public SelectionRefactor(BitmapSource bitmap, Rect screenBounds)
+        public Selection(BitmapSource bitmap, Rect screenBounds)
         {
             Bitmap = bitmap;
             ScreenBounds = screenBounds;

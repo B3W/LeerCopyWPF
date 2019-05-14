@@ -15,7 +15,7 @@ namespace LeerCopyWPF.ViewModels
     public class SelectionViewModel : BaseViewModel
     {
         #region Fields
-        private SelectionRefactor _selection;
+        private Selection _selection;
         private Rect _selectionRect;
         /// <summary>
         /// Key binding
@@ -271,7 +271,7 @@ namespace LeerCopyWPF.ViewModels
         {
             // Capture screen
             BitmapSource bitmap = BitmapUtilities.CaptureRect(bounds);
-            _selection = new SelectionRefactor(bitmap, bounds);
+            _selection = new Selection(bitmap, bounds);
 
             RefreshKeyBindings();
             BorderThickness = Properties.Settings.Default.SelectionBorderThickness;

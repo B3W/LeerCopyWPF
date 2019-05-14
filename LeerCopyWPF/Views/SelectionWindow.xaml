@@ -10,6 +10,7 @@
         Title="Leer Copy" ResizeMode="NoResize"
         WindowState="Normal" WindowStyle="None"
         AllowsTransparency="True" Width="750" Height="500">
+    <!-- Styles -->
     <Window.Resources>
         <Style x:Name="TxtBlkStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="18"/>
@@ -23,10 +24,10 @@
             <Setter Property="Margin" Value="0,0,10,0"/>
         </Style>
     </Window.Resources>
-    <!-- Window content -->
+    <!-- Window Content -->
     <Grid>
         <!-- Displays image of the screen in the background -->
-        <Image x:Name="ScreenImg" Panel.ZIndex="0"/>
+        <Image x:Name="ScreenImg" Source="{Binding Path=Bitmap, Mode=OneWay}" Panel.ZIndex="0"/>
         <!-- Gives transparent overlay effect -->
         <Grid x:Name="TransparentOverlay" Background="#FFCBCBCB" 
               Opacity="{Binding Source={x:Static prop:Settings.Default}, Path=SelectionWinOpacity, Mode=OneWay}" Panel.ZIndex="1"/>
@@ -78,12 +79,13 @@
             </StackPanel>
         </StackPanel>
         <!-- For displaying users selection -->
-        <Image x:Name="SelectionImg" Visibility="Hidden" Panel.ZIndex="3"/>
+        <Image x:Name="SelectionImg" Source="{Binding Path=Bitmap, Mode=OneWay}" Clip="{Binding Path=SelectionGeometry, Mode=OneWay}" Panel.ZIndex="3"/>
         <!-- For drawing the border -->
-        <Canvas x:Name="BorderCanvas" Background="Transparent" Panel.ZIndex="4"
-                Visibility="{Binding Source={x:Static prop:Settings.Default}, Path=BorderVisibility, Mode=TwoWay}">
-            <Rectangle x:Name="BorderRect" StrokeThickness="3" 
-                       Stroke="{Binding Source={x:Static prop:Settings.Default}, Path=SelectionBorderBrush, Mode=TwoWay}"/>
+        <Canvas x:Name="BorderCanvas" Background="Transparent" Panel.ZIndex="4" Visibility="{Binding Source={x:Static prop:Settings.Default}, Path=BorderVisibility, Mode=TwoWay}">
+            <Rectangle x:Name="BorderRect" StrokeThickness="{Binding Path=BorderThickness, Mode=OneWay}"
+                       Stroke="{Binding Source={x:Static prop:Settings.Default}, Path=SelectionBorderBrush, Mode=TwoWay}"
+                       Canvas.Left="{Binding Path=BorderLeft, Mode=OneWay}" Canvas.Top="{Binding Path=BorderTop, Mode=OneWay}"
+                       Width="{Binding Path=BorderWidth, Mode=OneWay}" Height="{Binding Path=BorderHeight, Mode=OneWay}"/>
         </Canvas>
     </Grid>
 </Window>

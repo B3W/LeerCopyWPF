@@ -77,5 +77,8 @@
     <Setting Name="SelectionWinOpacity" Type="System.Double" Scope="User">
       <Value Profile="(Default)">0.1</Value>
     </Setting>
+    <Setting Name="SelectionBorderThickness" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">3</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

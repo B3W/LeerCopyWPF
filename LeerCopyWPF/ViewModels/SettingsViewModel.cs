@@ -446,6 +446,7 @@ namespace LeerCopyWPF.ViewModels
             _tipsVisBool = (_tipsVisibility == Visibility.Visible) ? true : false;
 
             CloseCommand = new RelayCommand(closeAction);
+            _settingsChanges.Clear();
         }
         #endregion // Constructors
 

@@ -425,21 +425,21 @@ namespace LeerCopyWPF.ViewModels
 
             // Fetch initial values from settings
             // Key bindings
-            _copy = (string)_settingsInst[ConstCopyPropName];
-            _edit = (string)_settingsInst[ConstEditPropName];
-            _save = (string)_settingsInst[ConstSavePropName];
-            _clear = (string)_settingsInst[ConstClearPropName];
-            _selectAll = (string)_settingsInst[ConstSelectAllPropName];
-            _border = (string)_settingsInst[ConstBorderPropName];
-            _tips = (string)_settingsInst[ConstTipsPropName];
-            _swtchScrn = (string)_settingsInst[ConstSwtchScrnPropName];
-            _settings = (string)_settingsInst[ConstSettingsPropName];
-            _quit = (string)_settingsInst[ConstQuitPropName];
+            CopyKey = (string)_settingsInst[ConstCopyPropName];
+            EditKey = (string)_settingsInst[ConstEditPropName];
+            SaveKey = (string)_settingsInst[ConstSavePropName];
+            ClearKey = (string)_settingsInst[ConstClearPropName];
+            SelectAll = (string)_settingsInst[ConstSelectAllPropName];
+            BorderKey = (string)_settingsInst[ConstBorderPropName];
+            TipsKey = (string)_settingsInst[ConstTipsPropName];
+            SwitchScreenKey = (string)_settingsInst[ConstSwtchScrnPropName];
+            SettingsWin = (string)_settingsInst[ConstSettingsPropName];
+            QuitKey = (string)_settingsInst[ConstQuitPropName];
 
             // Other
-            _defaultExt = (string)_settingsInst[ConstFileExtPropName];
-            _defaultFileName = (string)_settingsInst[ConstFileNamePropName];
-            _selectWinOpacity = (double)_settingsInst[ConstSelectWinOpacityPropName];
+            DefaultSaveExt = (string)_settingsInst[ConstFileExtPropName];
+            DefaultFileName = (string)_settingsInst[ConstFileNamePropName];
+            SelectionWinOpacity = (double)_settingsInst[ConstSelectWinOpacityPropName];
             _selectBorderVisibility = (Visibility)_settingsInst[ConstSelectBorderVisPropName];
             _borderVisBool = (_selectBorderVisibility == Visibility.Visible) ? true : false;
             _tipsVisibility = (Visibility)_settingsInst[ConstTipsVisPropName];

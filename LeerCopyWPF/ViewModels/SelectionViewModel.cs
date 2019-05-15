@@ -1,4 +1,5 @@
 ﻿using LeerCopyWPF.Commands;
+using LeerCopyWPF.Constants;
 using LeerCopyWPF.Enums;
 using LeerCopyWPF.Models;
 using LeerCopyWPF.Utilities;
@@ -17,10 +18,7 @@ namespace LeerCopyWPF.ViewModels
         #region Fields
         private Selection _selection;
         private Rect _selectionRect;
-        /// <summary>
-        /// Key binding
-        /// </summary>
-        private string _copy, _edit, _save, _clear, _selectAll, _border, _tips, _swtchScrn, _settings, _quit;
+        private bool _mappingsChanged;
         private ICommand _copyCommand;
         private ICommand _editCommand;
         private ICommand _saveCommand;
@@ -31,16 +29,6 @@ namespace LeerCopyWPF.ViewModels
 
         #region Constants
         private const string ConstDisplayName = "Leer Copy";
-        private const string ConstCopyPropName = "CopyKey";
-        private const string ConstEditPropName = "EditKey";
-        private const string ConstSavePropName = "SaveKey";
-        private const string ConstClearPropName = "ClearKey";
-        private const string ConstSelectAllPropName = "SelectAll";
-        private const string ConstBorderPropName = "BorderKey";
-        private const string ConstTipsPropName = "TipsKey";
-        private const string ConstSwtchScrnPropName = "SwitchScreenKey";
-        private const string ConstSettingsPropName = "SettingsWin";
-        private const string ConstQuitPropName = "QuitKey";
         #endregion // Constants
 
         #region Properties
@@ -110,135 +98,9 @@ namespace LeerCopyWPF.ViewModels
 
         public double BorderHeight { get => SelectionRect.Height + (BorderThickness * 2); }
 
-        public string CopyKey
-        {
-            get => _copy;
-            set
-            {
-                if (_copy != value)
-                {
-                    _copy = value;
-                    OnPropertyChanged(ConstCopyPropName);
-                }
-            }
-        }
+        public event EventHandler KeyBindingsChangedEvent;
 
-        public string EditKey
-        {
-            get => _edit;
-            set
-            {
-                if (_edit != value)
-                {
-                    _edit = value;
-                    OnPropertyChanged(ConstEditPropName);
-                }
-            }
-        }
-
-        public string SaveKey
-        {
-            get => _save;
-            set
-            {
-                if (_save != value)
-                {
-                    _save = value;
-                    OnPropertyChanged(ConstSavePropName);
-                }
-            }
-        }
-
-        public string ClearKey
-        {
-            get => _clear;
-            set
-            {
-                if (_clear != value)
-                {
-                    _clear = value;
-                    OnPropertyChanged(ConstClearPropName);
-                }
-            }
-        }
-
-        public string SelectAll
-        {
-            get => _selectAll;
-            set
-            {
-                if (_selectAll != value)
-                {
-                    _selectAll = value;
-                    OnPropertyChanged(ConstSelectAllPropName);
-                }
-            }
-        }
-
-        public string BorderKey
-        {
-            get => _border;
-            set
-            {
-                if (_border != value)
-                {
-                    _border = value;
-                    OnPropertyChanged(ConstBorderPropName);
-                }
-            }
-        }
-
-        public string TipsKey
-        {
-            get => _tips;
-            set
-            {
-                if (_tips != value)
-                {
-                    _tips = value;
-                    OnPropertyChanged(ConstTipsPropName);
-                }
-            }
-        }
-
-        public string SwitchScreenKey
-        {
-            get => _swtchScrn;
-            set
-            {
-                if (_swtchScrn != value)
-                {
-                    _swtchScrn = value;
-                    OnPropertyChanged(ConstSwtchScrnPropName);
-                }
-            }
-        }
-
-        public string SettingsWin
-        {
-            get => _settings;
-            set
-            {
-                if (_settings != value)
-                {
-                    _settings = value;
-                    OnPropertyChanged(ConstSettingsPropName);
-                }
-            }
-        }
-
-        public string QuitKey
-        {
-            get => _quit;
-            set
-            {
-                if (_quit != value)
-                {
-                    _quit = value;
-                    OnPropertyChanged(ConstQuitPropName);
-                }
-            }
-        }
+        public IDictionary<string, string> KeyMappings { get; private set; }
 
         public bool CanCopy { get => !IsSelecting && IsSelected && !_selection.StartPt.Equals(_selection.EndPt); }
 
@@ -273,7 +135,8 @@ namespace LeerCopyWPF.ViewModels
             BitmapSource bitmap = BitmapUtilities.CaptureRect(bounds);
             _selection = new Selection(bitmap, bounds);
 
-            RefreshKeyBindings();
+            KeyMappings = new Dictionary<string, string>(10);
+            _mappingsChanged = true;
             BorderThickness = Properties.Settings.Default.SelectionBorderThickness;
         }
         #endregion // Constructors
@@ -398,21 +261,49 @@ namespace LeerCopyWPF.ViewModels
         /// <summary>
         /// Fetches the key bindings from settings
         /// </summary>
-        private void RefreshKeyBindings()
+        public void RefreshKeyBindings()
         {
             Properties.Settings settingsInst = Properties.Settings.Default;
 
-            CopyKey = (string)settingsInst[ConstCopyPropName];
-            EditKey = (string)settingsInst[ConstEditPropName];
-            SaveKey = (string)settingsInst[ConstSavePropName];
-            ClearKey = (string)settingsInst[ConstClearPropName];
-            SelectAll = (string)settingsInst[ConstSelectAllPropName];
-            BorderKey = (string)settingsInst[ConstBorderPropName];
-            TipsKey = (string)settingsInst[ConstTipsPropName];
-            SwitchScreenKey = (string)settingsInst[ConstSwtchScrnPropName];
-            SettingsWin = (string)settingsInst[ConstSettingsPropName];
-            QuitKey = (string)settingsInst[ConstQuitPropName];
+            SetMapping(SettingsConstants.CopySettingName, (string)settingsInst[SettingsConstants.CopySettingName]);
+            SetMapping(SettingsConstants.EditSettingName, (string)settingsInst[SettingsConstants.EditSettingName]);
+            SetMapping(SettingsConstants.SaveSettingName, (string)settingsInst[SettingsConstants.SaveSettingName]);
+            SetMapping(SettingsConstants.ClearSettingName, (string)settingsInst[SettingsConstants.ClearSettingName]);
+            SetMapping(SettingsConstants.SelectAllSettingName, (string)settingsInst[SettingsConstants.SelectAllSettingName]);
+            SetMapping(SettingsConstants.BorderSettingName, (string)settingsInst[SettingsConstants.BorderSettingName]);
+            SetMapping(SettingsConstants.TipsSettingName, (string)settingsInst[SettingsConstants.TipsSettingName]);
+            SetMapping(SettingsConstants.SwtchScrnSettingName, (string)settingsInst[SettingsConstants.SwtchScrnSettingName]);
+            SetMapping(SettingsConstants.SettingsSettingName, (string)settingsInst[SettingsConstants.SettingsSettingName]);
+            SetMapping(SettingsConstants.QuitSettingName, (string)settingsInst[SettingsConstants.QuitSettingName]);
+
+            if (_mappingsChanged)
+            {
+                KeyBindingsChangedEvent?.Invoke(this, EventArgs.Empty);
+                _mappingsChanged = false;
+            }
         } // RefreshKeyBindings
+
+
+        /// <summary>
+        /// Updates key mapping to new value or adds new
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        private void SetMapping(string key, string value)
+        {
+            if (KeyMappings.TryGetValue(key, out string curValue))
+            {
+                if (value != curValue)
+                {
+                    KeyMappings[key] = value;
+                    _mappingsChanged = true;
+                }
+            }
+            else
+            {
+                KeyMappings.Add(key, value);
+            }
+        }
         #endregion // Methods
 
         #region Command Functions

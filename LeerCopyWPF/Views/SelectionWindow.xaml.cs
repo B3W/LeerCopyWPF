@@ -48,11 +48,11 @@ namespace LeerCopyWPF
         /// <summary>
         /// Dictionary for quick lookup of key up mappings
         /// </summary>
-        private IDictionary<Key, KeyActions.KeyUp> keyUpMappings;
+        private IDictionary<Key, KeyUpAction> keyUpMappings;
         /// <summary>
         /// Dictionary for quick lookup of key up mappings
         /// </summary>
-        private IDictionary<Key, KeyActions.KeyDown> keyDownMappings;
+        private IDictionary<Key, KeyDownAction> keyDownMappings;
         /// <summary>
         /// Flag indicating whether switch is possible
         /// </summary>
@@ -86,13 +86,13 @@ namespace LeerCopyWPF
 
             // Bind keys to actions
             InitKeyUpMappings();
-            keyDownMappings = new Dictionary<Key, KeyActions.KeyDown>
+            keyDownMappings = new Dictionary<Key, KeyDownAction>
             {
                 // Add arrow keys
-                { Key.Up, KeyActions.KeyDown.Up },
-                { Key.Down, KeyActions.KeyDown.Down },
-                { Key.Left, KeyActions.KeyDown.Left },
-                { Key.Right, KeyActions.KeyDown.Right }
+                { Key.Up, KeyDownAction.Up },
+                { Key.Down, KeyDownAction.Down },
+                { Key.Left, KeyDownAction.Left },
+                { Key.Right, KeyDownAction.Right }
             };
 
             // Register event handlers
@@ -113,7 +113,7 @@ namespace LeerCopyWPF
             Properties.Settings settings = Properties.Settings.Default;
 
             // Populate key mappings into dictionary
-            keyUpMappings = new Dictionary<Key, KeyActions.KeyUp>();
+            keyUpMappings = new Dictionary<Key, KeyUpAction>();
             string[] keyUpNames = settings.KeyUpNames;
             KeyConverter converter = new KeyConverter();
 
@@ -155,7 +155,7 @@ namespace LeerCopyWPF
 
         private void SelectionWindow_PreviewKeyUp(object sender, KeyEventArgs e)
         {
-            KeyActions.KeyUp action;
+            KeyUpAction action;
             Visibility vis;
 
             if (keyUpMappings.ContainsKey(e.Key))
@@ -164,68 +164,68 @@ namespace LeerCopyWPF
                 action = keyUpMappings[e.Key];
                 switch (action)
                 {
-                    case KeyActions.KeyUp.Copy:
+                    case KeyUpAction.Copy:
                         // Copy selection to the clipboard
                         if (tmpVM.CopyCommand.CanExecute(null))
                         {
                             tmpVM.CopyCommand.Execute(null);
                         }
                         break;
-                    case KeyActions.KeyUp.Edit:
+                    case KeyUpAction.Edit:
                         // Edit the selection in default image editor
                         if (tmpVM.EditCommand.CanExecute(null))
                         {
                             tmpVM.EditCommand.Execute(null);
                         }
                         break;
-                    case KeyActions.KeyUp.Save:
+                    case KeyUpAction.Save:
                         // Save the selection to disk
                         if (tmpVM.SaveCommand.CanExecute(null))
                         {
                             tmpVM.SaveCommand.Execute(null);
                         }
                         break;
-                    case KeyActions.KeyUp.SelectAll:
+                    case KeyUpAction.SelectAll:
                         // Select the entire screen
                         if (tmpVM.MaximizeCommand.CanExecute(null))
                         {
                             tmpVM.MaximizeCommand.Execute(null);
                         }
                         break;
-                    case KeyActions.KeyUp.Clear:
+                    case KeyUpAction.Clear:
                         // Clear the current selection
                         if (tmpVM.ClearCommand.CanExecute(null))
                         {
                             tmpVM.ClearCommand.Execute(null);
                         }
                         break;
-                    case KeyActions.KeyUp.Border:
+                    case KeyUpAction.Border:
                         // Show/Hide border
                         vis = (Properties.Settings.Default.BorderVisibility == Visibility.Visible) ? Visibility.Hidden : Visibility.Visible;
                         Properties.Settings.Default.BorderVisibility = vis;
                         break;
-                    case KeyActions.KeyUp.Tips:
+                    case KeyUpAction.Tips:
                         // Show/Hide tip labels
                         vis = (Properties.Settings.Default.TipsVisibility == Visibility.Visible) ? Visibility.Hidden : Visibility.Visible;
                         Properties.Settings.Default.TipsVisibility = vis;
                         break;
-                    case KeyActions.KeyUp.Switch:
+                    case KeyUpAction.Switch:
                         e.Handled = true;
                         SwitchScreens();
                         break;
-                    case KeyActions.KeyUp.Settings:
+                    case KeyUpAction.Settings:
                         // Open up settings window
                         if (tmpVM.SettingsCommand.CanExecute(null))
                         {
                             tmpVM.SettingsCommand.Execute(null);
                         }
                         break;
-                    case KeyActions.KeyUp.Quit:
+                    case KeyUpAction.Quit:
                         // Quit selection
                         RaiseSignal(false);
                         this.Close();
                         break;
-                    case KeyActions.KeyUp.Invalid:
+                    case KeyUpAction.Invalid:
                     default:
                         break;
                 }
@@ -239,7 +239,7 @@ namespace LeerCopyWPF
             if (keyDownMappings.ContainsKey(e.Key))
             {
                 tmpVM = DataContext as SelectionViewModel;
-                KeyActions.KeyDown dir = keyDownMappings[e.Key];
+                KeyDownAction dir = keyDownMappings[e.Key];
 
                 tmpVM.ResizeSelection(dir);                
             }

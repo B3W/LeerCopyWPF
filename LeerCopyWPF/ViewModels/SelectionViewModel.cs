@@ -333,7 +333,7 @@ namespace LeerCopyWPF.ViewModels
         } // StopSelection
 
 
-        public void ResizeSelection(KeyActions.KeyDown dir)
+        public void ResizeSelection(KeyDownAction dir)
         {
             if (IsSelected && !IsSelecting)
             {
@@ -344,21 +344,21 @@ namespace LeerCopyWPF.ViewModels
                 // Set base offset
                 switch (dir)
                 {
-                    case KeyActions.KeyDown.Up:
+                    case KeyDownAction.Up:
                         offsetY = -1.0;
                         vert = true;
                         break;
-                    case KeyActions.KeyDown.Down:
+                    case KeyDownAction.Down:
                         offsetY = 1.0;
                         vert = true;
                         break;
-                    case KeyActions.KeyDown.Left:
+                    case KeyDownAction.Left:
                         offsetX = -1.0;
                         break;
-                    case KeyActions.KeyDown.Right:
+                    case KeyDownAction.Right:
                         offsetX = 1.0;
                         break;
-                    case KeyActions.KeyDown.Invalid:
+                    case KeyDownAction.Invalid:
                     default:
                         break;
                 }

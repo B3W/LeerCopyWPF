@@ -41,13 +41,13 @@ namespace LeerCopyWPF.Models
         /// <param name="offsetX"></param>
         /// <param name="offsetY"></param>
         /// <param name="dir"></param>
-        public void Resize(double offsetX, double offsetY, KeyActions.KeyDown dir)
+        public void Resize(double offsetX, double offsetY, KeyDownAction dir)
         {
             Point tmpPt;
 
             switch (dir)
             {
-                case KeyActions.KeyDown.Up:
+                case KeyDownAction.Up:
                     if (StartPt.Y > EndPt.Y)
                     {
                         tmpPt = new Point(EndPt.X, (EndPt.Y + offsetY));
@@ -65,7 +65,7 @@ namespace LeerCopyWPF.Models
                         }
                     }
                     break;
-                case KeyActions.KeyDown.Down:
+                case KeyDownAction.Down:
                     if (StartPt.Y > EndPt.Y)
                     {
                         tmpPt = new Point(StartPt.X, (StartPt.Y + offsetY));
@@ -83,7 +83,7 @@ namespace LeerCopyWPF.Models
                         }
                     }
                     break;
-                case KeyActions.KeyDown.Left:
+                case KeyDownAction.Left:
                     if (StartPt.X > EndPt.X)
                     {
                         tmpPt = new Point((EndPt.X + offsetX), EndPt.Y);
@@ -101,7 +101,7 @@ namespace LeerCopyWPF.Models
                         }
                     }
                     break;
-                case KeyActions.KeyDown.Right:
+                case KeyDownAction.Right:
                     if (StartPt.X > EndPt.X)
                     {
                         tmpPt = new Point((StartPt.X + offsetX), StartPt.Y);
@@ -119,7 +119,7 @@ namespace LeerCopyWPF.Models
                         }
                     }
                     break;
-                case KeyActions.KeyDown.Invalid:
+                case KeyDownAction.Invalid:
                 default:
                     break;
             }

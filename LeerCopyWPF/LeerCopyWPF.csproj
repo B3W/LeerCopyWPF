@@ -68,8 +68,11 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Constants\SettingsConstants.cs" />
+    <Compile Include="Models\Selection.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\SelectionViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="Views\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
@@ -86,13 +89,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Controllers\SelectControl.cs" />
     <Compile Include="Enums\KeyActions.cs" />
     <Compile Include="Models\SimpleScreen.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="Utilities\ActionConverter.cs" />
     <Compile Include="Utilities\BitmapUtilities.cs" />
-    <Compile Include="Models\Selection.cs" />
     <Compile Include="Utilities\EncodedImage.cs" />
     <Compile Include="Utilities\FlagEventArgs.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">

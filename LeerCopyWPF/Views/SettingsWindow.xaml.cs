@@ -32,38 +32,44 @@ namespace LeerCopyWPF.Views
 
 
         /// <summary>
-        /// Handles key binding validation
+        /// Handles key binding validation to prevent unwanted characters entering control
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void KeyBindingTxtBox_KeyUp(object sender, KeyEventArgs e)
+        private void KeyBindingTxtBox_PreviewTextInput(object sender, KeyEventArgs e)
         {
             TextBox keyBindTxtBx = (TextBox)sender;
-            BindingExpression txtBindingExpr = keyBindTxtBx.GetBindingExpression(TextBox.TextProperty);
-            // Get the property name for raising NotifyPropertyChanged
-            Binding txtBinding = txtBindingExpr.ParentBinding;
-            string propertyName = txtBinding.Path.Path;
             Key newKey = e.Key;
             Key oldKey = (Key)_keyConverter.ConvertFromString(keyBindTxtBx.Text);
 
-            // Validate key press against valid keys
-            if ((newKey >= Key.Cancel && newKey <= Key.Return)  ||  // Cancel, Backspace, Tab, Linefeed, Clear, Enter, Return
-                (newKey >= Key.Space && newKey <= Key.Home)     ||  // Space, PageUp, PageDown, Home, End
-                (newKey == Key.Insert || newKey == Key.Delete)  ||  
-                (newKey >= Key.D0 && newKey <= Key.Z)           ||  // 0, 1, 2, ..., x, y, z
-                (newKey >= Key.NumPad0 && newKey <= Key.F24))       // 0, 1, 2, ..., *, +, ..., F22, F23, F24
+            if (newKey == oldKey)
             {
-                // Validate against current bindings
-
+                e.Handled = true;
             }
-            /*
-             * How to manually add errors to Validation.Errors (https://stackoverflow.com/a/3660863)
-             * ValidationError validationError = new ValidationError( ? , txtBindingExpr);
-             * validationError.ErrorContent = "This is not a valid e-mail address";
-             * Validation.MarkInvalid(txtBindingExpr, validationError);
-             */
+            else if ((newKey < Key.Cancel || newKey > Key.Return)   &&  // Cancel, Backspace, Tab, Linefeed, Clear, Enter, Return
+                    (newKey < Key.Space || newKey > Key.Home)       &&  // Space, PageUp, PageDown, Home, End
+                    (newKey != Key.Insert && newKey != Key.Delete)  &&  
+                    (newKey < Key.D0 || newKey > Key.Z)             &&  // 0, 1, 2, ..., x, y, z
+                    (newKey < Key.NumPad0 || newKey > Key.F24))         // 0, 1, 2, ..., *, +, ..., F22, F23, F24
+            {
+                e.Handled = true;
+            }
+            else
+            {
+                // Get the property name for raising NotifyPropertyChanged
+                BindingExpression txtBindingExpr = keyBindTxtBx.GetBindingExpression(TextBox.TextProperty);
+                Binding txtBinding = txtBindingExpr.ParentBinding;
+                string propertyName = txtBinding.Path.Path;
 
+                /*
+                 * How to manually add errors to Validation.Errors (https://stackoverflow.com/a/3660863)
+                 * ValidationError validationError = new ValidationError( ? , txtBindingExpr);
+                 * validationError.ErrorContent = "This is not a valid e-mail address";
+                 * Validation.MarkInvalid(txtBindingExpr, validationError);
+                 */
+            }
+            
             throw new NotImplementedException();
-        }
+        } // KeyBindingTxtBox_KeyDown
     }
 }

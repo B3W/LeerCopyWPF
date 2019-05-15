@@ -47,6 +47,8 @@
                             Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)/ErrorContent}"/>
                 </Trigger>
             </Style.Triggers>
+            <EventSetter Event="PreviewTextInput" Handler="KeyBindingTxtBox_PreviewTextInput"/>
+            <Setter Property="IsUndoEnabled" Value="False"/>
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="TextAlignment" Value="Center"/>

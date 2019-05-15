@@ -283,5 +283,17 @@ namespace LeerCopyWPF.Properties {
                 this["SelectionWinOpacity"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("3")]
+        public double SelectionBorderThickness {
+            get {
+                return ((double)(this["SelectionBorderThickness"]));
+            }
+            set {
+                this["SelectionBorderThickness"] = value;
+            }
+        }
     }
 }

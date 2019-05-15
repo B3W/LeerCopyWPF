@@ -16,6 +16,7 @@
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+using LeerCopyWPF.Constants;
 using LeerCopyWPF.Enums;
 using LeerCopyWPF.Utilities;
 using LeerCopyWPF.ViewModels;
@@ -43,30 +44,39 @@ namespace LeerCopyWPF
     /// </summary>
     public partial class SelectionWindow : Window
     {
-        private SelectionViewModel _selectionViewModel;
-        private SelectionViewModel tmpVM;
+        #region Fields
+        private readonly SelectionViewModel _selectionViewModel;
+        private SelectionViewModel _tmpVM;
         /// <summary>
         /// Dictionary for quick lookup of key up mappings
         /// </summary>
-        private IDictionary<Key, KeyUpAction> keyUpMappings;
+        private IDictionary<Key, KeyUpAction> _keyUpMappings = new Dictionary<Key, KeyUpAction>(10);
         /// <summary>
         /// Dictionary for quick lookup of key up mappings
         /// </summary>
-        private IDictionary<Key, KeyDownAction> keyDownMappings;
+        private readonly IDictionary<Key, KeyDownAction> _keyDownMappings;
+        /// <summary>
+        /// Dictionary containing mappings between KeyUpAction enum and string values
+        /// </summary>
+        private readonly IDictionary<string, KeyUpAction> _keyUpStringMappings;
         /// <summary>
         /// Flag indicating whether switch is possible
         /// </summary>
-        private bool switchValid;
+        private bool _switchValid;
         /// <summary>
         /// Flag to prevent loaded event from firing multiple times
         /// </summary>
-        private bool winLoaded = false;
+        private bool _winLoaded = false;
+        #endregion // Fields
+
+        #region Properties
         /// <summary>
         /// Event for signaling the MainWindow
         /// </summary>
         public event EventHandler<FlagEventArgs> SignalMain;
+        #endregion // Properties
 
-
+        #region Constructors
         public SelectionWindow(Rect bounds, bool switchValid)
         {
             // Register window lifetime events
@@ -74,19 +84,36 @@ namespace LeerCopyWPF
 
             InitializeComponent();
 
+            // Construct conversion mapping
+            _keyUpStringMappings = new Dictionary<string, KeyUpAction>
+            {
+                { SettingsConstants.CopySettingName, KeyUpAction.Copy },
+                { SettingsConstants.EditSettingName, KeyUpAction.Edit },
+                { SettingsConstants.SaveSettingName, KeyUpAction.Save },
+                { SettingsConstants.ClearSettingName, KeyUpAction.Clear },
+                { SettingsConstants.SelectAllSettingName, KeyUpAction.SelectAll },
+                { SettingsConstants.BorderSettingName, KeyUpAction.Border },
+                { SettingsConstants.TipsSettingName, KeyUpAction.Tips },
+                { SettingsConstants.SwtchScrnSettingName, KeyUpAction.Switch },
+                { SettingsConstants.SettingsSettingName, KeyUpAction.Settings },
+                { SettingsConstants.QuitSettingName, KeyUpAction.Quit }
+            };
+
+            // Set DataContext
             _selectionViewModel = new SelectionViewModel(bounds);
             _selectionViewModel.OpenSettingsEvent += (s, eargs) => new SettingsWindow().ShowDialog();
+            _selectionViewModel.KeyBindingsChangedEvent += (s, eargs) => KeyMappingsChanged();
             DataContext = _selectionViewModel;
 
-            this.switchValid = switchValid;
+            _switchValid = switchValid;
 
             // Place form on correct screen
             this.Left = bounds.Left;
             this.Top = bounds.Top;
 
             // Bind keys to actions
-            InitKeyUpMappings();
-            keyDownMappings = new Dictionary<Key, KeyDownAction>
+            _selectionViewModel.RefreshKeyBindings();
+            _keyDownMappings = new Dictionary<Key, KeyDownAction>
             {
                 // Add arrow keys
                 { Key.Up, KeyDownAction.Up },
@@ -102,37 +129,52 @@ namespace LeerCopyWPF
             this.PreviewMouseLeftButtonUp += SelectionWindow_MouseLeftButtonUp;
             this.PreviewMouseMove += SelectionWindow_MouseMove;
         } // SelectionWindow
+        #endregion // Constructors
 
-
+        #region Methods
         /// <summary>
-        /// Initialize key bindings for the key up event
+        /// Switch screen if possible
         /// </summary>
-        private void InitKeyUpMappings()
+        private void SwitchScreens()
         {
-            // Retrieve app settings
-            Properties.Settings settings = Properties.Settings.Default;
-
-            // Populate key mappings into dictionary
-            keyUpMappings = new Dictionary<Key, KeyUpAction>();
-            string[] keyUpNames = settings.KeyUpNames;
-            KeyConverter converter = new KeyConverter();
-
-            foreach (string name in keyUpNames)
+            if (_switchValid)
             {
-                try
+                this.Hide();
+                RaiseSignal(true);
+            }
+        } // SwitchScreens
+        #endregion // Methods
+
+        #region EventHandlers
+        /// <summary>
+        /// EventHandler for updating the key up bindings (called by the ViewModel)
+        /// </summary>
+        private void KeyMappingsChanged()
+        {
+            SelectionViewModel _tmpVM = DataContext as SelectionViewModel;
+            IDictionary<string, string> keyMappings = _tmpVM.KeyMappings;
+            KeyConverter converter = new KeyConverter();
+            Key key;
+
+            // Update mappings
+            foreach (KeyValuePair<string, string> mapping in keyMappings)
+            {
+                key = (Key)converter.ConvertFromString(mapping.Value);
+                if (_keyUpStringMappings.TryGetValue(mapping.Key, out KeyUpAction value))
                 {
-                    keyUpMappings.Add((Key)converter.ConvertFromString((string)settings[name]), ActionConverter.KeyUpStrToEnum(name));
-                } catch (SettingsPropertyNotFoundException)
+                    _keyUpMappings[key] = value;
+                }
+                else
                 {
-                    // TODO exception logging
-                    throw;
+                    throw new KeyNotFoundException("KeyMappings from SelectionViewModel contain invalid key: " + mapping.Key);
                 }
             }
+
         } // InitKeyUpMappings
 
 
         /// <summary>
-        /// Raise the event to signal MainWindow
+        /// Raise the EventHandler to signal MainWindow
         /// </summary>
         private void RaiseSignal(bool switchFlag)
         {
@@ -140,63 +182,49 @@ namespace LeerCopyWPF
         } // RaiseSignal
 
 
-        /// <summary>
-        /// Switch screen if possible
-        /// </summary>
-        private void SwitchScreens()
-        {
-            if (switchValid)
-            {
-                this.Hide();
-                RaiseSignal(true);
-            }
-        } // SwitchScreens
-
-
         private void SelectionWindow_PreviewKeyUp(object sender, KeyEventArgs e)
         {
-            KeyUpAction action;
-            Visibility vis;
-
-            if (keyUpMappings.ContainsKey(e.Key))
+            if (_keyUpMappings.ContainsKey(e.Key))
             {
-                tmpVM = DataContext as SelectionViewModel;
-                action = keyUpMappings[e.Key];
+                _tmpVM = DataContext as SelectionViewModel;
+                KeyUpAction action = _keyUpMappings[e.Key];
+                Visibility vis;
+
                 switch (action)
                 {
                     case KeyUpAction.Copy:
                         // Copy selection to the clipboard
-                        if (tmpVM.CopyCommand.CanExecute(null))
+                        if (_tmpVM.CopyCommand.CanExecute(null))
                         {
-                            tmpVM.CopyCommand.Execute(null);
+                            _tmpVM.CopyCommand.Execute(null);
                         }
                         break;
                     case KeyUpAction.Edit:
                         // Edit the selection in default image editor
-                        if (tmpVM.EditCommand.CanExecute(null))
+                        if (_tmpVM.EditCommand.CanExecute(null))
                         {
-                            tmpVM.EditCommand.Execute(null);
+                            _tmpVM.EditCommand.Execute(null);
                         }
                         break;
                     case KeyUpAction.Save:
                         // Save the selection to disk
-                        if (tmpVM.SaveCommand.CanExecute(null))
+                        if (_tmpVM.SaveCommand.CanExecute(null))
                         {
-                            tmpVM.SaveCommand.Execute(null);
+                            _tmpVM.SaveCommand.Execute(null);
                         }
                         break;
                     case KeyUpAction.SelectAll:
                         // Select the entire screen
-                        if (tmpVM.MaximizeCommand.CanExecute(null))
+                        if (_tmpVM.MaximizeCommand.CanExecute(null))
                         {
-                            tmpVM.MaximizeCommand.Execute(null);
+                            _tmpVM.MaximizeCommand.Execute(null);
                         }
                         break;
                     case KeyUpAction.Clear:
                         // Clear the current selection
-                        if (tmpVM.ClearCommand.CanExecute(null))
+                        if (_tmpVM.ClearCommand.CanExecute(null))
                         {
-                            tmpVM.ClearCommand.Execute(null);
+                            _tmpVM.ClearCommand.Execute(null);
                         }
                         break;
                     case KeyUpAction.Border:
@@ -215,9 +243,9 @@ namespace LeerCopyWPF
                         break;
                     case KeyUpAction.Settings:
                         // Open up settings window
-                        if (tmpVM.SettingsCommand.CanExecute(null))
+                        if (_tmpVM.SettingsCommand.CanExecute(null))
                         {
-                            tmpVM.SettingsCommand.Execute(null);
+                            _tmpVM.SettingsCommand.Execute(null);
                         }
                         break;
                     case KeyUpAction.Quit:
@@ -236,12 +264,12 @@ namespace LeerCopyWPF
 
         private void SelectionWindow_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (keyDownMappings.ContainsKey(e.Key))
+            if (_keyDownMappings.ContainsKey(e.Key))
             {
-                tmpVM = DataContext as SelectionViewModel;
-                KeyDownAction dir = keyDownMappings[e.Key];
+                _tmpVM = DataContext as SelectionViewModel;
+                KeyDownAction dir = _keyDownMappings[e.Key];
 
-                tmpVM.ResizeSelection(dir);                
+                _tmpVM.ResizeSelection(dir);                
             }
             e.Handled = true;
         } // SelectionWindow_PreviewKeyDown
@@ -249,18 +277,15 @@ namespace LeerCopyWPF
 
         private void SelectionWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            if (!winLoaded)
+            if (!_winLoaded)
             {
-                // Final configuration of user selection view
-                // SelectionImg.Visibility = Visibility.Visible;
-
                 // Don't show the tip if you cannot switch screens
-                if (!switchValid)
+                if (!_switchValid)
                 {
                     LabelPanel.Children.Remove(SwitchLblPanel);
                 }
 
-                winLoaded = true;
+                _winLoaded = true;
             }
 
             this.WindowState = WindowState.Maximized;
@@ -269,8 +294,8 @@ namespace LeerCopyWPF
 
         private void SelectionWindow_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            tmpVM = DataContext as SelectionViewModel;
-            tmpVM.StartSelection(e.GetPosition(this));
+            _tmpVM = DataContext as SelectionViewModel;
+            _tmpVM.StartSelection(e.GetPosition(this));
 
             e.Handled = true;
         } // SelectionWindow_MouseLeftButtonDown
@@ -278,7 +303,7 @@ namespace LeerCopyWPF
 
         private void SelectionWindow_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            tmpVM?.StopSelection(e.GetPosition(this));
+            _tmpVM?.StopSelection(e.GetPosition(this));
 
             e.Handled = true;
         } // SelectionWindow_MouseLeftButtonUp
@@ -286,7 +311,7 @@ namespace LeerCopyWPF
 
         private void SelectionWindow_MouseMove(object sender, MouseEventArgs e)
         {
-            tmpVM?.UpdateSelection(e.GetPosition(this));
+            _tmpVM?.UpdateSelection(e.GetPosition(this));
 
             e.Handled = true;
         } // SelectionWindow_MouseMove
@@ -299,5 +324,6 @@ namespace LeerCopyWPF
 
             base.OnClosing(e);
         }
+        #endregion // EventHandlers
     }
 }

@@ -68,6 +68,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Constants\SettingsConstants.cs" />
     <Compile Include="Models\Selection.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
@@ -91,7 +92,6 @@
     <Compile Include="Enums\KeyActions.cs" />
     <Compile Include="Models\SimpleScreen.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="Utilities\ActionConverter.cs" />
     <Compile Include="Utilities\BitmapUtilities.cs" />
     <Compile Include="Utilities\EncodedImage.cs" />
     <Compile Include="Utilities\FlagEventArgs.cs" />

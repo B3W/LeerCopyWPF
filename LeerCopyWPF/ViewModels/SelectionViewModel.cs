@@ -13,12 +13,11 @@ using System.Windows.Media.Imaging;
 
 namespace LeerCopyWPF.ViewModels
 {
-    public class SelectionViewModel : BaseViewModel
+    public class SelectionViewModel : KeyBindingHelperViewModel
     {
         #region Fields
         private Selection _selection;
         private Rect _selectionRect;
-        private bool _mappingsChanged;
         private ICommand _copyCommand;
         private ICommand _editCommand;
         private ICommand _saveCommand;
@@ -26,13 +25,9 @@ namespace LeerCopyWPF.ViewModels
         private ICommand _clearCommand;
         private ICommand _settingsCommand;
         #endregion // Fields
-
-        #region Constants
-        private const string ConstDisplayName = "Leer Copy";
-        #endregion // Constants
-
+        
         #region Properties
-        public override string DisplayName { get => ConstDisplayName; }
+        public override string DisplayName { get => "Leer Copy"; }
 
         public Point StartPt
         {
@@ -98,10 +93,6 @@ namespace LeerCopyWPF.ViewModels
 
         public double BorderHeight { get => SelectionRect.Height + (BorderThickness * 2); }
 
-        public event EventHandler KeyBindingsChangedEvent;
-
-        public IDictionary<string, string> KeyMappings { get; private set; }
-
         public bool CanCopy { get => !IsSelecting && IsSelected && !_selection.StartPt.Equals(_selection.EndPt); }
 
         public ICommand CopyCommand { get => _copyCommand ?? (_copyCommand = new RelayCommand(param => CopySelection(), param => CanCopy)); }
@@ -129,14 +120,12 @@ namespace LeerCopyWPF.ViewModels
         #endregion // Properties
 
         #region Constructors
-        public SelectionViewModel(Rect bounds)
-        {
+        public SelectionViewModel(Rect bounds) : base()
+        {            
             // Capture screen
             BitmapSource bitmap = BitmapUtilities.CaptureRect(bounds);
             _selection = new Selection(bitmap, bounds);
 
-            KeyMappings = new Dictionary<string, string>(10);
-            _mappingsChanged = true;
             BorderThickness = Properties.Settings.Default.SelectionBorderThickness;
         }
         #endregion // Constructors
@@ -254,54 +243,6 @@ namespace LeerCopyWPF.ViewModels
                 }
                 _selection.Resize(offsetX, offsetY, dir);
                 SelectionRect = new Rect(StartPt, EndPt);
-            }
-        }
-
-
-        /// <summary>
-        /// Fetches the key bindings from settings
-        /// </summary>
-        public void RefreshKeyBindings()
-        {
-            Properties.Settings settingsInst = Properties.Settings.Default;
-
-            SetMapping(SettingsConstants.CopySettingName, (string)settingsInst[SettingsConstants.CopySettingName]);
-            SetMapping(SettingsConstants.EditSettingName, (string)settingsInst[SettingsConstants.EditSettingName]);
-            SetMapping(SettingsConstants.SaveSettingName, (string)settingsInst[SettingsConstants.SaveSettingName]);
-            SetMapping(SettingsConstants.ClearSettingName, (string)settingsInst[SettingsConstants.ClearSettingName]);
-            SetMapping(SettingsConstants.SelectAllSettingName, (string)settingsInst[SettingsConstants.SelectAllSettingName]);
-            SetMapping(SettingsConstants.BorderSettingName, (string)settingsInst[SettingsConstants.BorderSettingName]);
-            SetMapping(SettingsConstants.TipsSettingName, (string)settingsInst[SettingsConstants.TipsSettingName]);
-            SetMapping(SettingsConstants.SwtchScrnSettingName, (string)settingsInst[SettingsConstants.SwtchScrnSettingName]);
-            SetMapping(SettingsConstants.SettingsSettingName, (string)settingsInst[SettingsConstants.SettingsSettingName]);
-            SetMapping(SettingsConstants.QuitSettingName, (string)settingsInst[SettingsConstants.QuitSettingName]);
-
-            if (_mappingsChanged)
-            {
-                KeyBindingsChangedEvent?.Invoke(this, EventArgs.Empty);
-                _mappingsChanged = false;
-            }
-        } // RefreshKeyBindings
-
-
-        /// <summary>
-        /// Updates key mapping to new value or adds new
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="value"></param>
-        private void SetMapping(string key, string value)
-        {
-            if (KeyMappings.TryGetValue(key, out string curValue))
-            {
-                if (value != curValue)
-                {
-                    KeyMappings[key] = value;
-                    _mappingsChanged = true;
-                }
-            }
-            else
-            {
-                KeyMappings.Add(key, value);
             }
         }
         #endregion // Methods

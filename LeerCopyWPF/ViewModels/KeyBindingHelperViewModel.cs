@@ -33,8 +33,11 @@ namespace LeerCopyWPF.ViewModels
 
             if (_mappingsChanged)
             {
-                KeyBindingsChangedEvent?.Invoke(this, EventArgs.Empty);
-                _mappingsChanged = false;
+                if (KeyBindingsChangedEvent != null)
+                {
+                    KeyBindingsChangedEvent.Invoke(this, EventArgs.Empty);
+                    _mappingsChanged = false;
+                }
             }
         } // RefreshKeyBinding
 
@@ -59,8 +62,11 @@ namespace LeerCopyWPF.ViewModels
 
             if (_mappingsChanged)
             {
-                KeyBindingsChangedEvent?.Invoke(this, EventArgs.Empty);
-                _mappingsChanged = false;
+                if (KeyBindingsChangedEvent != null)
+                {
+                    KeyBindingsChangedEvent.Invoke(this, EventArgs.Empty);
+                    _mappingsChanged = false;
+                }
             }
         } // RefreshKeyBindings
 
@@ -83,6 +89,7 @@ namespace LeerCopyWPF.ViewModels
             else
             {
                 KeyMappings.Add(key, value);
+                _mappingsChanged = true;
             }
         } // SetMapping
         #endregion // Methods

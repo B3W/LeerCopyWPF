@@ -28,7 +28,7 @@ using System.Windows.Input;
 
 namespace LeerCopyWPF.ViewModels
 {
-    public class SettingsViewModel : BaseViewModel, IDataErrorInfo
+    public class SettingsViewModel : KeyBindingHelperViewModel, IDataErrorInfo
     {
         #region Structs
         private struct SettingData
@@ -85,10 +85,10 @@ namespace LeerCopyWPF.ViewModels
         /// Helper flag for validating data
         /// </summary>
         private bool _fileNameValid = true, _fileExtValid = true, _opacityValid = true;
+        private int _numInvalidKeys = 0;
         #endregion // Fields
 
         #region Constants
-        private const string _displayName = "Settings";
         private const string ConstFileExtPropName = "DefaultSaveExt";
         private const string ConstFileNamePropName = "DefaultFileName";
         private const string ConstSelectWinOpacityPropName = "SelectionWinOpacity";
@@ -101,7 +101,7 @@ namespace LeerCopyWPF.ViewModels
         #endregion // Constants
 
         #region Properties
-        public override string DisplayName { get => _displayName; }
+        public override string DisplayName { get => "Settings"; }
 
         public string CopyKey
         {
@@ -112,6 +112,7 @@ namespace LeerCopyWPF.ViewModels
                 {
                     _copy = value;
                     OnPropertyChanged(SettingsConstants.CopySettingName);
+                    RefreshKeyBinding(SettingsConstants.CopySettingName, value);
                     RecordPropertyChange(SettingsConstants.CopySettingName, value, typeof(string));
                 }
             }
@@ -126,6 +127,7 @@ namespace LeerCopyWPF.ViewModels
                 {
                     _edit = value;
                     OnPropertyChanged(SettingsConstants.EditSettingName);
+                    RefreshKeyBinding(SettingsConstants.EditSettingName, value);
                     RecordPropertyChange(SettingsConstants.EditSettingName, value, typeof(string));
                 }
             }
@@ -140,6 +142,7 @@ namespace LeerCopyWPF.ViewModels
                 {
                     _save = value;
                     OnPropertyChanged(SettingsConstants.SaveSettingName);
+                    RefreshKeyBinding(SettingsConstants.SaveSettingName, value);
                     RecordPropertyChange(SettingsConstants.SaveSettingName, value, typeof(string));
                 }
             }
@@ -154,6 +157,7 @@ namespace LeerCopyWPF.ViewModels
                 {
                     _clear = value;
                     OnPropertyChanged(SettingsConstants.ClearSettingName);
+                    RefreshKeyBinding(SettingsConstants.ClearSettingName, value);
                     RecordPropertyChange(SettingsConstants.ClearSettingName, value, typeof(string));
                 }
             }
@@ -168,6 +172,7 @@ namespace LeerCopyWPF.ViewModels
                 {
                     _selectAll = value;
                     OnPropertyChanged(SettingsConstants.SelectAllSettingName);
+                    RefreshKeyBinding(SettingsConstants.SelectAllSettingName, value);
                     RecordPropertyChange(SettingsConstants.SelectAllSettingName, value, typeof(string));
                 }
             }
@@ -182,6 +187,7 @@ namespace LeerCopyWPF.ViewModels
                 {
                     _border = value;
                     OnPropertyChanged(SettingsConstants.BorderSettingName);
+                    RefreshKeyBinding(SettingsConstants.BorderSettingName, value);
                     RecordPropertyChange(SettingsConstants.BorderSettingName, value, typeof(string));
                 }
             }
@@ -196,6 +202,7 @@ namespace LeerCopyWPF.ViewModels
                 {
                     _tips = value;
                     OnPropertyChanged(SettingsConstants.TipsSettingName);
+                    RefreshKeyBinding(SettingsConstants.TipsSettingName, value);
                     RecordPropertyChange(SettingsConstants.TipsSettingName, value, typeof(string));
                 }
             }
@@ -210,6 +217,7 @@ namespace LeerCopyWPF.ViewModels
                 {
                     _swtchScrn = value;
                     OnPropertyChanged(SettingsConstants.SwtchScrnSettingName);
+                    RefreshKeyBinding(SettingsConstants.SwtchScrnSettingName, value);
                     RecordPropertyChange(SettingsConstants.SwtchScrnSettingName, value, typeof(string));
                 }
             }
@@ -224,6 +232,7 @@ namespace LeerCopyWPF.ViewModels
                 {
                     _settings = value;
                     OnPropertyChanged(SettingsConstants.SettingsSettingName);
+                    RefreshKeyBinding(SettingsConstants.SettingsSettingName, value);
                     RecordPropertyChange(SettingsConstants.SettingsSettingName, value, typeof(string));
                 }
             }
@@ -238,6 +247,7 @@ namespace LeerCopyWPF.ViewModels
                 {
                     _quit = value;
                     OnPropertyChanged(SettingsConstants.QuitSettingName);
+                    RefreshKeyBinding(SettingsConstants.QuitSettingName, value);
                     RecordPropertyChange(SettingsConstants.QuitSettingName, value, typeof(string));
                 }
             }
@@ -319,7 +329,7 @@ namespace LeerCopyWPF.ViewModels
 
         public double OpacityMax { get => ConstSelectOpacityMax; }
 
-        public bool SettingsValid { get => _fileNameValid && _fileExtValid && _opacityValid; }
+        public bool SettingsValid { get => _fileNameValid && _fileExtValid && _opacityValid && _numInvalidKeys == 0; }
 
         public bool CanSave { get => SettingsValid && _settingsChanges != null && _settingsChanges.Count > 0; }
 
@@ -345,6 +355,31 @@ namespace LeerCopyWPF.ViewModels
 
                 switch (columnName)
                 {
+                    case SettingsConstants.CopySettingName:
+                    case SettingsConstants.EditSettingName:
+                    case SettingsConstants.SaveSettingName:
+                    case SettingsConstants.ClearSettingName:
+                    case SettingsConstants.SelectAllSettingName:
+                    case SettingsConstants.BorderSettingName:
+                    case SettingsConstants.TipsSettingName:
+                    case SettingsConstants.SwtchScrnSettingName:
+                    case SettingsConstants.SettingsSettingName:
+                    case SettingsConstants.QuitSettingName:
+                        if(IsValidKey(columnName, out error))
+                        {
+                            if (_numInvalidKeys > 0)
+                            {
+                                _numInvalidKeys--;
+                            }
+                        }
+                        else
+                        {
+                            if (_numInvalidKeys < 10)
+                            {
+                                _numInvalidKeys++;
+                            }
+                        }
+                        break;
                     case ConstFileExtPropName:
                         // Validate file extension
                         if (Array.IndexOf<string>(ExtOptions, _defaultExt) == -1)
@@ -396,26 +431,26 @@ namespace LeerCopyWPF.ViewModels
         #endregion // Properties
 
         #region Constructors
-        public SettingsViewModel(Action<object> closeAction)
+        public SettingsViewModel(Action<object> closeAction) : base()
         {
             _settingsInst = Properties.Settings.Default;
 
             // Fetch initial values from settings
             // Key bindings
-            CopyKey = (string)_settingsInst[SettingsConstants.CopySettingName];
-            EditKey = (string)_settingsInst[SettingsConstants.EditSettingName];
-            SaveKey = (string)_settingsInst[SettingsConstants.SaveSettingName];
-            ClearKey = (string)_settingsInst[SettingsConstants.ClearSettingName];
-            SelectAll = (string)_settingsInst[SettingsConstants.SelectAllSettingName];
-            BorderKey = (string)_settingsInst[SettingsConstants.BorderSettingName];
-            TipsKey = (string)_settingsInst[SettingsConstants.TipsSettingName];
-            SwitchScreenKey = (string)_settingsInst[SettingsConstants.SwtchScrnSettingName];
-            SettingsWin = (string)_settingsInst[SettingsConstants.SettingsSettingName];
-            QuitKey = (string)_settingsInst[SettingsConstants.QuitSettingName];
+            _copy = (string)_settingsInst[SettingsConstants.CopySettingName];
+            _edit = (string)_settingsInst[SettingsConstants.EditSettingName];
+            _save = (string)_settingsInst[SettingsConstants.SaveSettingName];
+            _clear = (string)_settingsInst[SettingsConstants.ClearSettingName];
+            _selectAll = (string)_settingsInst[SettingsConstants.SelectAllSettingName];
+            _border = (string)_settingsInst[SettingsConstants.BorderSettingName];
+            _tips = (string)_settingsInst[SettingsConstants.TipsSettingName];
+            _swtchScrn = (string)_settingsInst[SettingsConstants.SwtchScrnSettingName];
+            _settings = (string)_settingsInst[SettingsConstants.SettingsSettingName];
+            _quit = (string)_settingsInst[SettingsConstants.QuitSettingName];
 
             // Other
-            DefaultSaveExt = (string)_settingsInst[ConstFileExtPropName];
-            DefaultFileName = (string)_settingsInst[ConstFileNamePropName];
+            _defaultExt = (string)_settingsInst[ConstFileExtPropName];
+            _defaultFileName = (string)_settingsInst[ConstFileNamePropName];
             SelectionWinOpacity = (double)_settingsInst[ConstSelectWinOpacityPropName];
             _selectBorderVisibility = (Visibility)_settingsInst[ConstSelectBorderVisPropName];
             _borderVisBool = (_selectBorderVisibility == Visibility.Visible) ? true : false;
@@ -423,7 +458,6 @@ namespace LeerCopyWPF.ViewModels
             _tipsVisBool = (_tipsVisibility == Visibility.Visible) ? true : false;
 
             CloseCommand = new RelayCommand(closeAction);
-            _settingsChanges.Clear();
         }
         #endregion // Constructors
 
@@ -460,6 +494,35 @@ namespace LeerCopyWPF.ViewModels
             // Adds new KeyValue pair if key doesn't exist, or updates existing
             _settingsChanges[propertyName] = new SettingData(value, type);
         }
+
+
+        /// <summary>
+        /// Error checks key binding
+        /// </summary>
+        /// <param name="keyName"></param>
+        /// <param name="error"></param>
+        /// <returns></returns>
+        private bool IsValidKey(string keyName, out string error)
+        {
+            string keyValueStr = (string)GetType().GetProperty(keyName).GetValue(this, null);
+
+            foreach (KeyValuePair<string, string> mapping in KeyMappings)
+            {
+                if (!mapping.Key.Equals(keyName))
+                {
+                    if (mapping.Value.Equals(keyValueStr))
+                    {
+                        error = keyValueStr + " is already bound";
+                        return false;
+                    }
+                }
+            }
+            // Update mapping
+            KeyMappings[keyName] = keyValueStr;
+
+            error = string.Empty;
+            return true;
+        } // ValidateKey
 
 
         /// <summary>

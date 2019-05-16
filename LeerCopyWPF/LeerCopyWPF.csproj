@@ -70,7 +70,9 @@
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Constants\SettingsConstants.cs" />
     <Compile Include="Models\Selection.cs" />
+    <Compile Include="Utilities\CompatHashSet.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\KeyBindingHelperViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\SelectionViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />

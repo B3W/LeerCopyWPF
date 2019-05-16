@@ -47,13 +47,13 @@
                             Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)/ErrorContent}"/>
                 </Trigger>
             </Style.Triggers>
-            <EventSetter Event="PreviewTextInput" Handler="KeyBindingTxtBox_PreviewTextInput"/>
-            <Setter Property="IsUndoEnabled" Value="False"/>
+            <EventSetter Event="PreviewKeyUp" Handler="KeyBindingTxtBox_PreviewKeyUp"/>
+            <Setter Property="IsReadOnly" Value="True"/>
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="TextAlignment" Value="Center"/>
-            <Setter Property="MinWidth" Value="50"/>
-            <Setter Property="MaxWidth" Value="75"/>
+            <Setter Property="MinWidth" Value="100"/>
+            <Setter Property="MaxWidth" Value="200"/>
             <Setter Property="Margin" Value="0,1,0,1"/>
         </Style>
         <Style x:Key="SettingComboBoxStyle" TargetType="ComboBox">
@@ -123,43 +123,43 @@
                 </Grid.ColumnDefinitions>
                 <!-- Copy -->
                 <Label Grid.Row="0" Grid.Column="0" Content="{x:Static resx:Resources.SettingsCopyKeyStr}" Style="{StaticResource SettingLblStyle}"/>
-                <TextBox  Grid.Row="0" Grid.Column="1" Style="{StaticResource SettingKeyTxtBoxStyle}"
+                <TextBox  Grid.Row="0" Grid.Column="1" TabIndex="0" Style="{StaticResource SettingKeyTxtBoxStyle}"
                           Text="{Binding Path=CopyKey, Mode=TwoWay, ValidatesOnDataErrors=True}"/>
                 <!-- Edit -->
                 <Label Grid.Row="1" Grid.Column="0" Content="{x:Static resx:Resources.SettingsEditKeyStr}" Style="{StaticResource SettingLblStyle}"/>
-                <TextBox  Grid.Row="1" Grid.Column="1" Style="{StaticResource SettingKeyTxtBoxStyle}"
+                <TextBox  Grid.Row="1" Grid.Column="1" TabIndex="1" Style="{StaticResource SettingKeyTxtBoxStyle}"
                           Text="{Binding Path=EditKey, Mode=TwoWay, ValidatesOnDataErrors=True}"/>
                 <!-- Save -->
                 <Label Grid.Row="2" Grid.Column="0" Content="{x:Static resx:Resources.SettingsSaveKeyStr}" Style="{StaticResource SettingLblStyle}"/>
-                <TextBox  Grid.Row="2" Grid.Column="1" Style="{StaticResource SettingKeyTxtBoxStyle}"
+                <TextBox  Grid.Row="2" Grid.Column="1" TabIndex="2" Style="{StaticResource SettingKeyTxtBoxStyle}"
                           Text="{Binding Path=SaveKey, Mode=TwoWay, ValidatesOnDataErrors=True}"/>
                 <!-- Clear -->
                 <Label Grid.Row="3" Grid.Column="0" Content="{x:Static resx:Resources.SettingsClearKeyStr}" Style="{StaticResource SettingLblStyle}"/>
-                <TextBox  Grid.Row="3" Grid.Column="1" Style="{StaticResource SettingKeyTxtBoxStyle}"
+                <TextBox  Grid.Row="3" Grid.Column="1" TabIndex="3" Style="{StaticResource SettingKeyTxtBoxStyle}"
                           Text="{Binding Path=ClearKey, Mode=TwoWay, ValidatesOnDataErrors=True}"/>
                 <!-- Select All -->
                 <Label Grid.Row="4" Grid.Column="0" Content="{x:Static resx:Resources.SettingsSelectAllKeyStr}" Style="{StaticResource SettingLblStyle}"/>
-                <TextBox  Grid.Row="4" Grid.Column="1" Style="{StaticResource SettingKeyTxtBoxStyle}"
+                <TextBox  Grid.Row="4" Grid.Column="1" TabIndex="4" Style="{StaticResource SettingKeyTxtBoxStyle}"
                           Text="{Binding Path=SelectAll, Mode=TwoWay, ValidatesOnDataErrors=True}"/>
                 <!-- Selection Border -->
                 <Label Grid.Row="5" Grid.Column="0" Content="{x:Static resx:Resources.SettingsBorderKeyStr}" Style="{StaticResource SettingLblStyle}"/>
-                <TextBox  Grid.Row="5" Grid.Column="1" Style="{StaticResource SettingKeyTxtBoxStyle}"
+                <TextBox  Grid.Row="5" Grid.Column="1" TabIndex="5" Style="{StaticResource SettingKeyTxtBoxStyle}"
                           Text="{Binding Path=BorderKey, Mode=TwoWay, ValidatesOnDataErrors=True}"/>
                 <!-- Tips -->
                 <Label Grid.Row="6" Grid.Column="0" Content="{x:Static resx:Resources.SettingsTipsKeyStr}" Style="{StaticResource SettingLblStyle}"/>
-                <TextBox  Grid.Row="6" Grid.Column="1" Style="{StaticResource SettingKeyTxtBoxStyle}"
+                <TextBox  Grid.Row="6" Grid.Column="1" TabIndex="6" Style="{StaticResource SettingKeyTxtBoxStyle}"
                           Text="{Binding Path=TipsKey, Mode=TwoWay, ValidatesOnDataErrors=True}"/>
                 <!-- Switch Screen -->
                 <Label Grid.Row="7" Grid.Column="0" Content="{x:Static resx:Resources.SettingsSwtchScrnKeyStr}" Style="{StaticResource SettingLblStyle}"/>
-                <TextBox  Grid.Row="7" Grid.Column="1" Style="{StaticResource SettingKeyTxtBoxStyle}"
+                <TextBox  Grid.Row="7" Grid.Column="1" TabIndex="7" Style="{StaticResource SettingKeyTxtBoxStyle}"
                           Text="{Binding Path=SwitchScreenKey, Mode=TwoWay, ValidatesOnDataErrors=True}"/>
                 <!-- Open Settings -->
                 <Label Grid.Row="8" Grid.Column="0" Content="{x:Static resx:Resources.SettingsOpenSettingsKeyStr}" Style="{StaticResource SettingLblStyle}"/>
-                <TextBox  Grid.Row="8" Grid.Column="1" Style="{StaticResource SettingKeyTxtBoxStyle}"
+                <TextBox  Grid.Row="8" Grid.Column="1" TabIndex="8" Style="{StaticResource SettingKeyTxtBoxStyle}"
                           Text="{Binding Path=SettingsWin, Mode=TwoWay, ValidatesOnDataErrors=True}"/>
                 <!-- Quit -->
                 <Label Grid.Row="9" Grid.Column="0" Content="{x:Static resx:Resources.SettingsQuitKeyStr}" Style="{StaticResource SettingLblStyle}"/>
-                <TextBox  Grid.Row="9" Grid.Column="1" Style="{StaticResource SettingKeyTxtBoxStyle}"
+                <TextBox  Grid.Row="9" Grid.Column="1" TabIndex="9" Style="{StaticResource SettingKeyTxtBoxStyle}"
                           Text="{Binding Path=QuitKey, Mode=TwoWay, ValidatesOnDataErrors=True}"/>
             </Grid>
         </GroupBox>
@@ -187,7 +187,7 @@
                              Style="{StaticResource SettingKeyTxtBoxStyle}" IsReadOnly="True" IsTabStop="False" DockPanel.Dock="Right"/>
                     <Slider Name="TransparencySlider" Value="{Binding Path=SelectionWinOpacity, Mode=TwoWay, ValidatesOnDataErrors=True}"
                             Maximum="{Binding Path=OpacityMax, Mode=OneWay}" Style="{StaticResource SettingSliderStyle}"
-                            Minimum="0.0" TickFrequency="0.01" TickPlacement="BottomRight" IsSnapToTickEnabled="True"/>
+                            Minimum="0.0" TickFrequency="0.01" TickPlacement="BottomRight" IsSnapToTickEnabled="True" TabIndex="11"/>
                 </DockPanel>
             </Grid>
         </GroupBox>
@@ -209,18 +209,18 @@
                 </Grid.ColumnDefinitions>
                 <!-- File Name -->
                 <Label Grid.Row="0" Grid.Column="0" Content="{x:Static resx:Resources.SettingsFileNameStr}" Style="{StaticResource SettingLblStyle}"/>
-                <TextBox  Grid.Row="0" Grid.Column="1" Style="{StaticResource SettingGenericTxtBoxStyle}"
+                <TextBox  Grid.Row="0" Grid.Column="1" TabIndex="12" Style="{StaticResource SettingGenericTxtBoxStyle}"
                           Text="{Binding Path=DefaultFileName, Mode=TwoWay, ValidatesOnDataErrors=True}"/>
                 <!-- File Extension -->
                 <Label Grid.Row="1" Grid.Column="0" Content="{x:Static resx:Resources.SettingsFileExtStr}" Style="{StaticResource SettingLblStyle}"/>
-                <ComboBox Grid.Row="1" Grid.Column="1" MaxWidth="100" IsReadOnly="True" IsEditable="False" Style="{StaticResource SettingComboBoxStyle}"
+                <ComboBox Grid.Row="1" Grid.Column="1" TabIndex="13" MaxWidth="100" IsReadOnly="True" IsEditable="False" Style="{StaticResource SettingComboBoxStyle}"
                           SelectedItem="{Binding Path=DefaultSaveExt, Mode=TwoWay, ValidatesOnDataErrors=True}" ItemsSource="{Binding Path=ExtOptions, Mode=OneWay}"/>
                 <!-- Border Visibility -->
                 <Label Grid.Row="2" Grid.Column="0" Content="{x:Static resx:Resources.SettingsBorderVisStr}" Style="{StaticResource SettingLblStyle}"/>
-                <CheckBox Grid.Row="2" Grid.Column="1" Style="{StaticResource SettingChkBoxStyle}" IsChecked="{Binding Path=BorderVisibility, Mode=TwoWay}"/>
+                <CheckBox Grid.Row="2" Grid.Column="1" TabIndex="14" Style="{StaticResource SettingChkBoxStyle}" IsChecked="{Binding Path=BorderVisibility, Mode=TwoWay}"/>
                 <!-- Tips Visibility -->
                 <Label Grid.Row="3" Grid.Column="0" Content="{x:Static resx:Resources.SettingsTipsVisStr}" Style="{StaticResource SettingLblStyle}"/>
-                <CheckBox Grid.Row="3" Grid.Column="1" Style="{StaticResource SettingChkBoxStyle}" IsChecked="{Binding Path=TipsVisibility, Mode=TwoWay}"/>
+                <CheckBox Grid.Row="3" Grid.Column="1" TabIndex="15" Style="{StaticResource SettingChkBoxStyle}" IsChecked="{Binding Path=TipsVisibility, Mode=TwoWay}"/>
             </Grid>
         </GroupBox>
     </Grid>

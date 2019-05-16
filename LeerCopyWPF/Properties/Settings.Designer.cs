@@ -181,7 +181,7 @@ namespace LeerCopyWPF.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Tab")]
+        [global::System.Configuration.DefaultSettingValueAttribute("F")]
         public string SwitchScreenKey {
             get {
                 return ((string)(this["SwitchScreenKey"]));

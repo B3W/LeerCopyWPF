@@ -47,23 +47,16 @@ namespace LeerCopyWPF.Views
         private void KeyBindingTxtBox_PreviewKeyUp(object sender, KeyEventArgs e)
         {
             TextBox keyBindTxtBx = (TextBox)sender;
-            Key newKey = e.Key;
-            Key oldKey = (Key)_keyConverter.ConvertFromString(keyBindTxtBx.Text);
+            Key key = e.Key;
 
-            if (newKey == oldKey)
+            if ((key >= Key.Space && key <= Key.Home)       // Space, PageUp, PageDown, Home, End
+                || key == Key.Insert
+                || key == Key.Delete
+                || (key >= Key.D0 && key <= Key.Z)          // 0, 1, 2, ..., x, y, z
+                || (key >= Key.NumPad0 && key <= Key.F24))  // 0, 1, 2, ..., *, +, ..., F22, F23, F24
             {
-                return;
+                keyBindTxtBx.Text = _keyConverter.ConvertToString(key);
             }
-            else if ((newKey < Key.Space || newKey > Key.Home) &&  // Space, PageUp, PageDown, Home, End
-                    (newKey != Key.Insert && newKey != Key.Delete) &&
-                    (newKey < Key.D0 || newKey > Key.Z) &&  // 0, 1, 2, ..., x, y, z
-                    (newKey < Key.NumPad0 || newKey > Key.F24))         // 0, 1, 2, ..., *, +, ..., F22, F23, F24
-            {
-                return;
-            }
-
-            keyBindTxtBx.Text = _keyConverter.ConvertToString(newKey);
-            e.Handled = true;
         } // KeyBindingTxtBox_KeyUp
         #endregion // EventHandlers
     }

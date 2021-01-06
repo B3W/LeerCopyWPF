@@ -177,14 +177,15 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <!-- Selection Border Color -->
+                <!-- TODO Selection Border Color -->
                 <Label Grid.Row="0" Grid.Column="0" Content="{x:Static resx:Resources.SettingsBorderColorStr}" Style="{StaticResource SettingLblStyle}"/>
 
                 <!-- Selection Window Transparency -->
                 <Label Grid.Row="1" Grid.Column="0" Content="{x:Static resx:Resources.SettingsWinOpacityStr}" Style="{StaticResource SettingLblStyle}"/>
                 <DockPanel VerticalAlignment="Center" Grid.Row="1" Grid.Column="1">
                     <TextBox Text="{Binding ElementName=TransparencySlider, Path=Value, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
-                             Style="{StaticResource SettingKeyTxtBoxStyle}" IsReadOnly="True" IsTabStop="False" DockPanel.Dock="Right"/>
+                             FontSize="14" MinWidth="100" MaxWidth="200" Margin="0,1,0,1" IsReadOnly="True" IsTabStop="False"
+                             HorizontalAlignment="Left" TextAlignment="Center" DockPanel.Dock="Right"/>
                     <Slider Name="TransparencySlider" Value="{Binding Path=SelectionWinOpacity, Mode=TwoWay, ValidatesOnDataErrors=True}"
                             Maximum="{Binding Path=OpacityMax, Mode=OneWay}" Style="{StaticResource SettingSliderStyle}"
                             Minimum="0.0" TickFrequency="0.01" TickPlacement="BottomRight" IsSnapToTickEnabled="True" TabIndex="11"/>

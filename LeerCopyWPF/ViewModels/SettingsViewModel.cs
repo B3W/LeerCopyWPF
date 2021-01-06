@@ -382,7 +382,7 @@ namespace LeerCopyWPF.ViewModels
                         break;
                     case ConstFileExtPropName:
                         // Validate file extension
-                        if (Array.IndexOf<string>(ExtOptions, _defaultExt) == -1)
+                        if (Array.IndexOf(ExtOptions, _defaultExt) == -1)
                         {
                             error = "File extension not supported";
                             _fileExtValid = false;
@@ -532,17 +532,19 @@ namespace LeerCopyWPF.ViewModels
         /// <returns>True if invalid, false otherwise</returns>
         private bool IsInvalidFileName(string filename)
         {
-            string regexPattern = "^(COM[0-9]|CON|LPT[0-9]|NUL|PRN|AUX)$";
-            Regex invalRegex = new Regex(regexPattern, RegexOptions.None);
+            const string regexPattern = "^(COM[0-9]|CON|LPT[0-9]|NUL|PRN|AUX)$";
+            Regex invalidNameRegex = new Regex(regexPattern, RegexOptions.None);
 
             if (filename.IndexOfAny(System.IO.Path.GetInvalidFileNameChars()) != -1)
             {
                 return true;
             }
-            else if (invalRegex.IsMatch(filename))
+            
+            if (invalidNameRegex.IsMatch(filename))
             {
                 return true;
             }
+
             return false;
         }
         #endregion // Methods/Functions

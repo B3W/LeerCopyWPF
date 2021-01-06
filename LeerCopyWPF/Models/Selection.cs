@@ -1,7 +1,4 @@
 ﻿using LeerCopyWPF.Enums;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows;
 using System.Windows.Media.Imaging;
 
@@ -9,29 +6,59 @@ namespace LeerCopyWPF.Models
 {
     public class Selection
     {
-        #region Members
-        public Point StartPt { get; set; }
-        public Point EndPt { get; set; }
-        public BitmapSource Bitmap { get; }
-        public Rect ScreenBounds { get; }
-        #endregion // Members
+        #region Fields
+        #endregion // Fields
 
-        #region Constructors
+
+        #region Properties
+
+        /// <summary>
+        /// Starting point of the selection
+        /// </summary>
+        public Point StartPt { get; set; }
+
+        /// <summary>
+        /// Ending point of the selection
+        /// </summary>
+        public Point EndPt { get; set; }
+
+        /// <summary>
+        /// Image being selected
+        /// </summary>
+        public BitmapSource Bitmap { get; }
+
+        /// <summary>
+        /// Max bounds for the selection
+        /// </summary>
+        public Rect ScreenBounds { get; }
+
+        #endregion // Properties
+
+
+        #region Methods
+
+        /// <summary>
+        /// Constructs a selection
+        /// </summary>
+        /// <param name="bitmap">Image for selection</param>
+        /// <param name="screenBounds">Bounds of the image</param>
         public Selection(BitmapSource bitmap, Rect screenBounds)
         {
             Bitmap = bitmap;
             ScreenBounds = screenBounds;
             StartPt = new Point();
             EndPt = new Point();
-        }
-        #endregion // Constructors
+        } // Selection
 
-        #region Methods
+
+        /// <summary>
+        /// Resets the selection
+        /// </summary>
         public void Reset()
         {
             StartPt = new Point();
             EndPt = new Point();
-        }
+        } // Reset
 
 
         /// <summary>
@@ -124,6 +151,7 @@ namespace LeerCopyWPF.Models
                     break;
             }
         } // Resize
+
         #endregion // Methods
     }
 }

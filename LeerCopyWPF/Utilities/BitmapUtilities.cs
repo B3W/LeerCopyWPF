@@ -32,6 +32,16 @@ namespace LeerCopyWPF.Utilities
 {
     public static class BitmapUtilities
     {
+        #region Fields
+        #endregion // Fields
+
+
+        #region Properties
+        #endregion // Properties
+
+
+        #region Methods
+
         /// <summary>
         /// DELETE ONCE SAFEHBITMAPHANDLE IS NO LONGER NEEDED
         /// Internal class for all marshalled functions
@@ -133,6 +143,7 @@ namespace LeerCopyWPF.Utilities
                 // TODO exception logging
                 throw;
             }
+
             return bitmap;
         } // ToBitmap
 
@@ -154,6 +165,7 @@ namespace LeerCopyWPF.Utilities
                 }
                 bmSrc = BitmapToBitmapSource(bitmap);
             }
+
             if (bmSrc == null)
             {
                 // TODO exception logging
@@ -184,10 +196,11 @@ namespace LeerCopyWPF.Utilities
                 }
                 bmSrc = BitmapToBitmapSource(bitmap);
             }
+
             if (bmSrc == null)
             {
                 // TODO exception logging
-                throw new ApplicationException("BitmapUtilities.CaptureScreen: Unable to convert \'Bitmap\' to \'BitmapSouce\' for screen " + screen.DeviceName);
+                throw new ApplicationException($"BitmapUtilities.CaptureScreen: Unable to convert \'Bitmap\' to \'BitmapSouce\' for screen {screen.DeviceName}");
             }
 
             return bmSrc;
@@ -223,6 +236,8 @@ namespace LeerCopyWPF.Utilities
         /// <returns>True on success, false otherwise</returns>
         public static bool CopyToClipboard(BitmapSource bmSrc)
         {
+            bool success = true;
+
             try
             {
                 // Use 'Clipboard' class to set image to selected area
@@ -231,9 +246,11 @@ namespace LeerCopyWPF.Utilities
             catch (ExternalException)
             {
                 // TODO exception logging
-                throw;
+                success = false;
+                throw; // TODO Remove throw in favor of returning bool
             }
-            return false;
+
+            return success;
         } // CopyToClipboard
 
 
@@ -248,12 +265,16 @@ namespace LeerCopyWPF.Utilities
             // Determine normalization factors
             double factorX = src.PixelWidth / src.Width;
             double factorY = src.PixelHeight / src.Height;
+
             // Create normalized selection area
             Int32Rect convertedArea = new Int32Rect(
                 (int)Math.Round(area.X * factorX), (int)Math.Round(area.Y * factorY),
                 (int)Math.Round(area.Width * factorX), (int)Math.Round(area.Height * factorY));
+
             // Create normalized cropped bitmap
             return new CroppedBitmap(src, convertedArea);
         } // GetCroppedBitmap
+
+        #endregion // Methods
     }
 }

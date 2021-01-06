@@ -13,41 +13,55 @@ namespace LeerCopyWPF.Commands
     public class RelayCommand : ICommand
     {
         #region Fields
+
         /// <summary>
         /// Logic to run when command executed
         /// </summary>
         private readonly Action<object> _execute;
+
         /// <summary>
         /// Logic for determining if command is able to be executed
         /// </summary>
         private readonly Predicate<object> _canExecute;
+
         #endregion // Fields
 
-        #region Constructors
-        public RelayCommand(Action<object> execute) : this(execute, null) { }
-        public RelayCommand(Action<object> execute, Predicate<object> canExecute)
-        {
-            _execute = execute ?? throw new ArgumentNullException("execute", "Command's Action cannot be null");
-            _canExecute = canExecute;
-        }
-        #endregion // Constructors
 
-        #region ICommand Members        
+        #region Properties
+
+        #region ICommand Members
+
         public event EventHandler CanExecuteChanged
         {
-            add { CommandManager.RequerySuggested += value;  }
+            add { CommandManager.RequerySuggested += value; }
             remove { CommandManager.RequerySuggested -= value; }
         }
 
         public bool CanExecute(object parameter)
         {
-            return _canExecute == null ? true : _canExecute(parameter);
+            return _canExecute == null || _canExecute(parameter);
         }
 
         public void Execute(object parameter)
         {
             _execute(parameter);
         }
+
         #endregion // ICommand Members
+
+        #endregion // Properties
+
+
+        #region Methods
+
+        public RelayCommand(Action<object> execute) : this(execute, null) { }
+
+        public RelayCommand(Action<object> execute, Predicate<object> canExecute)
+        {
+            _execute = execute ?? throw new ArgumentNullException("execute", "Command's Action cannot be null");
+            _canExecute = canExecute;
+        }
+
+        #endregion // Methods
     }
 }

@@ -17,13 +17,23 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace LeerCopyWPF.Utilities
 {
     public class FlagEventArgs : EventArgs
     {
+        #region Fields
+        #endregion // Fields
+
+
+        #region Properties
+
         public bool Flag { get; set; }
+
+        #endregion // Properties
+
+
+        #region Methods
+        #endregion // Methods
     }
 }

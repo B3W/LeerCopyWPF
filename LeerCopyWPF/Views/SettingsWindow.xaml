@@ -124,43 +124,43 @@
                 <!-- Copy -->
                 <Label Grid.Row="0" Grid.Column="0" Content="{x:Static resx:Resources.SettingsCopyKeyStr}" Style="{StaticResource SettingLblStyle}"/>
                 <TextBox  Grid.Row="0" Grid.Column="1" TabIndex="0" Style="{StaticResource SettingKeyTxtBoxStyle}"
-                          Text="{Binding Path=CopyKey, Mode=TwoWay, ValidatesOnDataErrors=True}"/>
+                          Text="{Binding Path=CopyKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
                 <!-- Edit -->
                 <Label Grid.Row="1" Grid.Column="0" Content="{x:Static resx:Resources.SettingsEditKeyStr}" Style="{StaticResource SettingLblStyle}"/>
                 <TextBox  Grid.Row="1" Grid.Column="1" TabIndex="1" Style="{StaticResource SettingKeyTxtBoxStyle}"
-                          Text="{Binding Path=EditKey, Mode=TwoWay, ValidatesOnDataErrors=True}"/>
+                          Text="{Binding Path=EditKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
                 <!-- Save -->
                 <Label Grid.Row="2" Grid.Column="0" Content="{x:Static resx:Resources.SettingsSaveKeyStr}" Style="{StaticResource SettingLblStyle}"/>
                 <TextBox  Grid.Row="2" Grid.Column="1" TabIndex="2" Style="{StaticResource SettingKeyTxtBoxStyle}"
-                          Text="{Binding Path=SaveKey, Mode=TwoWay, ValidatesOnDataErrors=True}"/>
+                          Text="{Binding Path=SaveKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
                 <!-- Clear -->
                 <Label Grid.Row="3" Grid.Column="0" Content="{x:Static resx:Resources.SettingsClearKeyStr}" Style="{StaticResource SettingLblStyle}"/>
                 <TextBox  Grid.Row="3" Grid.Column="1" TabIndex="3" Style="{StaticResource SettingKeyTxtBoxStyle}"
-                          Text="{Binding Path=ClearKey, Mode=TwoWay, ValidatesOnDataErrors=True}"/>
+                          Text="{Binding Path=ClearKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
                 <!-- Select All -->
                 <Label Grid.Row="4" Grid.Column="0" Content="{x:Static resx:Resources.SettingsSelectAllKeyStr}" Style="{StaticResource SettingLblStyle}"/>
                 <TextBox  Grid.Row="4" Grid.Column="1" TabIndex="4" Style="{StaticResource SettingKeyTxtBoxStyle}"
-                          Text="{Binding Path=SelectAll, Mode=TwoWay, ValidatesOnDataErrors=True}"/>
+                          Text="{Binding Path=SelectAll, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
                 <!-- Selection Border -->
                 <Label Grid.Row="5" Grid.Column="0" Content="{x:Static resx:Resources.SettingsBorderKeyStr}" Style="{StaticResource SettingLblStyle}"/>
                 <TextBox  Grid.Row="5" Grid.Column="1" TabIndex="5" Style="{StaticResource SettingKeyTxtBoxStyle}"
-                          Text="{Binding Path=BorderKey, Mode=TwoWay, ValidatesOnDataErrors=True}"/>
+                          Text="{Binding Path=BorderKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
                 <!-- Tips -->
                 <Label Grid.Row="6" Grid.Column="0" Content="{x:Static resx:Resources.SettingsTipsKeyStr}" Style="{StaticResource SettingLblStyle}"/>
                 <TextBox  Grid.Row="6" Grid.Column="1" TabIndex="6" Style="{StaticResource SettingKeyTxtBoxStyle}"
-                          Text="{Binding Path=TipsKey, Mode=TwoWay, ValidatesOnDataErrors=True}"/>
+                          Text="{Binding Path=TipsKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
                 <!-- Switch Screen -->
                 <Label Grid.Row="7" Grid.Column="0" Content="{x:Static resx:Resources.SettingsSwtchScrnKeyStr}" Style="{StaticResource SettingLblStyle}"/>
                 <TextBox  Grid.Row="7" Grid.Column="1" TabIndex="7" Style="{StaticResource SettingKeyTxtBoxStyle}"
-                          Text="{Binding Path=SwitchScreenKey, Mode=TwoWay, ValidatesOnDataErrors=True}"/>
+                          Text="{Binding Path=SwitchScreenKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
                 <!-- Open Settings -->
                 <Label Grid.Row="8" Grid.Column="0" Content="{x:Static resx:Resources.SettingsOpenSettingsKeyStr}" Style="{StaticResource SettingLblStyle}"/>
                 <TextBox  Grid.Row="8" Grid.Column="1" TabIndex="8" Style="{StaticResource SettingKeyTxtBoxStyle}"
-                          Text="{Binding Path=SettingsWin, Mode=TwoWay, ValidatesOnDataErrors=True}"/>
+                          Text="{Binding Path=SettingsWin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
                 <!-- Quit -->
                 <Label Grid.Row="9" Grid.Column="0" Content="{x:Static resx:Resources.SettingsQuitKeyStr}" Style="{StaticResource SettingLblStyle}"/>
                 <TextBox  Grid.Row="9" Grid.Column="1" TabIndex="9" Style="{StaticResource SettingKeyTxtBoxStyle}"
-                          Text="{Binding Path=QuitKey, Mode=TwoWay, ValidatesOnDataErrors=True}"/>
+                          Text="{Binding Path=QuitKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
             </Grid>
         </GroupBox>
         <GroupBox Grid.Row="0" Grid.Column="1">

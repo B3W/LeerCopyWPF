@@ -257,9 +257,9 @@ namespace LeerCopyWPF.ViewModels
             ClearCommand = new RelayCommand(param => ClearSelection());
             SettingsCommand = new RelayCommand(param => ShowSettings(), param => CanOpenSettings);
             KeyDownCommand = new RelayCommand<KeyEventArgs>(KeyDown);
-            // MouseDownCommand = new RelayCommand<MouseButtonEventArgs>(MouseDown);
-            // MouseUpCommand = new RelayCommand<MouseButtonEventArgs>(MouseUp);
-            // MouseMoveCommand = new RelayCommand<MouseEventArgs>(MouseMove);
+            MouseDownCommand = new RelayCommand<MouseButtonEventArgs>(MouseDown);
+            MouseUpCommand = new RelayCommand<MouseButtonEventArgs>(MouseUp);
+            MouseMoveCommand = new RelayCommand<MouseEventArgs>(MouseMove);
         } // SelectionViewModel
 
 
@@ -513,9 +513,9 @@ namespace LeerCopyWPF.ViewModels
 
 
         /// <summary>
-        /// Handler for action key command
+        /// Handler for key down command
         /// </summary>
-        public void KeyDown(KeyEventArgs e)
+        private void KeyDown(KeyEventArgs e)
         {
             // Check modifier keys
             bool shiftPressed = Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift);
@@ -550,10 +550,10 @@ namespace LeerCopyWPF.ViewModels
         /// Handler for the mouse down command
         /// </summary>
         /// <param name="e">Arguments for the mouse down event</param>
-        public void MouseDown(MouseButtonEventArgs e)
+        private void MouseDown(MouseButtonEventArgs e)
         {
             Point position = e.GetPosition(_owner);
-            Console.WriteLine($"Mouse down: ({position.X}, {position.Y})");
+            StartSelection(position);
 
             e.Handled = true;
         }
@@ -563,10 +563,10 @@ namespace LeerCopyWPF.ViewModels
         /// Handler for the mouse up command
         /// </summary>
         /// <param name="e">Arguments for the mouse up event</param>
-        public void MouseUp(MouseButtonEventArgs e)
+        private void MouseUp(MouseButtonEventArgs e)
         {
             Point position = e.GetPosition(_owner);
-            Console.WriteLine($"Mouse up: ({position.X}, {position.Y})");
+            StopSelection(position);
 
             e.Handled = true;
         }
@@ -576,10 +576,10 @@ namespace LeerCopyWPF.ViewModels
         /// Handler for the mouse move command
         /// </summary>
         /// <param name="e">Arguments for the mouse move event</param>
-        public void MouseMove(MouseEventArgs e)
+        private void MouseMove(MouseEventArgs e)
         {
             Point position = e.GetPosition(_owner);
-            Console.WriteLine($"Mouse move: ({position.X}, {position.Y})");
+            UpdateSelection(position);
 
             e.Handled = true;
         }

@@ -29,7 +29,18 @@
     <!-- Input Bindings -->
     <behaviors:Interaction.Triggers>
         <!-- Mouse Interactions -->
-        <!-- TODO -->
+        <!-- Mouse Down -->
+        <behaviors:EventTrigger EventName="PreviewMouseLeftButtonDown">
+            <behaviors:InvokeCommandAction Command="{Binding MouseDownCommand}" PassEventArgsToCommand="True"/>
+        </behaviors:EventTrigger>
+        <!-- Mouse Up -->
+        <behaviors:EventTrigger EventName="PreviewMouseLeftButtonUp">
+            <behaviors:InvokeCommandAction Command="{Binding MouseUpCommand}" PassEventArgsToCommand="True"/>
+        </behaviors:EventTrigger>
+        <!-- Mouse Move -->
+        <behaviors:EventTrigger EventName="PreviewMouseMove">
+            <behaviors:InvokeCommandAction Command="{Binding MouseMoveCommand}" PassEventArgsToCommand="True"/>
+        </behaviors:EventTrigger>
         <!-- Key Interactions -->
         <!-- TODO -->
         <!-- Key Down -->

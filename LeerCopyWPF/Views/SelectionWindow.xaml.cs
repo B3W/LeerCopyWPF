@@ -121,9 +121,6 @@ namespace LeerCopyWPF
 
             // Register event handlers
             this.PreviewKeyUp += SelectionWindow_PreviewKeyUp;
-            this.PreviewMouseLeftButtonDown += SelectionWindow_MouseLeftButtonDown;
-            this.PreviewMouseLeftButtonUp += SelectionWindow_MouseLeftButtonUp;
-            this.PreviewMouseMove += SelectionWindow_MouseMove;
         } // SelectionWindow
         #endregion // Constructors
 
@@ -273,31 +270,6 @@ namespace LeerCopyWPF
 
             this.WindowState = WindowState.Maximized;
         } // SelectionWindow_Loaded
-
-
-        private void SelectionWindow_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            _tmpVM = DataContext as SelectionViewModel;
-            _tmpVM.StartSelection(e.GetPosition(this));
-
-            e.Handled = true;
-        } // SelectionWindow_MouseLeftButtonDown
-
-
-        private void SelectionWindow_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            _tmpVM?.StopSelection(e.GetPosition(this));
-
-            e.Handled = true;
-        } // SelectionWindow_MouseLeftButtonUp
-
-
-        private void SelectionWindow_MouseMove(object sender, MouseEventArgs e)
-        {
-            _tmpVM?.UpdateSelection(e.GetPosition(this));
-
-            e.Handled = true;
-        } // SelectionWindow_MouseMove
 
 
         protected override void OnClosing(CancelEventArgs e)

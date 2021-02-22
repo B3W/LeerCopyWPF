@@ -45,35 +45,40 @@ namespace LeerCopyWPF
     public partial class SelectionWindow : Window
     {
         #region Fields
+
         private readonly SelectionViewModel _selectionViewModel;
+
         private SelectionViewModel _tmpVM;
+
         /// <summary>
         /// Dictionary for quick lookup of key up mappings
         /// </summary>
         private IDictionary<Key, KeyUpAction> _keyUpMappings = new Dictionary<Key, KeyUpAction>(10);
-        /// <summary>
-        /// Dictionary for quick lookup of key up mappings
-        /// </summary>
-        private readonly IDictionary<Key, KeyDownAction> _keyDownMappings;
+
         /// <summary>
         /// Dictionary containing mappings between KeyUpAction enum and string values
         /// </summary>
         private readonly IDictionary<string, KeyUpAction> _keyUpStringMappings;
+
         /// <summary>
         /// Flag indicating whether switch is possible
         /// </summary>
         private bool _switchValid;
+
         /// <summary>
         /// Flag to prevent loaded event from firing multiple times
         /// </summary>
         private bool _winLoaded = false;
+
         #endregion // Fields
 
         #region Properties
+
         /// <summary>
         /// Event for signaling the MainWindow
         /// </summary>
         public event EventHandler<FlagEventArgs> SignalMain;
+
         #endregion // Properties
 
         #region Constructors
@@ -100,7 +105,7 @@ namespace LeerCopyWPF
             };
 
             // Set DataContext
-            _selectionViewModel = new SelectionViewModel(bounds);
+            _selectionViewModel = new SelectionViewModel(this, bounds);
             _selectionViewModel.OpenSettingsEvent += (s, eargs) => new SettingsWindow().ShowDialog();
             _selectionViewModel.KeyBindingsChangedEvent += (s, eargs) => KeyMappingsChanged();
             DataContext = _selectionViewModel;
@@ -113,18 +118,9 @@ namespace LeerCopyWPF
 
             // Bind keys to actions
             _selectionViewModel.RefreshKeyBindings();
-            _keyDownMappings = new Dictionary<Key, KeyDownAction>
-            {
-                // Add arrow keys
-                { Key.Up, KeyDownAction.Up },
-                { Key.Down, KeyDownAction.Down },
-                { Key.Left, KeyDownAction.Left },
-                { Key.Right, KeyDownAction.Right }
-            };
 
             // Register event handlers
             this.PreviewKeyUp += SelectionWindow_PreviewKeyUp;
-            this.PreviewKeyDown += SelectionWindow_PreviewKeyDown;
             this.PreviewMouseLeftButtonDown += SelectionWindow_MouseLeftButtonDown;
             this.PreviewMouseLeftButtonUp += SelectionWindow_MouseLeftButtonUp;
             this.PreviewMouseMove += SelectionWindow_MouseMove;
@@ -257,19 +253,6 @@ namespace LeerCopyWPF
                     default:
                         break;
                 }
-            }
-            e.Handled = true;
-        } // SelectionWindow_PreviewKeyDown
-        
-
-        private void SelectionWindow_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (_keyDownMappings.ContainsKey(e.Key))
-            {
-                _tmpVM = DataContext as SelectionViewModel;
-                KeyDownAction dir = _keyDownMappings[e.Key];
-
-                _tmpVM.ResizeSelection(dir);                
             }
             e.Handled = true;
         } // SelectionWindow_PreviewKeyDown

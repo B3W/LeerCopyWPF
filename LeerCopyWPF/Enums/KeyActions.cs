@@ -37,9 +37,9 @@ namespace LeerCopyWPF.Enums
     }
 
     /// <summary>
-    /// All key down actions able to be performed during selection
+    /// All possible directions to resize selection
     /// </summary>
-    public enum KeyDownAction
+    public enum ResizeDirection
     {
         Invalid,
         Up,

@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:resx="clr-namespace:LeerCopyWPF.Strings.en_US"
         xmlns:prop="clr-namespace:LeerCopyWPF.Properties"
+        xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:LeerCopyWPF"
         mc:Ignorable="d"
         Title="Leer Copy" ResizeMode="NoResize"
@@ -24,9 +25,19 @@
             <Setter Property="Margin" Value="0,0,10,0"/>
         </Style>
     </Window.Resources>
-    <!-- Input Bindings -->
-    <!-- TODO -->
     
+    <!-- Input Bindings -->
+    <behaviors:Interaction.Triggers>
+        <!-- Mouse Interactions -->
+        <!-- TODO -->
+        <!-- Key Interactions -->
+        <!-- TODO -->
+        <!-- Key Down -->
+        <behaviors:EventTrigger EventName="PreviewKeyDown">
+            <behaviors:InvokeCommandAction Command="{Binding KeyDownCommand}" PassEventArgsToCommand="True"/>
+        </behaviors:EventTrigger>
+    </behaviors:Interaction.Triggers>
+
     <!-- Window Content -->
     <Grid>
         <!-- Displays image of the screen in the background -->

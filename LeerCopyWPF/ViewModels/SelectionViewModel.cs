@@ -24,6 +24,11 @@ namespace LeerCopyWPF.ViewModels
         private const double ConstShiftModifier = 2.0;
 
         /// <summary>
+        /// WPF element that owns this viewmodel
+        /// </summary>
+        private readonly IInputElement _owner;
+
+        /// <summary>
         /// Data structure containing information on a selection
         /// </summary>
         private readonly Selection _selection;
@@ -197,16 +202,45 @@ namespace LeerCopyWPF.ViewModels
         /// </summary>
         public ICommand SettingsCommand { get; }
 
-
+        /// <summary>
+        /// Event to signal settings window should open
+        /// </summary>
         public event EventHandler OpenSettingsEvent;
+
+        /// <summary>
+        /// Command for key down event
+        /// </summary>
+        public ICommand KeyDownCommand { get; }
+
+        /// <summary>
+        /// MCommand for mouse down event
+        /// </summary>
+        public ICommand MouseDownCommand { get; }
+
+        /// <summary>
+        /// Command for mouse move event
+        /// </summary>
+        public ICommand MouseUpCommand { get; }
+
+        /// <summary>
+        /// Command for mouse move event
+        /// </summary>
+        public ICommand MouseMoveCommand { get; }
 
         #endregion // Properties
 
 
         #region Methods
 
-        public SelectionViewModel(Rect bounds) : base()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="owner"></param>
+        /// <param name="bounds"></param>
+        public SelectionViewModel(IInputElement owner, Rect bounds) : base()
         {
+            _owner = owner;
+
             // Capture screen
             BitmapSource bitmap = BitmapUtilities.CaptureRect(bounds);
             _selection = new Selection(bitmap, bounds);
@@ -222,6 +256,10 @@ namespace LeerCopyWPF.ViewModels
             MaximizeCommand = new RelayCommand(param => MaximizeSelection());
             ClearCommand = new RelayCommand(param => ClearSelection());
             SettingsCommand = new RelayCommand(param => ShowSettings(), param => CanOpenSettings);
+            KeyDownCommand = new RelayCommand<KeyEventArgs>(KeyDown);
+            // MouseDownCommand = new RelayCommand<MouseButtonEventArgs>(MouseDown);
+            // MouseUpCommand = new RelayCommand<MouseButtonEventArgs>(MouseUp);
+            // MouseMoveCommand = new RelayCommand<MouseEventArgs>(MouseMove);
         } // SelectionViewModel
 
 
@@ -283,66 +321,65 @@ namespace LeerCopyWPF.ViewModels
         /// <summary>
         /// Resizes the selection based on a key down action
         /// </summary>
-        /// <param name="keyAction">Key action performed</param>
-        public void ResizeSelection(KeyDownAction keyAction)
+        /// <param name="dir">Direction to resize selection</param>
+        public void ResizeSelection(ResizeDirection dir, bool fastResize, bool reverseResize)
         {
             if (IsSelected && !IsSelecting)
             {
-                bool vert = false;
+                bool performResize = true;
                 double offsetX = 0.0;
                 double offsetY = 0.0;
 
                 // Set base offset
-                switch (keyAction)
+                switch (dir)
                 {
-                    case KeyDownAction.Up:
-                        offsetY = -1.0;
-                        vert = true;
+                    case ResizeDirection.Up:
+                        offsetY = fastResize ? -ConstShiftModifier : -1.0;
+
+                        if (reverseResize)
+                        {
+                            offsetY = -offsetY;
+                        }
                         break;
-                    case KeyDownAction.Down:
-                        offsetY = 1.0;
-                        vert = true;
+
+                    case ResizeDirection.Down:
+                        offsetY = fastResize ? ConstShiftModifier : 1.0;
+
+                        if (reverseResize)
+                        {
+                            offsetY = -offsetY;
+                        }
                         break;
-                    case KeyDownAction.Left:
-                        offsetX = -1.0;
+
+                    case ResizeDirection.Left:
+                        offsetX = fastResize ? -ConstShiftModifier : -1.0;
+
+                        if (reverseResize)
+                        {
+                            offsetX = -offsetX;
+                        }
                         break;
-                    case KeyDownAction.Right:
-                        offsetX = 1.0;
+
+                    case ResizeDirection.Right:
+                        offsetX = fastResize ? ConstShiftModifier : 1.0;
+
+                        if (reverseResize)
+                        {
+                            offsetX = -offsetX;
+                        }
                         break;
-                    case KeyDownAction.Invalid:
+
+                    case ResizeDirection.Invalid:
                     default:
+                        performResize = false;
                         break;
                 }
 
-                // Check modifier keys
-                if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
+                if (performResize)
                 {
-                    // Speed up resizing
-                    if (vert)
-                    {
-                        offsetY *= ConstShiftModifier;
-                    }
-                    else
-                    {
-                        offsetX *= ConstShiftModifier;
-                    }
+                    _selection.Resize(offsetX, offsetY, dir);
+                    SelectionRect = new Rect(StartPt, EndPt);
                 }
-
-                if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.LeftCtrl))
-                {
-                    // Reverse direction
-                    if (vert)
-                    {
-                        offsetY = -offsetY;
-                    }
-                    else
-                    {
-                        offsetX = -offsetX;
-                    }
-                }
-
-                _selection.Resize(offsetX, offsetY, keyAction);
-                SelectionRect = new Rect(StartPt, EndPt);
             }
         } // ResizeSelection
 
@@ -473,6 +510,79 @@ namespace LeerCopyWPF.ViewModels
             OpenSettingsEvent?.Invoke(this, EventArgs.Empty);
             RefreshKeyBindings();
         } // ShowSettings
+
+
+        /// <summary>
+        /// Handler for action key command
+        /// </summary>
+        public void KeyDown(KeyEventArgs e)
+        {
+            // Check modifier keys
+            bool shiftPressed = Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift);
+            bool controlPressed = Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.LeftCtrl);
+
+            switch (e.Key)
+            {
+                case Key.Up:
+                    ResizeSelection(ResizeDirection.Up, shiftPressed, controlPressed);
+                    break;
+
+                case Key.Down:
+                    ResizeSelection(ResizeDirection.Down, shiftPressed, controlPressed);
+                    break;
+
+                case Key.Left:
+                    ResizeSelection(ResizeDirection.Left, shiftPressed, controlPressed);
+                    break;
+
+                case Key.Right:
+                    ResizeSelection(ResizeDirection.Right, shiftPressed, controlPressed);
+                    break;
+
+                default:
+                    // Do nothing
+                    break;
+            }
+        }
+
+
+        /// <summary>
+        /// Handler for the mouse down command
+        /// </summary>
+        /// <param name="e">Arguments for the mouse down event</param>
+        public void MouseDown(MouseButtonEventArgs e)
+        {
+            Point position = e.GetPosition(_owner);
+            Console.WriteLine($"Mouse down: ({position.X}, {position.Y})");
+
+            e.Handled = true;
+        }
+
+
+        /// <summary>
+        /// Handler for the mouse up command
+        /// </summary>
+        /// <param name="e">Arguments for the mouse up event</param>
+        public void MouseUp(MouseButtonEventArgs e)
+        {
+            Point position = e.GetPosition(_owner);
+            Console.WriteLine($"Mouse up: ({position.X}, {position.Y})");
+
+            e.Handled = true;
+        }
+
+
+        /// <summary>
+        /// Handler for the mouse move command
+        /// </summary>
+        /// <param name="e">Arguments for the mouse move event</param>
+        public void MouseMove(MouseEventArgs e)
+        {
+            Point position = e.GetPosition(_owner);
+            Console.WriteLine($"Mouse move: ({position.X}, {position.Y})");
+
+            e.Handled = true;
+        }
 
         #endregion // Command Functions
 

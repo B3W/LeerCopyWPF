@@ -24,6 +24,9 @@
             <Setter Property="Margin" Value="0,0,10,0"/>
         </Style>
     </Window.Resources>
+    <!-- Input Bindings -->
+    <!-- TODO -->
+    
     <!-- Window Content -->
     <Grid>
         <!-- Displays image of the screen in the background -->

@@ -5,6 +5,7 @@ using LeerCopyWPF.Models;
 using LeerCopyWPF.Utilities;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
@@ -16,19 +17,31 @@ namespace LeerCopyWPF.ViewModels
     public class SelectionViewModel : KeyBindingHelperViewModel
     {
         #region Fields
-        private Selection _selection;
+        
+        /// <summary>
+        /// Modifier which determines how much to speed up selection resizing
+        /// </summary>
+        private const double ConstShiftModifier = 2.0;
+
+        /// <summary>
+        /// Data structure containing information on a selection
+        /// </summary>
+        private readonly Selection _selection;
+
+        /// <summary>
+        /// Rectangle representing selection bounds
+        /// </summary>
         private Rect _selectionRect;
-        private ICommand _copyCommand;
-        private ICommand _editCommand;
-        private ICommand _saveCommand;
-        private ICommand _maximizeCommand;
-        private ICommand _clearCommand;
-        private ICommand _settingsCommand;
+
         #endregion // Fields
         
         #region Properties
+
         public override string DisplayName { get => "Leer Copy"; }
 
+        /// <summary>
+        /// Starting point of selection
+        /// </summary>
         public Point StartPt
         {
             get => _selection.StartPt;
@@ -42,6 +55,9 @@ namespace LeerCopyWPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Ending point of selection
+        /// </summary>
         public Point EndPt
         {
             get => _selection.EndPt;
@@ -55,6 +71,9 @@ namespace LeerCopyWPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Rectangle representing selection bounds
+        /// </summary>
         public Rect SelectionRect
         {
             get => _selectionRect;
@@ -73,64 +92,139 @@ namespace LeerCopyWPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Rectangle geometry derived from the selection bounds
+        /// </summary>
         public RectangleGeometry SelectionGeometry { get => new RectangleGeometry(SelectionRect); }
 
+        /// <summary>
+        /// Image to perform selection on
+        /// </summary>
         public BitmapSource Bitmap { get => _selection.Bitmap; }
 
+        /// <summary>
+        /// Max bounds for the selection
+        /// </summary>
         public Rect ScreenBounds { get => _selection.ScreenBounds; }
 
-        public bool IsSelecting { get; private set; } = false;
+        /// <summary>
+        /// Flag indicating if the user is currently making a selection
+        /// </summary>
+        public bool IsSelecting { get; private set; }
 
-        public bool IsSelected { get; private set; } = false;
+        /// <summary>
+        /// Flag indicating if the user has finished making a selection
+        /// </summary>
+        public bool IsSelected { get; private set; }
 
+        /// <summary>
+        /// Thickness of border around selection
+        /// </summary>
         public double BorderThickness { get; }
 
+        /// <summary>
+        /// X coordinate of rectangle bounds representing border
+        /// </summary>
         public double BorderLeft { get => SelectionRect.Left - BorderThickness; }
 
+        /// <summary>
+        /// Y coordinate of rectangle bounds representing border
+        /// </summary>
         public double BorderTop  { get => SelectionRect.Top - BorderThickness; }
 
+        /// <summary>
+        /// Width of rectangle bounds representing border
+        /// </summary>
         public double BorderWidth { get => SelectionRect.Width + (BorderThickness * 2); }
 
+        /// <summary>
+        /// Height of rectangle bounds representing border
+        /// </summary>
         public double BorderHeight { get => SelectionRect.Height + (BorderThickness * 2); }
 
+        /// <summary>
+        /// Flag indicating if the copy command can be performed
+        /// </summary>
         public bool CanCopy { get => !IsSelecting && IsSelected && !_selection.StartPt.Equals(_selection.EndPt); }
 
-        public ICommand CopyCommand { get => _copyCommand ?? (_copyCommand = new RelayCommand(param => CopySelection(), param => CanCopy)); }
-
+        /// <summary>
+        /// Flag indicating if the edit command can be performed
+        /// </summary>
         public bool CanEdit { get => !IsSelecting && IsSelected && !_selection.StartPt.Equals(_selection.EndPt); }
 
-        public ICommand EditCommand { get => _editCommand ?? (_editCommand = new RelayCommand(param => EditSelection(), param => CanEdit)); }
-
+        /// <summary>
+        /// Flag indicating if the save command can be performed
+        /// </summary>
         public bool CanSave { get => !IsSelecting && IsSelected && !_selection.StartPt.Equals(_selection.EndPt); }
 
-        public ICommand SaveCommand { get => _saveCommand ?? (_saveCommand = new RelayCommand(param => SaveSelection(), param => CanSave)); }
+        /// <summary>
+        /// Flag indicating if the settings window can be opened
+        /// </summary>
+        public bool CanOpenSettings { get => !IsSelecting; }
 
-        public ICommand MaximizeCommand { get => _maximizeCommand ?? (_maximizeCommand = new RelayCommand(param => MaximizeSelection())); }
+        /// <summary>
+        /// Flag indicating if the selection window can be closed
+        /// </summary>
+        public bool CanClose { get => !IsSelecting; }
 
-        public ICommand ClearCommand { get => _clearCommand ?? (_clearCommand = new RelayCommand(param => ClearSelection())); }
+        /// <summary>
+        /// Command for copying selection
+        /// </summary>
+        public ICommand CopyCommand { get; }
+
+        /// <summary>
+        /// Command for editing selection
+        /// </summary>
+        public ICommand EditCommand { get; }
+
+        /// <summary>
+        /// Command for saving selection
+        /// </summary>
+        public ICommand SaveCommand { get; }
+
+        /// <summary>
+        /// Command for maximizing selection to screen bounds
+        /// </summary>
+        public ICommand MaximizeCommand { get; }
+
+        /// <summary>
+        /// Command for clearing selection
+        /// </summary>
+        public ICommand ClearCommand { get; }
+
+        /// <summary>
+        /// Command for opening settings window
+        /// </summary>
+        public ICommand SettingsCommand { get; }
+
 
         public event EventHandler OpenSettingsEvent;
 
-        public bool CanOpenSettings { get => !IsSelecting; }
-
-        public ICommand SettingsCommand { get => _settingsCommand ?? (_settingsCommand = new RelayCommand(param => ShowSettings(), param => CanOpenSettings)); }
-
-        public bool CanClose { get => !IsSelecting; }
-
         #endregion // Properties
 
-        #region Constructors
+
+        #region Methods
+
         public SelectionViewModel(Rect bounds) : base()
-        {            
+        {
             // Capture screen
             BitmapSource bitmap = BitmapUtilities.CaptureRect(bounds);
             _selection = new Selection(bitmap, bounds);
 
+            IsSelecting = false;
+            IsSelected = false;
             BorderThickness = Properties.Settings.Default.SelectionBorderThickness;
-        }
-        #endregion // Constructors
 
-        #region Methods
+            // Setup commands
+            CopyCommand = new RelayCommand(param => CopySelection(), param => CanCopy);
+            EditCommand = new RelayCommand(param => EditSelection(), param => CanEdit);
+            SaveCommand = new RelayCommand(param => SaveSelection(), param => CanSave);
+            MaximizeCommand = new RelayCommand(param => MaximizeSelection());
+            ClearCommand = new RelayCommand(param => ClearSelection());
+            SettingsCommand = new RelayCommand(param => ShowSettings(), param => CanOpenSettings);
+        } // SelectionViewModel
+
+
         /// <summary>
         /// Start new selection or continue previous
         /// </summary>
@@ -181,20 +275,25 @@ namespace LeerCopyWPF.ViewModels
             {
                 IsSelected = false;
             }
+
             IsSelecting = false;
         } // StopSelection
 
 
-        public void ResizeSelection(KeyDownAction dir)
+        /// <summary>
+        /// Resizes the selection based on a key down action
+        /// </summary>
+        /// <param name="keyAction">Key action performed</param>
+        public void ResizeSelection(KeyDownAction keyAction)
         {
             if (IsSelected && !IsSelecting)
             {
-                double shftMod = 2.0;
                 bool vert = false;
-                double offsetX = 0.0, offsetY = 0.0;
+                double offsetX = 0.0;
+                double offsetY = 0.0;
 
                 // Set base offset
-                switch (dir)
+                switch (keyAction)
                 {
                     case KeyDownAction.Up:
                         offsetY = -1.0;
@@ -221,11 +320,11 @@ namespace LeerCopyWPF.ViewModels
                     // Speed up resizing
                     if (vert)
                     {
-                        offsetY *= shftMod;
+                        offsetY *= ConstShiftModifier;
                     }
                     else
                     {
-                        offsetX *= shftMod;
+                        offsetX *= ConstShiftModifier;
                     }
                 }
 
@@ -241,20 +340,22 @@ namespace LeerCopyWPF.ViewModels
                         offsetX = -offsetX;
                     }
                 }
-                _selection.Resize(offsetX, offsetY, dir);
+
+                _selection.Resize(offsetX, offsetY, keyAction);
                 SelectionRect = new Rect(StartPt, EndPt);
             }
-        }
-        #endregion // Methods
+        } // ResizeSelection
+
 
         #region Command Functions
+
         /// <summary>
         /// Copy current selection to the clipboard
         /// </summary>
         public void CopySelection()
         {
             BitmapUtilities.CopyToClipboard(BitmapUtilities.GetCroppedBitmap(Bitmap, SelectionRect));
-        }
+        } // CopySelection
 
         /// <summary>
         /// Edit current selection in default text editor
@@ -267,7 +368,7 @@ namespace LeerCopyWPF.ViewModels
             // Save to temp file
             EncodedImage eImage = new EncodedImage(finalBitmap, Properties.Settings.Default.DefaultSaveExt);
             string tmpFileName = Properties.Settings.Default.DefaultFileName + "_" + DateTime.Now.Ticks;  // Use DateTime to avoid name collisions
-            string tmpFilePath = Properties.Settings.Default.AppDataLoc + tmpFileName + Properties.Settings.Default.DefaultSaveExt;
+            string tmpFilePath = Path.Combine(Properties.Settings.Default.AppDataLoc, tmpFileName + Properties.Settings.Default.DefaultSaveExt);
             eImage.SaveToFile(tmpFilePath);
 
             // Open in editor
@@ -275,6 +376,7 @@ namespace LeerCopyWPF.ViewModels
             {
                 Verb = "edit"
             };
+
             try
             {
                 System.Diagnostics.Process.Start(stInfo);
@@ -306,6 +408,7 @@ namespace LeerCopyWPF.ViewModels
 
             // Show dialog
             bool? res = saveDialog.ShowDialog();
+
             if (res == true)
             {
                 // Crop bitmap to selection area
@@ -314,17 +417,20 @@ namespace LeerCopyWPF.ViewModels
                 // Save as requested format
                 string filePath = saveDialog.FileName;
                 int extPos = filePath.LastIndexOf('.');  // 'IndexOf' methods more performant than 'Split'
+
                 if (extPos == -1)
                 {
                     // TODO exception logging
-                    throw new ArgumentException("Invalid filename during save", "fileName");
+                    throw new ArgumentException($"SelectionViewModel.SaveSelection: '{filePath}' is invalid filename", "fileName");
                 }
+
                 string extension = filePath.Substring(extPos + 1);
                 EncodedImage eImage = new EncodedImage(finalBitmap, extension);
                 eImage.SaveToFile(filePath);
 
                 // Update last save directory
                 int fileNamePos = filePath.LastIndexOf(System.IO.Path.DirectorySeparatorChar);
+
                 if (fileNamePos != -1)  // If somehow backslash not found do nothing
                 {
                     string lastSavePath = filePath.Substring(0, fileNamePos + 1);
@@ -366,7 +472,10 @@ namespace LeerCopyWPF.ViewModels
         {
             OpenSettingsEvent?.Invoke(this, EventArgs.Empty);
             RefreshKeyBindings();
-        } // OpenSettings
+        } // ShowSettings
+
         #endregion // Command Functions
+
+        #endregion // Methods
     }
 }

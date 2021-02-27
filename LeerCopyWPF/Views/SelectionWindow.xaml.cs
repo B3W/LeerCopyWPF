@@ -120,7 +120,7 @@ namespace LeerCopyWPF
             _selectionViewModel.RefreshKeyBindings();
 
             // Register event handlers
-            this.PreviewKeyUp += SelectionWindow_PreviewKeyUp;
+            //this.PreviewKeyUp += SelectionWindow_PreviewKeyUp;
         } // SelectionWindow
         #endregion // Constructors
 
@@ -181,66 +181,66 @@ namespace LeerCopyWPF
             {
                 _tmpVM = DataContext as SelectionViewModel;
                 KeyUpAction action = _keyUpMappings[e.Key];
-                Visibility vis;
+                // Visibility vis;
 
                 switch (action)
                 {
-                    case KeyUpAction.Copy:
-                        // Copy selection to the clipboard
-                        if (_tmpVM.CopyCommand.CanExecute(null))
-                        {
-                            _tmpVM.CopyCommand.Execute(null);
-                        }
-                        break;
-                    case KeyUpAction.Edit:
-                        // Edit the selection in default image editor
-                        if (_tmpVM.EditCommand.CanExecute(null))
-                        {
-                            _tmpVM.EditCommand.Execute(null);
-                        }
-                        break;
-                    case KeyUpAction.Save:
-                        // Save the selection to disk
-                        if (_tmpVM.SaveCommand.CanExecute(null))
-                        {
-                            _tmpVM.SaveCommand.Execute(null);
-                        }
-                        break;
-                    case KeyUpAction.SelectAll:
-                        // Select the entire screen
-                        if (_tmpVM.MaximizeCommand.CanExecute(null))
-                        {
-                            _tmpVM.MaximizeCommand.Execute(null);
-                        }
-                        break;
-                    case KeyUpAction.Clear:
-                        // Clear the current selection
-                        if (_tmpVM.ClearCommand.CanExecute(null))
-                        {
-                            _tmpVM.ClearCommand.Execute(null);
-                        }
-                        break;
-                    case KeyUpAction.Border:
-                        // Show/Hide border
-                        vis = (Properties.Settings.Default.BorderVisibility == Visibility.Visible) ? Visibility.Hidden : Visibility.Visible;
-                        Properties.Settings.Default.BorderVisibility = vis;
-                        break;
-                    case KeyUpAction.Tips:
-                        // Show/Hide tip labels
-                        vis = (Properties.Settings.Default.TipsVisibility == Visibility.Visible) ? Visibility.Hidden : Visibility.Visible;
-                        Properties.Settings.Default.TipsVisibility = vis;
-                        break;
+                    // case KeyUpAction.Copy:
+                    //     // Copy selection to the clipboard
+                    //     if (_tmpVM.CopyCommand.CanExecute(null))
+                    //     {
+                    //         _tmpVM.CopyCommand.Execute(null);
+                    //     }
+                    //     break;
+                    // case KeyUpAction.Edit:
+                    //     // Edit the selection in default image editor
+                    //     if (_tmpVM.EditCommand.CanExecute(null))
+                    //     {
+                    //         _tmpVM.EditCommand.Execute(null);
+                    //     }
+                    //     break;
+                    // case KeyUpAction.Save:
+                    //     // Save the selection to disk
+                    //     if (_tmpVM.SaveCommand.CanExecute(null))
+                    //     {
+                    //         _tmpVM.SaveCommand.Execute(null);
+                    //     }
+                    //     break;
+                    // case KeyUpAction.SelectAll:
+                    //     // Select the entire screen
+                    //     if (_tmpVM.MaximizeCommand.CanExecute(null))
+                    //     {
+                    //         _tmpVM.MaximizeCommand.Execute(null);
+                    //     }
+                    //     break;
+                    // case KeyUpAction.Clear:
+                    //     // Clear the current selection
+                    //     if (_tmpVM.ClearCommand.CanExecute(null))
+                    //     {
+                    //         _tmpVM.ClearCommand.Execute(null);
+                    //     }
+                    //     break;
+                    // case KeyUpAction.Border:
+                    //     // Show/Hide border
+                    //     vis = (Properties.Settings.Default.BorderVisibility == Visibility.Visible) ? Visibility.Hidden : Visibility.Visible;
+                    //     Properties.Settings.Default.BorderVisibility = vis;
+                    //     break;
+                    // case KeyUpAction.Tips:
+                    //     // Show/Hide tip labels
+                    //     vis = (Properties.Settings.Default.TipsVisibility == Visibility.Visible) ? Visibility.Hidden : Visibility.Visible;
+                    //     Properties.Settings.Default.TipsVisibility = vis;
+                    //     break;
                     case KeyUpAction.Switch:
                         e.Handled = true;
                         SwitchScreens();
                         break;
-                    case KeyUpAction.Settings:
-                        // Open up settings window
-                        if (_tmpVM.SettingsCommand.CanExecute(null))
-                        {
-                            _tmpVM.SettingsCommand.Execute(null);
-                        }
-                        break;
+                    // case KeyUpAction.Settings:
+                    //     // Open up settings window
+                    //     if (_tmpVM.SettingsCommand.CanExecute(null))
+                    //     {
+                    //         _tmpVM.SettingsCommand.Execute(null);
+                    //     }
+                    //     break;
                     case KeyUpAction.Quit:
                         // Quit selection
                         RaiseSignal(false);

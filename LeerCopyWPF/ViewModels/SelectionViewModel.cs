@@ -198,6 +198,21 @@ namespace LeerCopyWPF.ViewModels
         public ICommand ClearCommand { get; }
 
         /// <summary>
+        /// Command for toggling the border on/off
+        /// </summary>
+        public ICommand BorderCommand { get; }
+
+        /// <summary>
+        /// Command for toggling the tips on/off
+        /// </summary>
+        public ICommand TipsCommand { get; }
+
+        /// <summary>
+        /// Command for switching the selection screen
+        /// </summary>
+        public ICommand SwitchScreenCommand { get; }
+
+        /// <summary>
         /// Command for opening settings window
         /// </summary>
         public ICommand SettingsCommand { get; }
@@ -206,6 +221,11 @@ namespace LeerCopyWPF.ViewModels
         /// Event to signal settings window should open
         /// </summary>
         public event EventHandler OpenSettingsEvent;
+
+        /// <summary>
+        /// Command for exiting out of selection
+        /// </summary>
+        public ICommand QuitCommand { get; }
 
         /// <summary>
         /// Command for key down event
@@ -255,7 +275,11 @@ namespace LeerCopyWPF.ViewModels
             SaveCommand = new RelayCommand(param => SaveSelection(), param => CanSave);
             MaximizeCommand = new RelayCommand(param => MaximizeSelection());
             ClearCommand = new RelayCommand(param => ClearSelection());
+            BorderCommand = new RelayCommand(param => ToggleBorder());
+            TipsCommand = new RelayCommand(param => ToggleTips());
+            SwitchScreenCommand = new RelayCommand(param => SwitchScreen());
             SettingsCommand = new RelayCommand(param => ShowSettings(), param => CanOpenSettings);
+            QuitCommand = new RelayCommand(param => ExitSelection());
             KeyDownCommand = new RelayCommand<KeyEventArgs>(KeyDown);
             MouseDownCommand = new RelayCommand<MouseButtonEventArgs>(MouseDown);
             MouseUpCommand = new RelayCommand<MouseButtonEventArgs>(MouseUp);
@@ -267,7 +291,7 @@ namespace LeerCopyWPF.ViewModels
         /// Start new selection or continue previous
         /// </summary>
         /// <param name="point"></param>
-        public void StartSelection(Point point)
+        private void StartSelection(Point point)
         {
             if (IsSelected)
             {
@@ -287,7 +311,7 @@ namespace LeerCopyWPF.ViewModels
         /// Update current selection
         /// </summary>
         /// <param name="point"></param>
-        public void UpdateSelection(Point point)
+        private void UpdateSelection(Point point)
         {
             if (IsSelecting)
             {
@@ -301,7 +325,7 @@ namespace LeerCopyWPF.ViewModels
         /// Stop current selection
         /// </summary>
         /// <param name="point"></param>
-        public void StopSelection(Point point)
+        private void StopSelection(Point point)
         {
             if (IsSelecting && !_selection.StartPt.Equals(point))
             {
@@ -322,7 +346,7 @@ namespace LeerCopyWPF.ViewModels
         /// Resizes the selection based on a key down action
         /// </summary>
         /// <param name="dir">Direction to resize selection</param>
-        public void ResizeSelection(ResizeDirection dir, bool fastResize, bool reverseResize)
+        private void ResizeSelection(ResizeDirection dir, bool fastResize, bool reverseResize)
         {
             if (IsSelected && !IsSelecting)
             {
@@ -389,15 +413,16 @@ namespace LeerCopyWPF.ViewModels
         /// <summary>
         /// Copy current selection to the clipboard
         /// </summary>
-        public void CopySelection()
+        private void CopySelection()
         {
             BitmapUtilities.CopyToClipboard(BitmapUtilities.GetCroppedBitmap(Bitmap, SelectionRect));
         } // CopySelection
 
+
         /// <summary>
         /// Edit current selection in default text editor
         /// </summary>
-        public void EditSelection()
+        private void EditSelection()
         {
             // Crop bitmap to selection area 
             CroppedBitmap finalBitmap = BitmapUtilities.GetCroppedBitmap(Bitmap, SelectionRect);
@@ -429,7 +454,7 @@ namespace LeerCopyWPF.ViewModels
         /// Save the current selection to disk
         /// </summary>
         /// <param name="owner"></param>
-        public void SaveSelection()
+        private void SaveSelection()
         {
             // Configure save dialog
             Microsoft.Win32.SaveFileDialog saveDialog = new Microsoft.Win32.SaveFileDialog
@@ -480,7 +505,7 @@ namespace LeerCopyWPF.ViewModels
         /// <summary>
         /// Select the entire screen
         /// </summary>
-        public void MaximizeSelection()
+        private void MaximizeSelection()
         {
             IsSelecting = false;
             IsSelected = true;
@@ -493,7 +518,7 @@ namespace LeerCopyWPF.ViewModels
         /// <summary>
         /// Clear the current selection
         /// </summary>
-        public void ClearSelection()
+        private void ClearSelection()
         {
             IsSelecting = false;
             IsSelected = false;
@@ -503,13 +528,63 @@ namespace LeerCopyWPF.ViewModels
 
 
         /// <summary>
+        /// Toggles the selection border on/off
+        /// </summary>
+        private void ToggleBorder()
+        {
+            if (Properties.Settings.Default.BorderVisibility == Visibility.Visible)
+            {
+                Properties.Settings.Default.BorderVisibility = Visibility.Hidden;
+            }
+            else
+            {
+                Properties.Settings.Default.BorderVisibility = Visibility.Visible;
+            }
+        } // ToggleBorder
+
+
+        /// <summary>
+        /// Toggles the application hints on/off
+        /// </summary>
+        private void ToggleTips()
+        {
+            if (Properties.Settings.Default.TipsVisibility == Visibility.Visible)
+            {
+                Properties.Settings.Default.TipsVisibility = Visibility.Hidden;
+            }
+            else
+            {
+                Properties.Settings.Default.TipsVisibility = Visibility.Visible;
+            }
+        } // ToggleTips
+
+
+        /// <summary>
+        /// Switches to the next selection screen
+        /// </summary>
+        private void SwitchScreen()
+        {
+            throw new NotImplementedException();
+        } // SwitchScreen
+
+
+        /// <summary>
         /// Opens SettingsWindow
         /// </summary>
-        public void ShowSettings()
+        private void ShowSettings()
         {
             OpenSettingsEvent?.Invoke(this, EventArgs.Empty);
             RefreshKeyBindings();
         } // ShowSettings
+
+
+        /// <summary>
+        /// Exits out of the selection
+        /// </summary>
+        private void ExitSelection()
+        {
+            throw new NotImplementedException();
+        } // ExitSelection
 
 
         /// <summary>

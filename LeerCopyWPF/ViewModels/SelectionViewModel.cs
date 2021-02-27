@@ -429,8 +429,11 @@ namespace LeerCopyWPF.ViewModels
 
             // Save to temp file
             EncodedImage eImage = new EncodedImage(finalBitmap, Properties.Settings.Default.DefaultSaveExt);
+
             string tmpFileName = Properties.Settings.Default.DefaultFileName + "_" + DateTime.Now.Ticks;  // Use DateTime to avoid name collisions
-            string tmpFilePath = Path.Combine(Properties.Settings.Default.AppDataLoc, tmpFileName + Properties.Settings.Default.DefaultSaveExt);
+            string tmpFilePath = Path.Combine(Properties.Settings.Default.AppDataLoc,
+                                              tmpFileName + Properties.Settings.Default.DefaultSaveExt);
+
             eImage.SaveToFile(tmpFilePath);
 
             // Open in editor

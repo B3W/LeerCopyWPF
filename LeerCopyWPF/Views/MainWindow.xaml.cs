@@ -61,22 +61,6 @@ namespace LeerCopyWPF.Views
             _mainWindowViewModel.OpenSettingsEvent += (s, eargs) => new SettingsWindow().ShowDialog();
             DataContext = _mainWindowViewModel;
 
-            // Initialize AppData setting
-            try
-            {
-                Properties.Settings.Default.AppDataLoc = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) +
-                        System.IO.Path.DirectorySeparatorChar + Application.ResourceAssembly.GetName().Name + System.IO.Path.DirectorySeparatorChar;
-                Properties.Settings.Default.Save();
-            }
-            catch (PlatformNotSupportedException)
-            {
-                // TODO exception handling
-            }
-            catch (InvalidOperationException)
-            {
-                // TODO exception handling
-            }
-
             // Initialize container for selection windows
             selectionWindows = new SelectionWindow[_mainWindowViewModel.Screens.Count];
         }

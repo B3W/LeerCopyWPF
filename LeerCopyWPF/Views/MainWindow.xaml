@@ -51,8 +51,8 @@
 
                 <!-- Grid content -->
                 <!-- Selection capture mode -->
-                <Button Name="SelectCaptureBtn" Grid.Row="0" Grid.Column="0" TabIndex="1" ToolTip="{x:Static resx:Resources.SelectCaptureBtnTooltipStr}"
-                        Click="SelectCaptureBtn_Click">
+                <Button Name="SelectCaptureBtn" Grid.Row="0" Grid.Column="0" TabIndex="1" Command="{Binding SelectionCaptureCommand}"
+                        ToolTip="{x:Static resx:Resources.SelectCaptureBtnTooltipStr}">
                     <Button.Content>
                         <StackPanel Orientation="Horizontal" >
                             <!-- Populate with icons later -->

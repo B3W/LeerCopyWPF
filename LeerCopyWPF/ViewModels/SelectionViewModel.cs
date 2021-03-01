@@ -1,5 +1,6 @@
 ﻿using LeerCopyWPF.Commands;
 using LeerCopyWPF.Constants;
+using LeerCopyWPF.Controller;
 using LeerCopyWPF.Enums;
 using LeerCopyWPF.Models;
 using LeerCopyWPF.Utilities;
@@ -29,6 +30,11 @@ namespace LeerCopyWPF.ViewModels
         private readonly IInputElement _owner;
 
         /// <summary>
+        /// Handle to selection window controller
+        /// </summary>
+        private readonly ISelectionWindowController _selectionWindowController;
+
+        /// <summary>
         /// Data structure containing information on a selection
         /// </summary>
         private readonly Selection _selection;
@@ -40,6 +46,7 @@ namespace LeerCopyWPF.ViewModels
 
         #endregion // Fields
         
+
         #region Properties
 
         public override string DisplayName { get => "Leer Copy"; }
@@ -233,7 +240,7 @@ namespace LeerCopyWPF.ViewModels
         public ICommand KeyDownCommand { get; }
 
         /// <summary>
-        /// MCommand for mouse down event
+        /// Command for mouse down event
         /// </summary>
         public ICommand MouseDownCommand { get; }
 
@@ -257,9 +264,10 @@ namespace LeerCopyWPF.ViewModels
         /// </summary>
         /// <param name="owner"></param>
         /// <param name="bounds"></param>
-        public SelectionViewModel(IInputElement owner, Rect bounds) : base()
+        public SelectionViewModel(IInputElement owner, Rect bounds, ISelectionWindowController selectionWindowController) : base()
         {
             _owner = owner;
+            _selectionWindowController = selectionWindowController;
 
             // Capture screen
             BitmapSource bitmap = BitmapUtilities.CaptureRect(bounds);
@@ -456,7 +464,6 @@ namespace LeerCopyWPF.ViewModels
         /// <summary>
         /// Save the current selection to disk
         /// </summary>
-        /// <param name="owner"></param>
         private void SaveSelection()
         {
             // Configure save dialog
@@ -567,7 +574,7 @@ namespace LeerCopyWPF.ViewModels
         /// </summary>
         private void SwitchScreen()
         {
-            throw new NotImplementedException();
+            _selectionWindowController.SwitchScreen();
         } // SwitchScreen
 
 
@@ -586,7 +593,7 @@ namespace LeerCopyWPF.ViewModels
         /// </summary>
         private void ExitSelection()
         {
-            throw new NotImplementedException();
+            _selectionWindowController.QuitSelection();
         } // ExitSelection
 
 
@@ -621,6 +628,8 @@ namespace LeerCopyWPF.ViewModels
                     // Do nothing
                     break;
             }
+
+            e.Handled = true;
         }
 
 

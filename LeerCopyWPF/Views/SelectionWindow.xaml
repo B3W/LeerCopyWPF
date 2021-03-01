@@ -145,9 +145,9 @@
         <!-- For displaying users selection -->
         <Image x:Name="SelectionImg" Source="{Binding Path=Bitmap, Mode=OneWay}" Clip="{Binding Path=SelectionGeometry, Mode=OneWay}" Panel.ZIndex="3"/>
         <!-- For drawing the border -->
-        <Canvas x:Name="BorderCanvas" Background="Transparent" Panel.ZIndex="4" Visibility="{Binding Source={x:Static prop:Settings.Default}, Path=BorderVisibility, Mode=TwoWay}">
+        <Canvas x:Name="BorderCanvas" Background="Transparent" Panel.ZIndex="4" Visibility="{Binding Source={x:Static prop:Settings.Default}, Path=BorderVisibility, Mode=OneWay}">
             <Rectangle x:Name="BorderRect" StrokeThickness="{Binding Path=BorderThickness, Mode=OneWay}"
-                       Stroke="{Binding Source={x:Static prop:Settings.Default}, Path=SelectionBorderBrush, Mode=TwoWay}"
+                       Stroke="{Binding Source={x:Static prop:Settings.Default}, Path=SelectionBorderBrush, Mode=OneWay}"
                        Canvas.Left="{Binding Path=BorderLeft, Mode=OneWay}" Canvas.Top="{Binding Path=BorderTop, Mode=OneWay}"
                        Width="{Binding Path=BorderWidth, Mode=OneWay}" Height="{Binding Path=BorderHeight, Mode=OneWay}"/>
         </Canvas>

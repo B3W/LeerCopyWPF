@@ -39,11 +39,6 @@ namespace LeerCopyWPF.Views
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly MainWindowViewModel _mainWindowViewModel;
-        /// <summary>
-        /// Selection windows for each screen
-        /// </summary>
-        private SelectionWindow[] selectionWindows;
         /// <summary>
         /// Flag to prevent loaded event handler logic firing multiple times
         /// </summary>
@@ -56,82 +51,7 @@ namespace LeerCopyWPF.Views
             this.Loaded += MainWindow_Loaded;
 
             InitializeComponent();
-
-            _mainWindowViewModel = new MainWindowViewModel(param => this.Close());
-            _mainWindowViewModel.OpenSettingsEvent += (s, eargs) => new SettingsWindow().ShowDialog();
-            DataContext = _mainWindowViewModel;
-
-            // Initialize container for selection windows
-            selectionWindows = new SelectionWindow[_mainWindowViewModel.Screens.Count];
         }
-
-
-        /// <summary>
-        /// Initializes a selection window covering the given bounds
-        /// </summary>
-        /// <param name="bounds"></param>
-        /// <returns></returns>
-        private SelectionWindow InitSelectWindow(Rect bounds)
-        {
-            SelectionWindow sWin = new SelectionWindow(bounds, (_mainWindowViewModel.Screens.Count > 1));
-            sWin.SignalMain += Selection_SignalMain;
-            sWin.Owner = this;
-
-            return sWin;
-        } // InitSelectWindow
-
-
-        /// <summary>
-        /// Event for child SelectionWindow to signal MainWindow
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public void Selection_SignalMain(object sender, FlagEventArgs e)
-        {
-            if (e.Flag)
-            {
-                // Increment screen index
-                int curScreenIndex =_mainWindowViewModel.IncrementScreen();
-
-                // Create new selection window or show existing
-                if (selectionWindows[curScreenIndex] == null)
-                {
-                    selectionWindows[curScreenIndex] = InitSelectWindow(_mainWindowViewModel.CurrentScreen.Bounds);
-                }
-                selectionWindows[curScreenIndex].Show();
-                selectionWindows[curScreenIndex].Activate();
-            }
-            else
-            {
-                // Clear all selections when selection capture is quit
-                for (int i = 0; i < selectionWindows.Length; i++)
-                {
-                    selectionWindows[i]?.Close();
-                    selectionWindows[i] = null;
-                }
-
-                // Show MainWindow
-                this.Show();
-                this.WindowState = WindowState.Normal;
-            }
-        } // Selection_SignalMain
-
-
-        private void SelectCaptureBtn_Click(object sender, RoutedEventArgs e)
-        {
-            // Determine screen MainWindow is located on
-            // ***Needs to be done before window is minimized***
-            int curScreenIndex = _mainWindowViewModel.InitScreenIndex(this.Left, this.Top);
-
-            // Hide MainWindow
-            this.WindowState = WindowState.Minimized;
-            this.Hide();
-
-            // Open SelectionWindow
-            selectionWindows[curScreenIndex] = InitSelectWindow(_mainWindowViewModel.CurrentScreen.Bounds);
-            selectionWindows[curScreenIndex].Show();
-            selectionWindows[curScreenIndex].Activate();
-        } // SelectCaptureBtn_Click
 
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)

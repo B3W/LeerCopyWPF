@@ -5,6 +5,8 @@ using System.Configuration;
 using System.Data;
 using System.Windows;
 using System.Windows.Threading;
+using LeerCopyWPF.Controller;
+using LeerCopyWPF.Views;
 
 namespace LeerCopyWPF
 {
@@ -13,6 +15,11 @@ namespace LeerCopyWPF
     /// </summary>
     public partial class App : Application
     {
+        /// <summary>
+        /// Keep handle to window controller so it stays around for duration of application.
+        /// </summary>
+        private WindowController _windowController;
+
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
@@ -36,13 +43,19 @@ namespace LeerCopyWPF
                 Console.WriteLine("App.OnStartup: Exception initializing AppData - %s\n", ex.Message);
             }
 
-            // Initialize window controller
-            // TODO
+            // Construct the main window
+            // First Window object instantiated in AppDomain sets MainWindow property of Application
+            Window mainWindow = new MainWindow();
 
-            // Show the main window
-            // First Window object instantiated in AppDomain, therefore sets MainWindow property of Application
-            Views.MainWindow window = new Views.MainWindow();
-            window.Show();
+            // Initialize window controller
+            IDialogWindowController dialogWindowController = new DialogWindowController();
+            IMainWindowController mainWindowController = new MainWindowController(mainWindow, dialogWindowController);
+            ISelectionWindowController selectionWindowController = new SelectionWindowController(dialogWindowController);
+
+            _windowController = new WindowController(mainWindowController, selectionWindowController, dialogWindowController);
+
+            // Show main window
+            _windowController.MainWindowController.Show();
         }
 
         /// <summary>

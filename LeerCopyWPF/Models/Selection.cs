@@ -29,9 +29,14 @@ namespace LeerCopyWPF.Models
         public BitmapSource Bitmap { get; }
 
         /// <summary>
-        /// Max bounds for the selection
+        /// Max bounds for the selection. Relative application's selection window.
         /// </summary>
         public Rect SelectionBounds { get; }
+
+        /// <summary>
+        /// Bounds for screen selection is occuring on. Relative to other screens.
+        /// </summary>
+        public Rect ScreenBounds { get; }
 
         #endregion // Properties
 
@@ -46,12 +51,13 @@ namespace LeerCopyWPF.Models
         public Selection(BitmapSource bitmap, Rect screenBounds)
         {
             Bitmap = bitmap;
+            ScreenBounds = screenBounds;
             StartPt = new Point();
             EndPt = new Point();
 
             // Selection bounds are derived from screen bounds but always start at (0, 0) because screen
-            // bounds are global where as selection coordinates are relative to the selection windows.
-            SelectionBounds = new Rect(0, 0, screenBounds.Width, screenBounds.Height);
+            // coordinates are global where as selection coordinates are relative to the selection windows.
+            SelectionBounds = new Rect(0, 0, ScreenBounds.Width, ScreenBounds.Height);
         } // Selection
 
 

@@ -213,18 +213,17 @@ namespace LeerCopyWPF.Utilities
         /// <returns>List of SimpleScreen objects representing each screen</returns>
         public static List<SimpleScreen> CaptureScreens()
         {
-            SimpleScreen tmpScr;
-            Rect tmpBounds;
             List<SimpleScreen> screenList = new List<SimpleScreen>();
 
             foreach (Screen screen in Screen.AllScreens)
             {
-                tmpBounds = new Rect(screen.Bounds.Left, screen.Bounds.Top, screen.Bounds.Width, screen.Bounds.Height);
-                tmpScr = new SimpleScreen(screen.BitsPerPixel, tmpBounds, screen.DeviceName);
-                screenList.Add(tmpScr);
+                Rect screenBounds = new Rect(screen.Bounds.Left, screen.Bounds.Top, screen.Bounds.Width, screen.Bounds.Height);
+                SimpleScreen simpleScreen = new SimpleScreen(screen.BitsPerPixel, screenBounds, screen.DeviceName);
+                screenList.Add(simpleScreen);
             }
 
             screenList.Sort();
+
             return screenList;
         } // CaptureScreens
 

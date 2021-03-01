@@ -117,7 +117,7 @@ namespace LeerCopyWPF.ViewModels
         /// <summary>
         /// Max bounds for the selection
         /// </summary>
-        public Rect ScreenBounds { get => _selection.ScreenBounds; }
+        public Rect SelectionBounds { get => _selection.SelectionBounds; }
 
         /// <summary>
         /// Flag indicating if the user is currently making a selection

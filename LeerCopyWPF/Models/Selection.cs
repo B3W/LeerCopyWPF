@@ -30,7 +30,7 @@ namespace LeerCopyWPF.Models
         /// <summary>
         /// Max bounds for the selection
         /// </summary>
-        public Rect ScreenBounds { get; }
+        public Rect SelectionBounds { get; }
 
         #endregion // Properties
 
@@ -41,13 +41,16 @@ namespace LeerCopyWPF.Models
         /// Constructs a selection
         /// </summary>
         /// <param name="bitmap">Image for selection</param>
-        /// <param name="screenBounds">Bounds of the image</param>
+        /// <param name="screenBounds">Bounds of the screen</param>
         public Selection(BitmapSource bitmap, Rect screenBounds)
         {
             Bitmap = bitmap;
-            ScreenBounds = screenBounds;
             StartPt = new Point();
             EndPt = new Point();
+
+            // Selection bounds are derived from screen bounds but always start at (0, 0) because screen
+            // bounds are global where as selection coordinates are relative to the selection windows.
+            SelectionBounds = new Rect(0, 0, screenBounds.Width, screenBounds.Height);
         } // Selection
 
 
@@ -78,7 +81,7 @@ namespace LeerCopyWPF.Models
                     if (StartPt.Y > EndPt.Y)
                     {
                         tmpPt = new Point(EndPt.X, (EndPt.Y + offsetY));
-                        if (ScreenBounds.Top <= tmpPt.Y && StartPt.Y > tmpPt.Y)
+                        if (SelectionBounds.Top <= tmpPt.Y && StartPt.Y > tmpPt.Y)
                         {
                             EndPt = tmpPt;
                         }
@@ -86,7 +89,7 @@ namespace LeerCopyWPF.Models
                     else if (StartPt.Y < EndPt.Y)
                     {
                         tmpPt = new Point(StartPt.X, (StartPt.Y + offsetY));
-                        if (ScreenBounds.Top <= tmpPt.Y && EndPt.Y > tmpPt.Y)
+                        if (SelectionBounds.Top <= tmpPt.Y && EndPt.Y > tmpPt.Y)
                         {
                             StartPt = tmpPt;
                         }
@@ -96,7 +99,7 @@ namespace LeerCopyWPF.Models
                     if (StartPt.Y > EndPt.Y)
                     {
                         tmpPt = new Point(StartPt.X, (StartPt.Y + offsetY));
-                        if (ScreenBounds.Bottom >= tmpPt.Y && EndPt.Y < tmpPt.Y)
+                        if (SelectionBounds.Bottom >= tmpPt.Y && EndPt.Y < tmpPt.Y)
                         {
                             StartPt = tmpPt;
                         }
@@ -104,7 +107,7 @@ namespace LeerCopyWPF.Models
                     else if (StartPt.Y < EndPt.Y)
                     {
                         tmpPt = new Point(EndPt.X, (EndPt.Y + offsetY));
-                        if (ScreenBounds.Bottom >= tmpPt.Y && StartPt.Y < tmpPt.Y)
+                        if (SelectionBounds.Bottom >= tmpPt.Y && StartPt.Y < tmpPt.Y)
                         {
                             EndPt = tmpPt;
                         }
@@ -114,7 +117,7 @@ namespace LeerCopyWPF.Models
                     if (StartPt.X > EndPt.X)
                     {
                         tmpPt = new Point((EndPt.X + offsetX), EndPt.Y);
-                        if (ScreenBounds.Left <= tmpPt.X && StartPt.X > tmpPt.X)
+                        if (SelectionBounds.Left <= tmpPt.X && StartPt.X > tmpPt.X)
                         {
                             EndPt = tmpPt;
                         }
@@ -122,7 +125,7 @@ namespace LeerCopyWPF.Models
                     else if (StartPt.X < EndPt.X)
                     {
                         tmpPt = new Point((StartPt.X + offsetX), StartPt.Y);
-                        if (ScreenBounds.Left <= tmpPt.X && EndPt.X > tmpPt.X)
+                        if (SelectionBounds.Left <= tmpPt.X && EndPt.X > tmpPt.X)
                         {
                             StartPt = tmpPt;
                         }
@@ -132,7 +135,7 @@ namespace LeerCopyWPF.Models
                     if (StartPt.X > EndPt.X)
                     {
                         tmpPt = new Point((StartPt.X + offsetX), StartPt.Y);
-                        if (ScreenBounds.Right >= tmpPt.X && EndPt.X < tmpPt.X)
+                        if (SelectionBounds.Right >= tmpPt.X && EndPt.X < tmpPt.X)
                         {
                             StartPt = tmpPt;
                         }
@@ -140,7 +143,7 @@ namespace LeerCopyWPF.Models
                     else if (StartPt.X < EndPt.X)
                     {
                         tmpPt = new Point((EndPt.X + offsetX), EndPt.Y);
-                        if (ScreenBounds.Right >= tmpPt.X && StartPt.X < tmpPt.X)
+                        if (SelectionBounds.Right >= tmpPt.X && StartPt.X < tmpPt.X)
                         {
                             EndPt = tmpPt;
                         }

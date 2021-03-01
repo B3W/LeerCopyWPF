@@ -215,11 +215,6 @@ namespace LeerCopyWPF.ViewModels
         public ICommand TipsCommand { get; }
 
         /// <summary>
-        /// Command for switching the selection screen
-        /// </summary>
-        public ICommand SwitchScreenCommand { get; }
-
-        /// <summary>
         /// Command for opening settings window
         /// </summary>
         public ICommand SettingsCommand { get; }
@@ -285,7 +280,6 @@ namespace LeerCopyWPF.ViewModels
             ClearCommand = new RelayCommand(param => ClearSelection());
             BorderCommand = new RelayCommand(param => ToggleBorder());
             TipsCommand = new RelayCommand(param => ToggleTips());
-            SwitchScreenCommand = new RelayCommand(param => SwitchScreen());
             SettingsCommand = new RelayCommand(param => ShowSettings(), param => CanOpenSettings);
             QuitCommand = new RelayCommand(param => ExitSelection());
             KeyDownCommand = new RelayCommand<KeyEventArgs>(KeyDown);
@@ -567,15 +561,6 @@ namespace LeerCopyWPF.ViewModels
                 Properties.Settings.Default.TipsVisibility = Visibility.Visible;
             }
         } // ToggleTips
-
-
-        /// <summary>
-        /// Switches to the next selection screen
-        /// </summary>
-        private void SwitchScreen()
-        {
-            _selectionWindowController.SwitchScreen();
-        } // SwitchScreen
 
 
         /// <summary>

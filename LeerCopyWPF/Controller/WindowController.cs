@@ -89,9 +89,7 @@ namespace LeerCopyWPF.Controller
         /// <param name="e">Arguments associated with event</param>
         private void OnSelectionStart(object sender, EventArgs e)
         {
-            SelectionStartEventArgs startArgs = (SelectionStartEventArgs)e;
-
-            if (!SelectionController.StartSelection(startArgs.ActiveScreenLocation))
+            if (!SelectionController.StartSelection())
             {
                 // Unable to start selection
                 MainWindowController.Show();

@@ -70,10 +70,6 @@
         <behaviors:KeyTrigger Key="{Binding Source={x:Static prop:Settings.Default}, Path=TipsKey, Mode=OneWay}" FiredOn="KeyUp" ActiveOnFocus="False">
             <behaviors:InvokeCommandAction Command="{Binding TipsCommand}"/>
         </behaviors:KeyTrigger>
-        <!-- SwitchScreen Command -->
-        <behaviors:KeyTrigger Key="{Binding Source={x:Static prop:Settings.Default}, Path=SwitchScreenKey, Mode=OneWay}" FiredOn="KeyUp" ActiveOnFocus="False">
-            <behaviors:InvokeCommandAction Command="{Binding SwitchScreenCommand}"/>
-        </behaviors:KeyTrigger>
         <!-- Settings Command -->
         <behaviors:KeyTrigger Key="{Binding Source={x:Static prop:Settings.Default}, Path=SettingsWin, Mode=OneWay}" FiredOn="KeyUp" ActiveOnFocus="False">
             <behaviors:InvokeCommandAction Command="{Binding SettingsCommand}"/>
@@ -120,10 +116,6 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock x:Name="ArrowKeysLbl" Text="{x:Static resx:Resources.ArrowKeysLblStr}"/>
-            </StackPanel>
-            <StackPanel x:Name="SwitchLblPanel" Orientation="Horizontal">
-                <TextBlock Text="{Binding Source={x:Static prop:Settings.Default}, Path=SwitchScreenKey, Mode=OneWay}"/>
-                <TextBlock x:Name="SwitchLbl" Text="{x:Static resx:Resources.SwitchLblStr}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="{Binding Source={x:Static prop:Settings.Default}, Path=BorderKey, Mode=OneWay}"/>

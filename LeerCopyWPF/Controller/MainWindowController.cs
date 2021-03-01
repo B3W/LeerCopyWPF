@@ -55,11 +55,6 @@ namespace LeerCopyWPF.Controller
         /// </summary>
         private Window MainWindow { get; }
 
-        /// <summary>
-        /// Last recorded location of the main window before it was hidden. Only valid when 'Hidden' is true
-        /// </summary>
-        private Point LastActiveLocation { get; set; }
-
         #endregion
 
         #endregion // Properties
@@ -82,7 +77,6 @@ namespace LeerCopyWPF.Controller
             MainWindow.DataContext = mainWindowViewModel;
 
             Hidden = true;
-            LastActiveLocation = new Point(-1.0, -1.0);
         }
 
 
@@ -99,9 +93,6 @@ namespace LeerCopyWPF.Controller
         public void Hide()
         {
             Hidden = true;
-
-            // Record location of the window before hiding it
-            LastActiveLocation = new Point(MainWindow.Left, MainWindow.Top);
 
             MainWindow.WindowState = WindowState.Minimized;
             MainWindow.Hide();
@@ -140,8 +131,7 @@ namespace LeerCopyWPF.Controller
         /// </summary>
         private void StartSelection()
         {
-            SelectionStartEventArgs args = new SelectionStartEventArgs(LastActiveLocation);
-            SelectionStarted?.Invoke(this, args);
+            SelectionStarted?.Invoke(this, EventArgs.Empty);
         }
 
         #endregion

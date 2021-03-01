@@ -81,7 +81,6 @@
     <Compile Include="Controller\ISelectionWindowController.cs" />
     <Compile Include="Controller\IMainWindowController.cs" />
     <Compile Include="Controller\MainWindowController.cs" />
-    <Compile Include="Controller\SelectionStartEventArgs.cs" />
     <Compile Include="Controller\SelectionWindowController.cs" />
     <Compile Include="Controller\WindowController.cs" />
     <Compile Include="Enums\MainWindowControllerActions.cs" />

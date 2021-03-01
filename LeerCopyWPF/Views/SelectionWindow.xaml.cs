@@ -54,7 +54,7 @@ namespace LeerCopyWPF
 
         #region Constructors
 
-        public SelectionWindow(Rect bounds, bool switchValid)
+        public SelectionWindow(Rect screenBounds)
         {
             // Register window lifetime events
             this.Loaded += SelectionWindow_Loaded;
@@ -68,17 +68,11 @@ namespace LeerCopyWPF
             // DataContext = _selectionViewModel;
 
             // Place form on correct screen
-            this.Left = bounds.Left;
-            this.Top = bounds.Top;
+            this.Left = screenBounds.Left;
+            this.Top = screenBounds.Top;
 
             // Bind keys to actions
             // _selectionViewModel.RefreshKeyBindings();
-
-            // Remove tip if switch is not possible
-            if (!switchValid)
-            {
-                LabelPanel.Children.Remove(SwitchLblPanel);
-            }
         } // SelectionWindow
 
         #endregion // Constructors

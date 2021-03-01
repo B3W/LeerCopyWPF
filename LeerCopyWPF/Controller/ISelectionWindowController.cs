@@ -16,14 +16,8 @@ namespace LeerCopyWPF.Controller
         /// <summary>
         /// Starts selection operation if there is not one already active.
         /// </summary>
-        /// <param name="activeScreenLocation">Selection should start on screen that contains this point</param>
         /// <returns>true if selection started successfully, false otherwise</returns>
-        bool StartSelection(System.Windows.Point activeScreenLocation);
-
-        /// <summary>
-        /// Switches the selection screen if possible.
-        /// </summary>
-        void SwitchScreen();
+        bool StartSelection();
 
         /// <summary>
         /// Exits selection operation.

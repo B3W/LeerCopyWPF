@@ -27,7 +27,7 @@ namespace LeerCopyWPF.ViewModels
         /// <summary>
         /// WPF element that owns this viewmodel
         /// </summary>
-        private readonly IInputElement _owner;
+        private readonly IInputElement _inputOwner;
 
         /// <summary>
         /// Handle to selection window controller
@@ -257,11 +257,11 @@ namespace LeerCopyWPF.ViewModels
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="owner"></param>
+        /// <param name="inputOwner"></param>
         /// <param name="bounds"></param>
-        public SelectionViewModel(IInputElement owner, Rect bounds, ISelectionWindowController selectionWindowController) : base()
+        public SelectionViewModel(IInputElement inputOwner, Rect bounds, ISelectionWindowController selectionWindowController) : base()
         {
-            _owner = owner;
+            _inputOwner = inputOwner;
             _selectionWindowController = selectionWindowController;
 
             // Capture screen
@@ -624,7 +624,7 @@ namespace LeerCopyWPF.ViewModels
         /// <param name="e">Arguments for the mouse down event</param>
         private void MouseDown(MouseButtonEventArgs e)
         {
-            Point position = e.GetPosition(_owner);
+            Point position = e.GetPosition(_inputOwner);
             StartSelection(position);
 
             e.Handled = true;
@@ -637,8 +637,11 @@ namespace LeerCopyWPF.ViewModels
         /// <param name="e">Arguments for the mouse up event</param>
         private void MouseUp(MouseButtonEventArgs e)
         {
-            Point position = e.GetPosition(_owner);
-            StopSelection(position);
+            if (IsSelecting)
+            {
+                Point position = e.GetPosition(_inputOwner);
+                StopSelection(position);
+            }
 
             e.Handled = true;
         }
@@ -650,7 +653,7 @@ namespace LeerCopyWPF.ViewModels
         /// <param name="e">Arguments for the mouse move event</param>
         private void MouseMove(MouseEventArgs e)
         {
-            Point position = e.GetPosition(_owner);
+            Point position = e.GetPosition(_inputOwner);
             UpdateSelection(position);
 
             e.Handled = true;

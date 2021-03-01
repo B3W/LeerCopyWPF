@@ -360,6 +360,7 @@ namespace LeerCopyWPF.ViewModels
                 switch (dir)
                 {
                     case ResizeDirection.Up:
+                        // Calculate total offset for resize
                         offsetY = fastResize ? -ConstShiftModifier : -1.0;
 
                         if (reverseResize)
@@ -369,6 +370,7 @@ namespace LeerCopyWPF.ViewModels
                         break;
 
                     case ResizeDirection.Down:
+                        // Calculate total offset for resize
                         offsetY = fastResize ? ConstShiftModifier : 1.0;
 
                         if (reverseResize)
@@ -378,6 +380,7 @@ namespace LeerCopyWPF.ViewModels
                         break;
 
                     case ResizeDirection.Left:
+                        // Calculate total offset for resize
                         offsetX = fastResize ? -ConstShiftModifier : -1.0;
 
                         if (reverseResize)
@@ -387,6 +390,7 @@ namespace LeerCopyWPF.ViewModels
                         break;
 
                     case ResizeDirection.Right:
+                        // Calculate total offset for resize
                         offsetX = fastResize ? ConstShiftModifier : 1.0;
 
                         if (reverseResize)

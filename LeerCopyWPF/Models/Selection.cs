@@ -85,27 +85,13 @@ namespace LeerCopyWPF.Models
                 case ResizeDirection.Up:
                     if (StartPt.Y > EndPt.Y)
                     {
-                        // Point resizedPoint = new Point(EndPt.X, (EndPt.Y + offsetY));
-                        // 
-                        // if (SelectionBounds.Top <= resizedPoint.Y && StartPt.Y > resizedPoint.Y)
-                        // {
-                        //     EndPt = resizedPoint;
-                        // }
-
                         double modifiedY = EndPt.Y + offsetY;
                         double clampedY = modifiedY.Clamp(SelectionBounds.Top, StartPt.Y);
 
                         EndPt = new Point(EndPt.X, clampedY);
                     }
-                    else// if (StartPt.Y < EndPt.Y)
+                    else
                     {
-                        // Point resizedPoint = new Point(StartPt.X, (StartPt.Y + offsetY));
-                        // 
-                        // if (SelectionBounds.Top <= resizedPoint.Y && EndPt.Y > resizedPoint.Y)
-                        // {
-                        //     StartPt = resizedPoint;
-                        // }
-
                         double modifiedY = StartPt.Y + offsetY;
                         double clampedY = modifiedY.Clamp(SelectionBounds.Top, EndPt.Y);
 
@@ -115,61 +101,49 @@ namespace LeerCopyWPF.Models
                 case ResizeDirection.Down:
                     if (StartPt.Y > EndPt.Y)
                     {
-                        Point resizedPoint = new Point(StartPt.X, (StartPt.Y + offsetY));
+                        double modifiedY = StartPt.Y + offsetY;
+                        double clampedY = modifiedY.Clamp(EndPt.Y, SelectionBounds.Bottom);
 
-                        if (SelectionBounds.Bottom >= resizedPoint.Y && EndPt.Y < resizedPoint.Y)
-                        {
-                            StartPt = resizedPoint;
-                        }
+                        StartPt = new Point(StartPt.X, clampedY);
                     }
-                    else if (StartPt.Y < EndPt.Y)
+                    else
                     {
-                        Point resizedPoint = new Point(EndPt.X, (EndPt.Y + offsetY));
+                        double modifiedY = EndPt.Y + offsetY;
+                        double clampedY = modifiedY.Clamp(StartPt.Y, SelectionBounds.Bottom);
 
-                        if (SelectionBounds.Bottom >= resizedPoint.Y && StartPt.Y < resizedPoint.Y)
-                        {
-                            EndPt = resizedPoint;
-                        }
+                        EndPt = new Point(EndPt.X, clampedY);
                     }
                     break;
                 case ResizeDirection.Left:
                     if (StartPt.X > EndPt.X)
                     {
-                        Point resizedPoint = new Point((EndPt.X + offsetX), EndPt.Y);
+                        double modifiedX = EndPt.X + offsetX;
+                        double clampedX = modifiedX.Clamp(SelectionBounds.Left, StartPt.X);
 
-                        if (SelectionBounds.Left <= resizedPoint.X && StartPt.X > resizedPoint.X)
-                        {
-                            EndPt = resizedPoint;
-                        }
+                        EndPt = new Point(clampedX, EndPt.Y);
                     }
-                    else if (StartPt.X < EndPt.X)
+                    else
                     {
-                        Point resizedPoint = new Point((StartPt.X + offsetX), StartPt.Y);
+                        double modifiedX = StartPt.X + offsetX;
+                        double clampedX = modifiedX.Clamp(SelectionBounds.Left, EndPt.X);
 
-                        if (SelectionBounds.Left <= resizedPoint.X && EndPt.X > resizedPoint.X)
-                        {
-                            StartPt = resizedPoint;
-                        }
+                        StartPt = new Point(clampedX, StartPt.Y);
                     }
                     break;
                 case ResizeDirection.Right:
                     if (StartPt.X > EndPt.X)
                     {
-                        Point resizedPoint = new Point((StartPt.X + offsetX), StartPt.Y);
+                        double modifiedX = StartPt.X + offsetX;
+                        double clampedX = modifiedX.Clamp(EndPt.X, SelectionBounds.Right);
 
-                        if (SelectionBounds.Right >= resizedPoint.X && EndPt.X < resizedPoint.X)
-                        {
-                            StartPt = resizedPoint;
-                        }
+                        StartPt = new Point(clampedX, StartPt.Y);
                     }
-                    else if (StartPt.X < EndPt.X)
+                    else
                     {
-                        Point resizedPoint = new Point((EndPt.X + offsetX), EndPt.Y);
+                        double modifiedX = EndPt.X + offsetX;
+                        double clampedX = modifiedX.Clamp(StartPt.X, SelectionBounds.Right);
 
-                        if (SelectionBounds.Right >= resizedPoint.X && StartPt.X < resizedPoint.X)
-                        {
-                            EndPt = resizedPoint;
-                        }
+                        EndPt = new Point(clampedX, EndPt.Y);
                     }
                     break;
                 case ResizeDirection.Invalid:

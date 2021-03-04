@@ -352,9 +352,8 @@ namespace LeerCopyWPF.ViewModels
         {
             if (IsSelected && !IsSelecting)
             {
-                bool performResize = true;
-                double offsetX = 0.0;
-                double offsetY = 0.0;
+                double offsetX;
+                double offsetY;
 
                 // Set base offset
                 switch (dir)
@@ -367,6 +366,24 @@ namespace LeerCopyWPF.ViewModels
                         {
                             offsetY = -offsetY;
                         }
+
+                        // Resize
+                        if (StartPt.Y > EndPt.Y)
+                        {
+                            double modifiedY = EndPt.Y + offsetY;
+                            double clampedY = modifiedY.Clamp(SelectionBounds.Top, StartPt.Y);
+
+                            EndPt = new Point(EndPt.X, clampedY);
+                        }
+                        else
+                        {
+                            double modifiedY = StartPt.Y + offsetY;
+                            double clampedY = modifiedY.Clamp(SelectionBounds.Top, EndPt.Y);
+
+                            StartPt = new Point(StartPt.X, clampedY);
+                        }
+
+                        SelectionRect = new Rect(StartPt, EndPt);
                         break;
 
                     case ResizeDirection.Down:
@@ -377,6 +394,24 @@ namespace LeerCopyWPF.ViewModels
                         {
                             offsetY = -offsetY;
                         }
+
+                        // Resize
+                        if (StartPt.Y > EndPt.Y)
+                        {
+                            double modifiedY = StartPt.Y + offsetY;
+                            double clampedY = modifiedY.Clamp(EndPt.Y, SelectionBounds.Bottom);
+
+                            StartPt = new Point(StartPt.X, clampedY);
+                        }
+                        else
+                        {
+                            double modifiedY = EndPt.Y + offsetY;
+                            double clampedY = modifiedY.Clamp(StartPt.Y, SelectionBounds.Bottom);
+
+                            EndPt = new Point(EndPt.X, clampedY);
+                        }
+
+                        SelectionRect = new Rect(StartPt, EndPt);
                         break;
 
                     case ResizeDirection.Left:
@@ -387,6 +422,24 @@ namespace LeerCopyWPF.ViewModels
                         {
                             offsetX = -offsetX;
                         }
+
+                        // Resize
+                        if (StartPt.X > EndPt.X)
+                        {
+                            double modifiedX = EndPt.X + offsetX;
+                            double clampedX = modifiedX.Clamp(SelectionBounds.Left, StartPt.X);
+
+                            EndPt = new Point(clampedX, EndPt.Y);
+                        }
+                        else
+                        {
+                            double modifiedX = StartPt.X + offsetX;
+                            double clampedX = modifiedX.Clamp(SelectionBounds.Left, EndPt.X);
+
+                            StartPt = new Point(clampedX, StartPt.Y);
+                        }
+
+                        SelectionRect = new Rect(StartPt, EndPt);
                         break;
 
                     case ResizeDirection.Right:
@@ -397,18 +450,29 @@ namespace LeerCopyWPF.ViewModels
                         {
                             offsetX = -offsetX;
                         }
+
+                        // Resize
+                        if (StartPt.X > EndPt.X)
+                        {
+                            double modifiedX = StartPt.X + offsetX;
+                            double clampedX = modifiedX.Clamp(EndPt.X, SelectionBounds.Right);
+
+                            StartPt = new Point(clampedX, StartPt.Y);
+                        }
+                        else
+                        {
+                            double modifiedX = EndPt.X + offsetX;
+                            double clampedX = modifiedX.Clamp(StartPt.X, SelectionBounds.Right);
+
+                            EndPt = new Point(clampedX, EndPt.Y);
+                        }
+
+                        SelectionRect = new Rect(StartPt, EndPt);
                         break;
 
-                    case ResizeDirection.Invalid:
+                    case ResizeDirection.Invalid: // Intentional fallthrough
                     default:
-                        performResize = false;
                         break;
-                }
-
-                if (performResize)
-                {
-                    _selection.Resize(offsetX, offsetY, dir);
-                    SelectionRect = new Rect(StartPt, EndPt);
                 }
             }
         } // ResizeSelection

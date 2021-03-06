@@ -19,11 +19,14 @@ namespace LeerCopyWPF.Views
     public partial class SettingsWindow : Window
     {
         #region Fields
+
         private readonly SettingsViewModel _viewModel;
         private readonly KeyConverter _keyConverter;
+
         #endregion // Fields
 
         #region Constructors
+
         public SettingsWindow()
         {
             InitializeComponent();
@@ -36,9 +39,11 @@ namespace LeerCopyWPF.Views
             // https://stackoverflow.com/a/818536
             Loaded += (sender, e) => MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
         }
+
         #endregion // Constructors
 
         #region EventHandlers
+
         /// <summary>
         /// Update the text within the text box
         /// </summary>
@@ -57,7 +62,8 @@ namespace LeerCopyWPF.Views
             {
                 keyBindTxtBx.Text = _keyConverter.ConvertToString(key);
             }
-        } // KeyBindingTxtBox_KeyUp
+        }
+
         #endregion // EventHandlers
     }
 }

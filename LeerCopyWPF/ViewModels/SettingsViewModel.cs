@@ -128,8 +128,12 @@ namespace LeerCopyWPF.ViewModels
 
 
         #region Properties
+
         public override string DisplayName { get => "Settings"; }
 
+        /// <summary>
+        /// Bound to 'Copy' key binding textbox
+        /// </summary>
         public string CopyKey
         {
             get => _copyKeyBinding.CurrentValue;
@@ -144,6 +148,9 @@ namespace LeerCopyWPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Bound to 'Edit' key binding textbox
+        /// </summary>
         public string EditKey
         {
             get => _editKeyBinding.CurrentValue;
@@ -158,6 +165,9 @@ namespace LeerCopyWPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Bound to 'Save' key binding textbox
+        /// </summary>
         public string SaveKey
         {
             get => _saveKeyBinding.CurrentValue;
@@ -172,6 +182,9 @@ namespace LeerCopyWPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Bound to 'Clear' key binding textbox
+        /// </summary>
         public string ClearKey
         {
             get => _clearKeyBinding.CurrentValue;
@@ -186,6 +199,9 @@ namespace LeerCopyWPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Bound to 'Select All' key binding textbox
+        /// </summary>
         public string SelectAll
         {
             get => _selectAllKeyBinding.CurrentValue;
@@ -200,6 +216,9 @@ namespace LeerCopyWPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Bound to 'Toggle Border' key binding textbox
+        /// </summary>
         public string BorderKey
         {
             get => _toggleBorderKeyBinding.CurrentValue;
@@ -214,6 +233,9 @@ namespace LeerCopyWPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Bound to 'Toggle Tips' key binding textbox
+        /// </summary>
         public string TipsKey
         {
             get => _toggleTipsKeyBinding.CurrentValue;
@@ -228,6 +250,9 @@ namespace LeerCopyWPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Bound to 'Open Settings' key binding textbox
+        /// </summary>
         public string SettingsWin
         {
             get => _settingsKeyBinding.CurrentValue;
@@ -242,6 +267,9 @@ namespace LeerCopyWPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Bound to 'Quit' key binding textbox
+        /// </summary>
         public string QuitKey
         {
             get => _quitKeyBinding.CurrentValue;
@@ -256,6 +284,9 @@ namespace LeerCopyWPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Bound to file extension dropdown
+        /// </summary>
         public string DefaultSaveExt
         {
             get => _defaultFileExt.CurrentValue;
@@ -270,6 +301,9 @@ namespace LeerCopyWPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Bound to file name textbox
+        /// </summary>
         public string DefaultFileName
         {
             get => _defaultFileName.CurrentValue;
@@ -284,6 +318,9 @@ namespace LeerCopyWPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Bound to opacity slider
+        /// </summary>
         public double SelectionWinOpacity
         {
             get => _selectionOpacity.CurrentValue;
@@ -298,6 +335,9 @@ namespace LeerCopyWPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Bound to border visibility checkbox
+        /// </summary>
         public bool BorderVisibility
         {
             get => _selectionBorderVisibility.CurrentValue;
@@ -312,6 +352,9 @@ namespace LeerCopyWPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Bound to tips visibility checkbox
+        /// </summary>
         public bool TipsVisibility
         {
             get => _tipsVisibility.CurrentValue;
@@ -326,18 +369,39 @@ namespace LeerCopyWPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// File extension options for the dropdown menu
+        /// </summary>
         public string[] ExtOptions { get => _extOptions; }
 
+        /// <summary>
+        /// Max value for selection window opacity
+        /// </summary>
         public double OpacityMax { get => SettingsConstants.ConstSelectOpacityMax; }
 
+        /// <summary>
+        /// Flag indicating if settings are valid
+        /// </summary>
         public bool SettingsValid { get => _validationErrors.Count == 0; }
 
+        /// <summary>
+        /// Flag indicating if the settings have been modified
+        /// </summary>
         public bool SettingsChanged { get => SettingsContainChanges(); }
 
+        /// <summary>
+        /// Flag indicating if settings can be saved
+        /// </summary>
         public bool CanSave { get => SettingsValid && SettingsChanged; }
 
+        /// <summary>
+        /// Command for saving settings
+        /// </summary>
         public ICommand SaveCommand { get; }
 
+        /// <summary>
+        /// Command for closing the settings window
+        /// </summary>
         public ICommand CloseCommand { get; }
 
         /// <summary>
@@ -373,6 +437,10 @@ namespace LeerCopyWPF.ViewModels
 
         #region Methods
 
+        /// <summary>
+        /// Constructs instance of SettingsViewModel
+        /// </summary>
+        /// <param name="closeAction"></param>
         public SettingsViewModel(Action<object> closeAction)
         {
             _keyBindings = new List<ISetting>();
@@ -462,7 +530,7 @@ namespace LeerCopyWPF.ViewModels
             // Setup commands
             SaveCommand = new RelayCommand(param => SaveSettings(), param => CanSave);
             CloseCommand = new RelayCommand(closeAction);
-        } // SettingsViewModel
+        }
 
 
         /// <summary>
@@ -497,7 +565,7 @@ namespace LeerCopyWPF.ViewModels
             }
 
             return settingsModified;
-        } // SettingsContainChanges
+        }
 
 
         /// <summary>
@@ -521,9 +589,14 @@ namespace LeerCopyWPF.ViewModels
             {
                 setting.Save();
             }
-        } // SaveSettings
+        }
 
 
+        /// <summary>
+        /// Validates entire set of coupled settings
+        /// </summary>
+        /// <param name="coupledSettings">List of coupled settings to validate</param>
+        /// <returns>true if valid, false otherwise</returns>
         private bool ValidateCoupledSettings(IList<ISetting> coupledSettings)
         {
             bool coupledSettingsValid = true;
@@ -546,6 +619,11 @@ namespace LeerCopyWPF.ViewModels
         }
 
 
+        /// <summary>
+        /// Validates a setting independent of all other settings
+        /// </summary>
+        /// <param name="setting">Setting to validate</param>
+        /// <returns>true if valid, false otherwise</returns>
         private bool ValidateDiscreteSetting(ISetting setting)
         {
             bool isValid = setting.Validate();
@@ -565,7 +643,7 @@ namespace LeerCopyWPF.ViewModels
             }
 
             return isValid;
-        } // ValidateSetting
+        }
 
 
         /// <summary>
@@ -594,7 +672,7 @@ namespace LeerCopyWPF.ViewModels
             }
 
             return isValid;
-        } // ValidateKey
+        }
 
 
         /// <summary>
@@ -618,7 +696,7 @@ namespace LeerCopyWPF.ViewModels
             }
 
             return isValid;
-        } // ValidateFileExtension
+        }
 
 
         /// <summary>
@@ -647,7 +725,7 @@ namespace LeerCopyWPF.ViewModels
             }
 
             return isValid;
-        } // ValidateFileName
+        }
 
 
         /// <summary>
@@ -672,7 +750,7 @@ namespace LeerCopyWPF.ViewModels
             }
 
             return isInvalid;
-        } // IsInvalidFileName
+        }
 
 
         /// <summary>
@@ -696,7 +774,7 @@ namespace LeerCopyWPF.ViewModels
             }
 
             return opacityValue;
-        } // ValidateOpacity
+        }
 
         #endregion // Methods
     }

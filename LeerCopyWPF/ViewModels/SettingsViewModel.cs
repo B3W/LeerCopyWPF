@@ -432,6 +432,7 @@ namespace LeerCopyWPF.ViewModels
                 return error;
             }
         }
+
         #endregion // Properties
 
 

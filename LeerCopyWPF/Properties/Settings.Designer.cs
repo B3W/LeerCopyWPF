@@ -179,27 +179,6 @@ namespace LeerCopyWPF.Properties {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute(@"<?xml version=""1.0"" encoding=""utf-16""?>
-<ArrayOfString xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
-  <string>CopyKey</string>
-  <string>EditKey</string>
-  <string>SaveKey</string>
-  <string>ClearKey</string>
-  <string>QuitKey</string>
-  <string>TipsKey</string>
-  <string>SettingsWin</string>
-  <string>SelectAll</string>
-  <string>SwitchScreenKey</string>
-  <string>BorderKey</string>
-</ArrayOfString>")]
-        public string[] KeyUpNames {
-            get {
-                return ((string[])(this["KeyUpNames"]));
-            }
-        }
-        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("B")]
@@ -214,10 +193,10 @@ namespace LeerCopyWPF.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Visible")]
-        public global::System.Windows.Visibility BorderVisibility {
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool BorderVisibility {
             get {
-                return ((global::System.Windows.Visibility)(this["BorderVisibility"]));
+                return ((bool)(this["BorderVisibility"]));
             }
             set {
                 this["BorderVisibility"] = value;
@@ -226,10 +205,10 @@ namespace LeerCopyWPF.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Visible")]
-        public global::System.Windows.Visibility TipsVisibility {
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool TipsVisibility {
             get {
-                return ((global::System.Windows.Visibility)(this["TipsVisibility"]));
+                return ((bool)(this["TipsVisibility"]));
             }
             set {
                 this["TipsVisibility"] = value;

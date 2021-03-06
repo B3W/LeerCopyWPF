@@ -15,7 +15,7 @@ using System.Windows.Media.Imaging;
 
 namespace LeerCopyWPF.ViewModels
 {
-    public class SelectionViewModel : KeyBindingHelperViewModel
+    public class SelectionViewModel : BaseViewModel
     {
         #region Fields
         
@@ -259,7 +259,7 @@ namespace LeerCopyWPF.ViewModels
         /// </summary>
         /// <param name="inputOwner"></param>
         /// <param name="bounds"></param>
-        public SelectionViewModel(IInputElement inputOwner, Rect bounds, ISelectionWindowController selectionWindowController) : base()
+        public SelectionViewModel(IInputElement inputOwner, Rect bounds, ISelectionWindowController selectionWindowController)
         {
             _inputOwner = inputOwner;
             _selectionWindowController = selectionWindowController;
@@ -604,14 +604,7 @@ namespace LeerCopyWPF.ViewModels
         /// </summary>
         private void ToggleBorder()
         {
-            if (Properties.Settings.Default.BorderVisibility == Visibility.Visible)
-            {
-                Properties.Settings.Default.BorderVisibility = Visibility.Hidden;
-            }
-            else
-            {
-                Properties.Settings.Default.BorderVisibility = Visibility.Visible;
-            }
+            Properties.Settings.Default.BorderVisibility = !Properties.Settings.Default.BorderVisibility;
         } // ToggleBorder
 
 
@@ -620,14 +613,7 @@ namespace LeerCopyWPF.ViewModels
         /// </summary>
         private void ToggleTips()
         {
-            if (Properties.Settings.Default.TipsVisibility == Visibility.Visible)
-            {
-                Properties.Settings.Default.TipsVisibility = Visibility.Hidden;
-            }
-            else
-            {
-                Properties.Settings.Default.TipsVisibility = Visibility.Visible;
-            }
+            Properties.Settings.Default.TipsVisibility = !Properties.Settings.Default.TipsVisibility;
         } // ToggleTips
 
 
@@ -637,7 +623,6 @@ namespace LeerCopyWPF.ViewModels
         private void ShowSettings()
         {
             OpenSettingsEvent?.Invoke(this, EventArgs.Empty);
-            RefreshKeyBindings();
         } // ShowSettings
 
 

@@ -7,7 +7,7 @@
         xmlns:prop="clr-namespace:LeerCopyWPF.Properties"
         xmlns:local="clr-namespace:LeerCopyWPF.Views"
         mc:Ignorable="d"
-        Title="{Binding Path=DisplayName}" MinWidth="1000" MinHeight="600" WindowStartupLocation="CenterScreen">
+        Title="{Binding Path=DisplayName}" MinWidth="800" MinHeight="500" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight">
     <Window.Resources>
         <Style x:Key="FinalizationBtnStyle" TargetType="Button">
             <Setter Property="FontSize" Value="16"/>
@@ -90,8 +90,8 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
         <!-- 'Finalization' Buttons -->
         <Button x:Name="CancleBtn" Style="{StaticResource FinalizationBtnStyle}" Content="Cancel" Margin="0,5,40,20" 

@@ -19,25 +19,7 @@
 namespace LeerCopyWPF.Enums
 {
     /// <summary>
-    /// All key up actions able to be performed during selection
-    /// </summary>
-    public enum KeyUpAction
-    {
-        Invalid,
-        Copy,
-        Edit,
-        Save,
-        SelectAll,
-        Clear,
-        Border,
-        Tips,
-        Switch,
-        Settings,
-        Quit
-    }
-
-    /// <summary>
-    /// All possible directions to resize selection
+    /// All possible directions to resize selection via keys
     /// </summary>
     public enum ResizeDirection
     {

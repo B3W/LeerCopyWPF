@@ -74,7 +74,7 @@ namespace LeerCopyWPF.Controller
         }
 
 
-        public bool StartSelection()
+        public bool StartSelection(double startScreenX, double startScreenY)
         {
             if (SelectionActive)
             {
@@ -86,6 +86,7 @@ namespace LeerCopyWPF.Controller
 
             // Initialize selection window for each screen
             SelectionWindows.Clear();
+            Window activeWindow = null;
 
             foreach (SimpleScreen screen in Screens)
             {
@@ -100,8 +101,14 @@ namespace LeerCopyWPF.Controller
 
                 // Show all selection windows at the same time
                 selectionWindow.Show();
-                selectionWindow.Activate();
+
+                if (screen.Bounds.Contains(startScreenX, startScreenY))
+                {
+                    activeWindow = selectionWindow;
+                }
             }
+
+            activeWindow?.Activate();
 
             return true;
         }

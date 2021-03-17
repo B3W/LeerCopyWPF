@@ -1,4 +1,5 @@
 ﻿using LeerCopyWPF.Enums;
+using LeerCopyWPF.Utilities;
 using LeerCopyWPF.ViewModels;
 using LeerCopyWPF.Views;
 using System;
@@ -30,6 +31,9 @@ namespace LeerCopyWPF.Controller
 
         #region Public Properties
 
+        /// <summary>
+        /// Signals the start of a selection
+        /// </summary>
         public event EventHandler SelectionStarted;
 
         /// <summary>
@@ -112,7 +116,8 @@ namespace LeerCopyWPF.Controller
         /// </summary>
         private void StartSelection()
         {
-            SelectionStarted?.Invoke(this, EventArgs.Empty);
+            SelectionStartEventArgs args = new SelectionStartEventArgs(MainWindow.Left, MainWindow.Top);
+            SelectionStarted?.Invoke(this, args);
         }
 
 

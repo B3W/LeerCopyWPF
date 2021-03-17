@@ -86,6 +86,7 @@
     <Compile Include="Models\Selection.cs" />
     <Compile Include="Models\Setting.cs" />
     <Compile Include="Utilities\ExtensionMethods.cs" />
+    <Compile Include="Utilities\SelectionStartEventArgs.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\SelectionViewModel.cs" />
@@ -110,7 +111,6 @@
     <Compile Include="Settings.cs" />
     <Compile Include="Utilities\BitmapUtilities.cs" />
     <Compile Include="Utilities\EncodedImage.cs" />
-    <Compile Include="Utilities\FlagEventArgs.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>

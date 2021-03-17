@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LeerCopyWPF.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,8 +17,10 @@ namespace LeerCopyWPF.Controller
         /// <summary>
         /// Starts selection operation if there is not one already active.
         /// </summary>
+        /// <param name="startScreenX">X coordinate located on active screen</param>
+        /// <param name="startScreenY">Y coordinate located on active screen</param>
         /// <returns>true if selection started successfully, false otherwise</returns>
-        bool StartSelection();
+        bool StartSelection(double startScreenX, double startScreenY);
 
         /// <summary>
         /// Exits selection operation.

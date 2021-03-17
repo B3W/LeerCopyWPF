@@ -1,4 +1,5 @@
 ﻿using LeerCopyWPF.Enums;
+using LeerCopyWPF.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -83,7 +84,9 @@ namespace LeerCopyWPF.Controller
         /// <param name="e">Arguments associated with event</param>
         private void OnSelectionStart(object sender, EventArgs e)
         {
-            if (!SelectionController.StartSelection())
+            SelectionStartEventArgs args = e as SelectionStartEventArgs;
+
+            if (!SelectionController.StartSelection(args.MainWindowX, args.MainWindowY))
             {
                 // Unable to start selection
                 MainWindowController.PerformAction(MainWindowControllerActions.ShowMainWindow);

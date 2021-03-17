@@ -21,12 +21,6 @@ namespace LeerCopyWPF.Controller
         #endregion
 
         #region Private Fields
-
-        /// <summary>
-        /// Handle to dialog window controller
-        /// </summary>
-        private readonly IDialogWindowController _dialogWindowController;
-
         #endregion
 
         #endregion // Fields
@@ -67,10 +61,8 @@ namespace LeerCopyWPF.Controller
         /// <summary>
         /// Constructs instance of MainWindowController
         /// </summary>
-        public MainWindowController(Window mainWindow, IDialogWindowController dialogWindowController)
+        public MainWindowController(Window mainWindow)
         {
-            _dialogWindowController = dialogWindowController;
-
             MainWindow = mainWindow;
             MainWindowViewModel mainWindowViewModel = new MainWindowViewModel(this);
             mainWindowViewModel.OpenSettingsEvent += (s, eargs) => new SettingsWindow().ShowDialog();

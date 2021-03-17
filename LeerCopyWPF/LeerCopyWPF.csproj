@@ -76,8 +76,6 @@
     </ApplicationDefinition>
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Constants\SettingsConstants.cs" />
-    <Compile Include="Controller\DialogWindowController.cs" />
-    <Compile Include="Controller\IDialogWindowController.cs" />
     <Compile Include="Controller\ISelectionWindowController.cs" />
     <Compile Include="Controller\IMainWindowController.cs" />
     <Compile Include="Controller\MainWindowController.cs" />

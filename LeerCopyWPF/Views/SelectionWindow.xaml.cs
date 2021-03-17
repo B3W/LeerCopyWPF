@@ -17,6 +17,7 @@
  */
 
 using LeerCopyWPF.Constants;
+using LeerCopyWPF.Controller;
 using LeerCopyWPF.Enums;
 using LeerCopyWPF.Utilities;
 using LeerCopyWPF.ViewModels;
@@ -45,6 +46,11 @@ namespace LeerCopyWPF
     public partial class SelectionWindow : Window
     {
         #region Fields
+
+        private readonly ISelectionWindowController _selectionWindowController;
+
+        private readonly KeyConverter _keyConverter;
+
         #endregion // Fields
 
 
@@ -54,37 +60,28 @@ namespace LeerCopyWPF
 
         #region Constructors
 
-        public SelectionWindow(Rect screenBounds)
+        public SelectionWindow(ISelectionWindowController selectionWindowController, Rect screenBounds)
         {
             // Register window lifetime events
             this.Loaded += SelectionWindow_Loaded;
 
             InitializeComponent();
 
-            // Set DataContext
-            // _selectionViewModel = new SelectionViewModel(this, bounds);
-            // _selectionViewModel.OpenSettingsEvent += (s, eargs) => new SettingsWindow().ShowDialog();
-            // _selectionViewModel.KeyBindingsChangedEvent += (s, eargs) => KeyMappingsChanged();
-            // DataContext = _selectionViewModel;
+            _selectionWindowController = selectionWindowController;
+            _keyConverter = new KeyConverter();
 
             // Place form on correct screen
             this.Left = screenBounds.Left;
             this.Top = screenBounds.Top;
 
-            // Bind keys to actions
-            // _selectionViewModel.RefreshKeyBindings();
-        } // SelectionWindow
+            // Subscribe to other window events
+            this.PreviewKeyUp += SelectionWindow_PreviewKeyUp;
+        }
 
         #endregion // Constructors
 
 
         #region EventHandlers
-
-        private void SelectionWindow_Loaded(object sender, RoutedEventArgs e)
-        {
-            this.WindowState = WindowState.Maximized;
-        } // SelectionWindow_Loaded
-
 
         protected override void OnClosing(CancelEventArgs e)
         {
@@ -92,6 +89,83 @@ namespace LeerCopyWPF
             Properties.Settings.Default.Save();
 
             base.OnClosing(e);
+        }
+
+
+        private void SelectionWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.WindowState = WindowState.Maximized;
+        }
+
+
+        /// <summary>
+        /// Handles all key events that are not able to be handled in XAML through KeyTriggers without breaking MVVM
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SelectionWindow_PreviewKeyUp(object sender, KeyEventArgs e)
+        {
+            string keyStr = _keyConverter.ConvertToString(e.Key);
+
+            // Save selection key binding
+            if (keyStr == Properties.Settings.Default.SaveKey)
+            {
+                SelectionViewModel viewModel = DataContext as SelectionViewModel;
+
+                if (viewModel.CanSave)
+                {
+                    // Get the full path for the initial save directory (relative paths will throw exception)
+                    string initialSavePath = System.IO.Path.GetFullPath(Properties.Settings.Default.LastSavePath);
+
+                    // Configure save dialog
+                    Microsoft.Win32.SaveFileDialog saveDialog = new Microsoft.Win32.SaveFileDialog
+                    {
+                        AddExtension = true,
+                        DefaultExt = Properties.Settings.Default.DefaultSaveExt,
+                        FileName = Properties.Settings.Default.DefaultFileName,
+                        Filter = "BMP (.bmp)|*.bmp|GIF (.gif)|*.gif|JPEG (.jpg)|*.jpg;*.jpeg|PNG (.png)|*.png|TIFF (.tif)|*.tif;*.tiff|WMP (.wmp)|*.wmp",
+                        InitialDirectory = initialSavePath,
+                        OverwritePrompt = true,
+                        Title = "Save Leer"
+                    };
+
+                    // Show dialog
+                    bool? result = saveDialog.ShowDialog();
+
+                    if (result == true)
+                    {
+                        viewModel.SaveCommand.Execute(saveDialog.FileName);
+                    }
+                }
+
+                e.Handled = true;
+            }
+
+            // Open settings key binding
+            if (keyStr == Properties.Settings.Default.SettingsWin)
+            {
+                SelectionViewModel viewModel = DataContext as SelectionViewModel;
+
+                if (viewModel.CanOpenSettings)
+                {
+                    new SettingsWindow().ShowDialog();
+                }
+
+                e.Handled = true;
+            }
+
+            // Quit selection key binding
+            if (keyStr == Properties.Settings.Default.QuitKey)
+            {
+                SelectionViewModel viewModel = DataContext as SelectionViewModel;
+
+                if (viewModel.CanClose)
+                {
+                    _selectionWindowController.QuitSelection();
+                }
+
+                e.Handled = true;
+            }
         }
 
         #endregion // EventHandlers

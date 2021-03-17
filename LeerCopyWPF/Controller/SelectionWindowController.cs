@@ -22,12 +22,6 @@ namespace LeerCopyWPF.Controller
         #endregion
 
         #region Private Fields
-
-        /// <summary>
-        /// Handle to dialog window controller
-        /// </summary>
-        private readonly IDialogWindowController _dialogWindowController;
-
         #endregion
 
         #endregion // Fields
@@ -73,10 +67,8 @@ namespace LeerCopyWPF.Controller
         /// <summary>
         /// Constructs instance of SelectionWindowController
         /// </summary>
-        public SelectionWindowController(IDialogWindowController dialogWindowController)
+        public SelectionWindowController()
         {
-            _dialogWindowController = dialogWindowController;
-
             SelectionActive = false;
             SelectionWindows = new List<Window>();
         }
@@ -98,9 +90,8 @@ namespace LeerCopyWPF.Controller
             foreach (SimpleScreen screen in Screens)
             {
                 // Construct Window and associated ViewModel for given screen
-                Window selectionWindow = new SelectionWindow(screen.Bounds);
-                SelectionViewModel selectionViewModel = new SelectionViewModel(selectionWindow, screen.Bounds, this);
-                selectionViewModel.OpenSettingsEvent += (s, eargs) => new SettingsWindow().ShowDialog();
+                Window selectionWindow = new SelectionWindow(this, screen.Bounds);
+                SelectionViewModel selectionViewModel = new SelectionViewModel(selectionWindow, screen.Bounds);
                 
                 selectionWindow.DataContext = selectionViewModel;
                 selectionWindow.Owner = Application.Current.MainWindow;

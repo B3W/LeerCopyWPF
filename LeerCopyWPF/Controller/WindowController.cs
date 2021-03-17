@@ -39,11 +39,6 @@ namespace LeerCopyWPF.Controller
         /// </summary>
         public ISelectionWindowController SelectionController { get; }
 
-        /// <summary>
-        /// Controller for dialog windows
-        /// </summary>
-        public IDialogWindowController DialogController { get; }
-
         #endregion
 
         #region Protected Properties
@@ -63,12 +58,10 @@ namespace LeerCopyWPF.Controller
         /// Constructs WindowController instance
         /// </summary>
         public WindowController(IMainWindowController mainWindowController,
-                                ISelectionWindowController selectionController,
-                                IDialogWindowController dialogController)
+                                ISelectionWindowController selectionController)
         {
             MainWindowController = mainWindowController;
             SelectionController = selectionController;
-            DialogController = dialogController;
 
             // Register event handlers
             MainWindowController.SelectionStarted += OnSelectionStart;

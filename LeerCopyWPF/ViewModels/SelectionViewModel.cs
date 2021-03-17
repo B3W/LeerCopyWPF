@@ -30,11 +30,6 @@ namespace LeerCopyWPF.ViewModels
         private readonly IInputElement _inputOwner;
 
         /// <summary>
-        /// Handle to selection window controller
-        /// </summary>
-        private readonly ISelectionWindowController _selectionWindowController;
-
-        /// <summary>
         /// Data structure containing information on a selection
         /// </summary>
         private readonly Selection _selection;
@@ -215,21 +210,6 @@ namespace LeerCopyWPF.ViewModels
         public ICommand TipsCommand { get; }
 
         /// <summary>
-        /// Command for opening settings window
-        /// </summary>
-        public ICommand SettingsCommand { get; }
-
-        /// <summary>
-        /// Event to signal settings window should open
-        /// </summary>
-        public event EventHandler OpenSettingsEvent;
-
-        /// <summary>
-        /// Command for exiting out of selection
-        /// </summary>
-        public ICommand QuitCommand { get; }
-
-        /// <summary>
         /// Command for key down event
         /// </summary>
         public ICommand KeyDownCommand { get; }
@@ -259,10 +239,9 @@ namespace LeerCopyWPF.ViewModels
         /// </summary>
         /// <param name="inputOwner"></param>
         /// <param name="bounds"></param>
-        public SelectionViewModel(IInputElement inputOwner, Rect bounds, ISelectionWindowController selectionWindowController)
+        public SelectionViewModel(IInputElement inputOwner, Rect bounds)
         {
             _inputOwner = inputOwner;
-            _selectionWindowController = selectionWindowController;
 
             // Capture screen
             BitmapSource bitmap = BitmapUtilities.CaptureRect(bounds);
@@ -275,13 +254,11 @@ namespace LeerCopyWPF.ViewModels
             // Setup commands
             CopyCommand = new RelayCommand(param => CopySelection(), param => CanCopy);
             EditCommand = new RelayCommand(param => EditSelection(), param => CanEdit);
-            SaveCommand = new RelayCommand(param => SaveSelection(), param => CanSave);
+            SaveCommand = new RelayCommand<string>(SaveSelection, param => CanSave);
             MaximizeCommand = new RelayCommand(param => MaximizeSelection());
             ClearCommand = new RelayCommand(param => ClearSelection());
             BorderCommand = new RelayCommand(param => ToggleBorder());
             TipsCommand = new RelayCommand(param => ToggleTips());
-            SettingsCommand = new RelayCommand(param => ShowSettings(), param => CanOpenSettings);
-            QuitCommand = new RelayCommand(param => ExitSelection());
             KeyDownCommand = new RelayCommand<KeyEventArgs>(KeyDown);
             MouseDownCommand = new RelayCommand<MouseButtonEventArgs>(MouseDown);
             MouseUpCommand = new RelayCommand<MouseButtonEventArgs>(MouseUp);
@@ -526,51 +503,20 @@ namespace LeerCopyWPF.ViewModels
         /// <summary>
         /// Save the current selection to disk
         /// </summary>
-        private void SaveSelection()
+        /// <param name="savePath">Path to save selection to</param>
+        private void SaveSelection(string savePath)
         {
-            // Configure save dialog
-            Microsoft.Win32.SaveFileDialog saveDialog = new Microsoft.Win32.SaveFileDialog
-            {
-                AddExtension = true,
-                DefaultExt = Properties.Settings.Default.DefaultSaveExt,
-                FileName = Properties.Settings.Default.DefaultFileName,
-                Filter = "BMP (.bmp)|*.bmp|GIF (.gif)|*.gif|JPEG (.jpg)|*.jpg;*.jpeg|PNG (.png)|*.png|TIFF (.tif)|*.tif;*.tiff|WMP (.wmp)|*.wmp",
-                InitialDirectory = Properties.Settings.Default.LastSavePath,
-                OverwritePrompt = true,
-                Title = "Save Leer"
-            };
+            // Crop bitmap to selection area
+            CroppedBitmap finalBitmap = BitmapUtilities.GetCroppedBitmap(Bitmap, SelectionRect);
 
-            // Show dialog
-            bool? res = saveDialog.ShowDialog();
+            // Save as requested format
+            FileInfo saveFile = new FileInfo(savePath);
 
-            if (res == true)
-            {
-                // Crop bitmap to selection area
-                CroppedBitmap finalBitmap = BitmapUtilities.GetCroppedBitmap(Bitmap, SelectionRect);
+            EncodedImage encodedImage = new EncodedImage(finalBitmap, saveFile.Extension);
+            encodedImage.SaveToFile(savePath);
 
-                // Save as requested format
-                string filePath = saveDialog.FileName;
-                int extPos = filePath.LastIndexOf('.');  // 'IndexOf' methods more performant than 'Split'
-
-                if (extPos == -1)
-                {
-                    // TODO exception logging
-                    throw new ArgumentException($"SelectionViewModel.SaveSelection: '{filePath}' is invalid filename", "fileName");
-                }
-
-                string extension = filePath.Substring(extPos + 1);
-                EncodedImage eImage = new EncodedImage(finalBitmap, extension);
-                eImage.SaveToFile(filePath);
-
-                // Update last save directory
-                int fileNamePos = filePath.LastIndexOf(System.IO.Path.DirectorySeparatorChar);
-
-                if (fileNamePos != -1)  // If somehow backslash not found do nothing
-                {
-                    string lastSavePath = filePath.Substring(0, fileNamePos + 1);
-                    Properties.Settings.Default.LastSavePath = lastSavePath;
-                }
-            }
+            // Update last save directory
+            Properties.Settings.Default.LastSavePath = saveFile.DirectoryName;
         } // SaveSelection
 
 
@@ -615,24 +561,6 @@ namespace LeerCopyWPF.ViewModels
         {
             Properties.Settings.Default.TipsVisibility = !Properties.Settings.Default.TipsVisibility;
         } // ToggleTips
-
-
-        /// <summary>
-        /// Opens SettingsWindow
-        /// </summary>
-        private void ShowSettings()
-        {
-            OpenSettingsEvent?.Invoke(this, EventArgs.Empty);
-        } // ShowSettings
-
-
-        /// <summary>
-        /// Exits out of the selection
-        /// </summary>
-        private void ExitSelection()
-        {
-            _selectionWindowController.QuitSelection();
-        } // ExitSelection
 
 
         /// <summary>

@@ -71,14 +71,6 @@
         <behaviors:KeyTrigger Key="{Binding Source={x:Static prop:Settings.Default}, Path=TipsKey, Mode=OneWay}" FiredOn="KeyUp" ActiveOnFocus="False">
             <behaviors:InvokeCommandAction Command="{Binding TipsCommand}"/>
         </behaviors:KeyTrigger>
-        <!-- Settings Command -->
-        <behaviors:KeyTrigger Key="{Binding Source={x:Static prop:Settings.Default}, Path=SettingsWin, Mode=OneWay}" FiredOn="KeyUp" ActiveOnFocus="False">
-            <behaviors:InvokeCommandAction Command="{Binding SettingsCommand}"/>
-        </behaviors:KeyTrigger>
-        <!-- Quit Command -->
-        <behaviors:KeyTrigger Key="{Binding Source={x:Static prop:Settings.Default}, Path=QuitKey, Mode=OneWay}" FiredOn="KeyUp" ActiveOnFocus="False">
-            <behaviors:InvokeCommandAction Command="{Binding QuitCommand}"/>
-        </behaviors:KeyTrigger>
         <!-- Key Down -->
         <behaviors:EventTrigger EventName="PreviewKeyDown">
             <behaviors:InvokeCommandAction Command="{Binding KeyDownCommand}" PassEventArgsToCommand="True"/>

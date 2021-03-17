@@ -107,16 +107,28 @@ namespace LeerCopyWPF.Utilities
         /// <param name="extension">Extension of file format to encode image to</param>
         public EncodedImage(BitmapSource image, string extension)
         {
-            Image = image;
-            Encoding? enc = ConvertExtensionToEncoding(extension);
-
-            if (enc == null)
+            if (image == null)
             {
                 // TODO Error logging
-                throw new ArgumentException($"{extension} is not a supported file extension", "extension");
+                throw new ArgumentNullException("image", "Image cannot be null");
             }
 
-            EncodingType = enc.Value;
+            if (string.IsNullOrEmpty(extension))
+            {
+                // TODO Error logging
+                throw new ArgumentNullException("extension", "File extension cannot be null or empty");
+            }
+
+            Image = image;
+            Encoding? encoding = ConvertExtensionToEncoding(extension);
+
+            if (!encoding.HasValue)
+            {
+                // TODO Error logging
+                throw new ArgumentException($"'{extension}' is not a supported file extension", "extension");
+            }
+
+            EncodingType = encoding.Value;
 
             switch (EncodingType)
             {

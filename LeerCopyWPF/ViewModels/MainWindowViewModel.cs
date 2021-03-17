@@ -13,83 +13,59 @@ namespace LeerCopyWPF.ViewModels
 {
     public class MainWindowViewModel : BaseViewModel
     {
-        #region Fields
-
-        /// <summary>
-        /// Handle to controller for the main window
-        /// </summary>
-        private readonly IMainWindowController _mainWindowController;
-        
-        #endregion // Fields
-
         #region Constants
-        
+
         private const string ConstDisplayName = "Leer Copy";
 
         #endregion // Constants
 
+
+        #region Fields
+
+        #region Public Fields
+        #endregion
+
+        #region Protected Fields
+        #endregion
+
+        #region Private Fields
+        #endregion
+
+        #endregion // Fields
+
+
         #region Properties
+
+        #region Public Properties
 
         public override string DisplayName { get => ConstDisplayName; }
 
-        public event EventHandler OpenSettingsEvent;
+        #endregion
 
-        /// <summary>
-        /// Command for selection capture button press
-        /// </summary>
-        public ICommand SelectionCaptureCommand { get; }
+        #region Protected Properties
+        #endregion
 
-        /// <summary>
-        /// Command for opening the settings
-        /// </summary>
-        public ICommand SettingsCommand { get; }
-
-        /// <summary>
-        /// Command for closing the main window
-        /// </summary>
-        public ICommand CloseCommand { get; }
+        #region Private Properties
+        #endregion
 
         #endregion // Properties
 
 
-        #region Constructors
-        
-        public MainWindowViewModel(IMainWindowController mainWindowController)
-        {
-            _mainWindowController = mainWindowController;
+        #region Fields
 
-            SelectionCaptureCommand = new RelayCommand(param => SelectionCaptureHandler());
-            SettingsCommand = new RelayCommand(param => ShowSettingsHandler());
-            CloseCommand = new RelayCommand(param => CloseHandler());
-        }
-        
-        #endregion // Constructors
+        #region Public Methods
 
-        #region Methods
-        
-        /// <summary>
-        /// Signals window controller that selection capture was requested
-        /// </summary>
-        private void SelectionCaptureHandler()
+        public MainWindowViewModel()
         {
-            _mainWindowController.PerformAction(MainWindowControllerActions.StartSelection);
         }
 
-        /// <summary>
-        /// Opens settings.
-        /// </summary>
-        private void ShowSettingsHandler()
-        {
-            OpenSettingsEvent?.Invoke(this, EventArgs.Empty);
-        }
+        #endregion
 
-        /// <summary>
-        /// Signals window controller to close main window
-        /// </summary>
-        private void CloseHandler()
-        {
-            _mainWindowController.Close();
-        }
+        #region Protected Methods
+        #endregion
+
+        #region Private Methods
+        #endregion
 
         #endregion // Methods
     }

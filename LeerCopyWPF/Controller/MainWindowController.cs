@@ -61,39 +61,16 @@ namespace LeerCopyWPF.Controller
         /// <summary>
         /// Constructs instance of MainWindowController
         /// </summary>
-        public MainWindowController(Window mainWindow)
+        public MainWindowController()
         {
-            MainWindow = mainWindow;
-            MainWindowViewModel mainWindowViewModel = new MainWindowViewModel(this);
-            mainWindowViewModel.OpenSettingsEvent += (s, eargs) => new SettingsWindow().ShowDialog();
+            // First Window object instantiated in AppDomain sets MainWindow property of Application (set anyway to be safe)
+            MainWindow = new MainWindow(this);
+            Application.Current.MainWindow = MainWindow;
+
+            MainWindowViewModel mainWindowViewModel = new MainWindowViewModel();
             MainWindow.DataContext = mainWindowViewModel;
 
             Hidden = true;
-        }
-
-
-        public void Show()
-        {
-            Hidden = false;
-
-            MainWindow.Show();
-            MainWindow.WindowState = WindowState.Normal;
-            MainWindow.Activate();
-        }
-
-
-        public void Hide()
-        {
-            Hidden = true;
-
-            MainWindow.WindowState = WindowState.Minimized;
-            MainWindow.Hide();
-        }
-
-
-        public void Close()
-        {
-            MainWindow.Close();
         }
 
 
@@ -104,6 +81,18 @@ namespace LeerCopyWPF.Controller
                 case MainWindowControllerActions.StartSelection:
                     Hide();                     // Hide the main window
                     StartSelection();           // Start the new selection
+                    break;
+
+                case MainWindowControllerActions.ShowMainWindow:
+                    Show();
+                    break;
+
+                case MainWindowControllerActions.HideMainWindow:
+                    Hide();
+                    break;
+
+                case MainWindowControllerActions.CloseMainWindow:
+                    Close();
                     break;
 
                 default:
@@ -124,6 +113,31 @@ namespace LeerCopyWPF.Controller
         private void StartSelection()
         {
             SelectionStarted?.Invoke(this, EventArgs.Empty);
+        }
+
+
+        private void Show()
+        {
+            Hidden = false;
+
+            MainWindow.Show();
+            MainWindow.WindowState = WindowState.Normal;
+            MainWindow.Activate();
+        }
+
+
+        private void Hide()
+        {
+            Hidden = true;
+
+            MainWindow.WindowState = WindowState.Minimized;
+            MainWindow.Hide();
+        }
+
+
+        private void Close()
+        {
+            MainWindow.Close();
         }
 
         #endregion

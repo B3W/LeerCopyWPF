@@ -47,8 +47,14 @@ namespace LeerCopyWPF
     {
         #region Fields
 
+        /// <summary>
+        /// Handle to selection window controller
+        /// </summary>
         private readonly ISelectionWindowController _selectionWindowController;
 
+        /// <summary>
+        /// Converter instance for converter Key object to string
+        /// </summary>
         private readonly KeyConverter _keyConverter;
 
         #endregion // Fields

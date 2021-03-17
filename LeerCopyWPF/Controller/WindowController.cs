@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LeerCopyWPF.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -85,7 +86,7 @@ namespace LeerCopyWPF.Controller
             if (!SelectionController.StartSelection())
             {
                 // Unable to start selection
-                MainWindowController.Show();
+                MainWindowController.PerformAction(MainWindowControllerActions.ShowMainWindow);
 
                 // TODO Log, show notification
             }
@@ -99,7 +100,7 @@ namespace LeerCopyWPF.Controller
         /// <param name="e">Arguments associated with event</param>
         private void OnSelectionQuit(object sender, EventArgs e)
         {
-            MainWindowController.Show();
+            MainWindowController.PerformAction(MainWindowControllerActions.ShowMainWindow);
         }
 
         #endregion

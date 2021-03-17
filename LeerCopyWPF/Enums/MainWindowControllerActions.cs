@@ -11,6 +11,10 @@ namespace LeerCopyWPF.Enums
     /// </summary>
     public enum MainWindowControllerActions
     {
-        StartSelection
+        ShowMainWindow,
+        HideMainWindow,
+        CloseMainWindow,
+        StartSelection,
+        OpenSettingsWindow
     }
 }

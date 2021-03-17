@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Threading;
 using LeerCopyWPF.Controller;
 using LeerCopyWPF.Views;
+using LeerCopyWPF.Enums;
 
 namespace LeerCopyWPF
 {
@@ -43,18 +44,53 @@ namespace LeerCopyWPF
                 Console.WriteLine("App.OnStartup: Exception initializing AppData - %s\n", ex.Message);
             }
 
-            // Construct the main window
-            // First Window object instantiated in AppDomain sets MainWindow property of Application
-            Window mainWindow = new MainWindow();
-
-            // Initialize window controller
-            IMainWindowController mainWindowController = new MainWindowController(mainWindow);
+            // Initialize window controllers
+            IMainWindowController mainWindowController = new MainWindowController();
             ISelectionWindowController selectionWindowController = new SelectionWindowController();
 
             _windowController = new WindowController(mainWindowController, selectionWindowController);
 
             // Show main window
-            _windowController.MainWindowController.Show();
+            _windowController.MainWindowController.PerformAction(MainWindowControllerActions.ShowMainWindow);
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            const double NUM_DAYS_TO_EXPIRE = 1.0D;
+
+            try
+            {
+                // Clean up temporary 'edit' files in AppData
+                string appDataPath = LeerCopyWPF.Properties.Settings.Default.AppDataLoc;
+
+                if (Directory.Exists(appDataPath))
+                {
+                    // Get files which have default file name/extension
+                    string searchPattern = LeerCopyWPF.Properties.Settings.Default.DefaultFileName
+                                         + "*" 
+                                         + LeerCopyWPF.Properties.Settings.Default.DefaultSaveExt;
+
+                    string[] files = Directory.GetFiles(appDataPath, searchPattern);
+
+                    // Delete 'default' files that are 1+ days old
+                    DateTime fileDT;
+                    DateTime currentDT = DateTime.Now;
+
+                    foreach (string file in files)
+                    {
+                        fileDT = File.GetCreationTime(file);
+
+                        if (fileDT.AddDays(NUM_DAYS_TO_EXPIRE) < currentDT)
+                        {
+                            File.Delete(file);
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                base.OnExit(e);
+            }
         }
 
         /// <summary>

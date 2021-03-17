@@ -16,6 +16,8 @@
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+using LeerCopyWPF.Controller;
+using LeerCopyWPF.Enums;
 using LeerCopyWPF.Utilities;
 using LeerCopyWPF.ViewModels;
 using System;
@@ -39,24 +41,80 @@ namespace LeerCopyWPF.Views
     /// </summary>
     public partial class MainWindow : Window
     {
+        #region Fields
+
+        #region Public Fields
+        #endregion
+
+        #region Protected Fields
+        #endregion
+
+        #region Private Fields
+
+        /// <summary>
+        /// Handle to the main window controller
+        /// </summary>
+        private readonly IMainWindowController _mainWindowController;
+
         /// <summary>
         /// Flag to prevent loaded event handler logic firing multiple times
         /// </summary>
-        private bool winLoaded = false;
+        private bool _winLoaded = false;
+
+        #endregion
+
+        #endregion // Fields
 
 
-        public MainWindow()
+        #region Properties
+
+        #region Public Properties
+        #endregion
+
+        #region Protected Properties
+        #endregion
+
+        #region Private Properties
+        #endregion
+
+        #endregion // Properties
+
+
+        #region Methods
+
+        #region Public Methods
+
+        public MainWindow(IMainWindowController mainWindowController)
         {
             // Register window lifetime event handlers
             this.Loaded += MainWindow_Loaded;
 
             InitializeComponent();
+
+            _mainWindowController = mainWindowController;
         }
 
+        #endregion
+
+        #region Protected Methods
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            // Save settings
+            Properties.Settings.Default.MainWinX = this.Left;
+            Properties.Settings.Default.MainWinY = this.Top;
+            Properties.Settings.Default.Save();
+
+            base.OnClosing(e);
+        }
+
+        #endregion
+
+        #region Private Methods
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            if (!winLoaded)
+            if (!_winLoaded)
             {
                 // Restore window location if possible
                 double tmpL = Properties.Settings.Default.MainWinX;
@@ -74,42 +132,30 @@ namespace LeerCopyWPF.Views
                     }
                 }
 
-                winLoaded = true;
+                _winLoaded = true;
             }
-        } // MainWindow_Loaded
+        }
 
 
-        protected override void OnClosing(CancelEventArgs e)
+        private void SelectCaptureBtn_Click(object sender, RoutedEventArgs e)
         {
-            // Clean up temporary 'edit' files in AppData
-            string appDataPath = Properties.Settings.Default.AppDataLoc;
+            _mainWindowController.PerformAction(MainWindowControllerActions.StartSelection);
+        }
 
-            if (Directory.Exists(appDataPath))
-            {
-                // Get files which have default file name/extension
-                string searchPattern = Properties.Settings.Default.DefaultFileName + "*" + Properties.Settings.Default.DefaultSaveExt;
-                string[] files = Directory.GetFiles(appDataPath, searchPattern);
 
-                // Delete 'default' files that are 1+ days old
-                DateTime fileDT;
-                DateTime currentDT = DateTime.Now;
+        private void OpenSettings_Click(object sender, RoutedEventArgs e)
+        {
+            new SettingsWindow().ShowDialog();
+        }
 
-                foreach (string file in files)
-                {
-                    fileDT = File.GetCreationTime(file);
-                    if (fileDT.AddDays(1.0) < currentDT)
-                    {
-                        File.Delete(file);
-                    }
-                }
-            }
 
-            // Save settings
-            Properties.Settings.Default.MainWinX = this.Left;
-            Properties.Settings.Default.MainWinY = this.Top;
-            Properties.Settings.Default.Save();
+        private void ExitApp_Click(object sender, RoutedEventArgs e)
+        {
+            _mainWindowController.PerformAction(MainWindowControllerActions.CloseMainWindow);
+        }
 
-            base.OnClosing(e);
-        } // MainWindow_Closing
+        #endregion
+
+        #endregion // Methods
     }
 }

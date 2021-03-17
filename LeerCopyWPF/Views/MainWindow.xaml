@@ -27,9 +27,9 @@
         <!-- App menu -->
         <Menu Name="MainMenu" Grid.Row="0">
             <MenuItem Header="{x:Static resx:Resources.MenuFileStr}">
-                <MenuItem Header="{x:Static resx:Resources.MenuSettingsStr}" Command="{Binding Path=SettingsCommand}"/>
+                <MenuItem Header="{x:Static resx:Resources.MenuSettingsStr}" Click="OpenSettings_Click"/>
                 <Separator/>
-                <MenuItem Header="{x:Static resx:Resources.MenuExitStr}" Command="{Binding Path=CloseCommand}"/>
+                <MenuItem Header="{x:Static resx:Resources.MenuExitStr}" Click="ExitApp_Click"/>
             </MenuItem>
             <MenuItem Header="{x:Static resx:Resources.MenuAboutStr}">
                 
@@ -51,7 +51,7 @@
 
                 <!-- Grid content -->
                 <!-- Selection capture mode -->
-                <Button Name="SelectCaptureBtn" Grid.Row="0" Grid.Column="0" TabIndex="1" Command="{Binding SelectionCaptureCommand}"
+                <Button Name="SelectCaptureBtn" Grid.Row="0" Grid.Column="0" TabIndex="1" Click="SelectCaptureBtn_Click"
                         ToolTip="{x:Static resx:Resources.SelectCaptureBtnTooltipStr}">
                     <Button.Content>
                         <StackPanel Orientation="Horizontal" >

@@ -15,21 +15,6 @@ namespace LeerCopyWPF.Controller
         event EventHandler SelectionStarted;
 
         /// <summary>
-        /// Shows the main window.
-        /// </summary>
-        void Show();
-
-        /// <summary>
-        /// Hides/Minimizes the main window.
-        /// </summary>
-        void Hide();
-
-        /// <summary>
-        /// Closes the main window.
-        /// </summary>
-        void Close();
-
-        /// <summary>
         /// Signals window controller to perform specified action.
         /// </summary>
         /// <param name="action">Action to perform</param>

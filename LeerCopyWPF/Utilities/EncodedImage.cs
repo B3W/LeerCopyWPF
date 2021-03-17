@@ -46,17 +46,17 @@ namespace LeerCopyWPF.Utilities
         /// <summary>
         /// Image to encode
         /// </summary>
-        public BitmapSource Image { get; private set; }
+        public BitmapSource Image { get; }
 
         /// <summary>
         /// Encoder for stream
         /// </summary>
-        public BitmapEncoder Encoder { get; private set; }
+        public BitmapEncoder Encoder { get; }
 
         /// <summary>
         /// Type of encoding for image
         /// </summary>
-        public Encoding EncodingType { get; private set; }
+        public Encoding EncodingType { get; }
 
         #endregion // Properties
 

@@ -125,12 +125,6 @@ namespace LeerCopyWPF.Controller
         }
 
 
-        private void QuitSelection()
-        {
-            // TODO
-        }
-
-
         private void ShowMainWindow()
         {
             MainWindow.Show();

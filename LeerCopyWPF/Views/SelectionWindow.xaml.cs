@@ -113,8 +113,7 @@ namespace LeerCopyWPF
         {
             string keyStr = _keyConverter.ConvertToString(e.Key);
 
-            // Save selection key binding
-            if (keyStr == Properties.Settings.Default.SaveKey)
+            if (keyStr == Properties.Settings.Default.SaveKey)          // Save selection key binding
             {
                 SelectionViewModel viewModel = DataContext as SelectionViewModel;
 
@@ -161,9 +160,7 @@ namespace LeerCopyWPF
 
                 e.Handled = true;
             }
-
-            // Open settings key binding
-            if (keyStr == Properties.Settings.Default.SettingsWin)
+            else if (keyStr == Properties.Settings.Default.SettingsWin) // Open settings key binding
             {
                 SelectionViewModel viewModel = DataContext as SelectionViewModel;
 
@@ -174,9 +171,7 @@ namespace LeerCopyWPF
 
                 e.Handled = true;
             }
-
-            // Quit selection key binding
-            if (keyStr == Properties.Settings.Default.QuitKey)
+            else if (keyStr == Properties.Settings.Default.QuitKey)     // Quit selection key binding
             {
                 SelectionViewModel viewModel = DataContext as SelectionViewModel;
 

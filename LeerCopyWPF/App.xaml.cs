@@ -16,11 +16,6 @@ namespace LeerCopyWPF
     /// </summary>
     public partial class App : Application
     {
-        /// <summary>
-        /// Keep handle to window controller so it stays around for duration of application.
-        /// </summary>
-        private WindowController _windowController;
-
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
@@ -45,13 +40,11 @@ namespace LeerCopyWPF
             }
 
             // Initialize window controllers
-            IMainWindowController mainWindowController = new MainWindowController();
             ISelectionWindowController selectionWindowController = new SelectionWindowController();
-
-            _windowController = new WindowController(mainWindowController, selectionWindowController);
+            IMainWindowController mainWindowController = new MainWindowController(selectionWindowController);
 
             // Show main window
-            _windowController.MainWindowController.PerformAction(MainWindowControllerActions.ShowMainWindow);
+            mainWindowController.PerformAction(MainWindowControllerActions.ShowMainWindow);
         }
 
         protected override void OnExit(ExitEventArgs e)

@@ -69,7 +69,7 @@ namespace LeerCopyWPF
         public SelectionWindow(ISelectionWindowController selectionWindowController, Rect screenBounds)
         {
             // Register window lifetime events
-            this.Loaded += SelectionWindow_Loaded;
+            Loaded += SelectionWindow_Loaded;
 
             InitializeComponent();
 
@@ -77,11 +77,11 @@ namespace LeerCopyWPF
             _keyConverter = new KeyConverter();
 
             // Place form on correct screen
-            this.Left = screenBounds.Left;
-            this.Top = screenBounds.Top;
+            Left = screenBounds.Left;
+            Top = screenBounds.Top;
 
             // Subscribe to other window events
-            this.PreviewKeyUp += SelectionWindow_PreviewKeyUp;
+            PreviewKeyUp += SelectionWindow_PreviewKeyUp;
         }
 
         #endregion // Constructors
@@ -100,7 +100,7 @@ namespace LeerCopyWPF
 
         private void SelectionWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            this.WindowState = WindowState.Maximized;
+            WindowState = WindowState.Maximized;
         }
 
 
@@ -120,6 +120,13 @@ namespace LeerCopyWPF
 
                 if (viewModel.CanSave)
                 {
+                    // Important that selection window opening save dialog is always topmost in z-order otherwise
+                    // dragging the dialog to a different screen and clicking on that window would cover the dialog
+                    Topmost = true;
+
+                    // Disable selection on all other selection windows
+                    _selectionWindowController.DisableSelection();
+
                     // Get the full path for the initial save directory (relative paths will throw exception)
                     string initialSavePath = System.IO.Path.GetFullPath(Properties.Settings.Default.LastSavePath);
 
@@ -142,6 +149,14 @@ namespace LeerCopyWPF
                     {
                         viewModel.SaveCommand.Execute(saveDialog.FileName);
                     }
+
+                    // Enable selection on all other selection windows
+                    _selectionWindowController.EnableSelection();
+
+                    // Clear the topmost designation for normal operation and give focus to this window
+                    Topmost = false;
+                    Activate();
+                    Focus();
                 }
 
                 e.Handled = true;
@@ -167,7 +182,7 @@ namespace LeerCopyWPF
 
                 if (viewModel.CanClose)
                 {
-                    _selectionWindowController.QuitSelection();
+                    _selectionWindowController.StopSelection();
                 }
 
                 e.Handled = true;

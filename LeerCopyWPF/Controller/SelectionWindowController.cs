@@ -43,6 +43,11 @@ namespace LeerCopyWPF.Controller
         /// </summary>
         public bool SelectionActive { get; private set; }
 
+        /// <summary>
+        /// Flag indicating if selection operation is enabled
+        /// </summary>
+        public bool SelectionEnabled { get; private set; }
+
         #endregion
 
         #region Protected Properties
@@ -70,11 +75,12 @@ namespace LeerCopyWPF.Controller
         public SelectionWindowController()
         {
             SelectionActive = false;
+            SelectionEnabled = false;
             SelectionWindows = new List<Window>();
         }
 
 
-        public bool StartSelection(double startScreenX, double startScreenY)
+        public bool StartSelection(Window owner)
         {
             if (SelectionActive)
             {
@@ -82,6 +88,7 @@ namespace LeerCopyWPF.Controller
             }
 
             SelectionActive = true;
+            SelectionEnabled = true;
             Screens = BitmapUtilities.CaptureScreens();
 
             // Initialize selection window for each screen
@@ -95,7 +102,7 @@ namespace LeerCopyWPF.Controller
                 SelectionViewModel selectionViewModel = new SelectionViewModel(selectionWindow, screen.Bounds);
                 
                 selectionWindow.DataContext = selectionViewModel;
-                selectionWindow.Owner = Application.Current.MainWindow;
+                selectionWindow.Owner = owner;
                 selectionWindow.ShowInTaskbar = false;
 
                 SelectionWindows.Add(selectionWindow);
@@ -103,22 +110,47 @@ namespace LeerCopyWPF.Controller
                 // Show all selection windows at the same time
                 selectionWindow.Show();
 
-                if (screen.Bounds.Contains(startScreenX, startScreenY))
+                if (screen.Bounds.Contains(owner.Left, owner.Top))
                 {
                     activeWindow = selectionWindow;
                 }
             }
 
             activeWindow?.Activate();
-            Application.Current.MainWindow.Show();  // Make sure main window shows up in taskbar/Alt+Tab menu
 
             return true;
         }
 
 
-        public void QuitSelection()
+        public void EnableSelection()
+        {
+            SelectionEnabled = true;
+
+            // Enable all selection windows
+            foreach (Window window in SelectionWindows)
+            {
+                window.IsEnabled = true;
+                window.Focusable = true;
+            }
+        }
+
+        public void DisableSelection()
+        {
+            SelectionEnabled = false;
+
+            // Disable all selection windows
+            foreach (Window window in SelectionWindows)
+            {
+                window.Focusable = false;
+                window.IsEnabled = false;
+            }
+        }
+
+
+        public void StopSelection()
         {
             SelectionActive = false;
+            SelectionEnabled = false;
 
             // Dispose of all selection windows
             foreach (Window window in SelectionWindows)

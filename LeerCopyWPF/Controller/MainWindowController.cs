@@ -22,6 +22,9 @@ namespace LeerCopyWPF.Controller
         #endregion
 
         #region Private Fields
+
+        private readonly ISelectionWindowController _selectionWindowController;
+
         #endregion
 
         #endregion // Fields
@@ -30,17 +33,6 @@ namespace LeerCopyWPF.Controller
         #region Properties
 
         #region Public Properties
-
-        /// <summary>
-        /// Signals the start of a selection
-        /// </summary>
-        public event EventHandler SelectionStarted;
-
-        /// <summary>
-        /// Flag indicating if main window is hidden
-        /// </summary>
-        public bool Hidden { get; private set; }
-
         #endregion
 
         #region Protected Properties
@@ -65,8 +57,10 @@ namespace LeerCopyWPF.Controller
         /// <summary>
         /// Constructs instance of MainWindowController
         /// </summary>
-        public MainWindowController()
+        public MainWindowController(ISelectionWindowController selectionWindowController)
         {
+            _selectionWindowController = selectionWindowController;
+
             // First Window object instantiated in AppDomain sets MainWindow property of Application (set anyway to be safe)
             MainWindow = new MainWindow(this);
             Application.Current.MainWindow = MainWindow;
@@ -74,7 +68,7 @@ namespace LeerCopyWPF.Controller
             MainWindowViewModel mainWindowViewModel = new MainWindowViewModel();
             MainWindow.DataContext = mainWindowViewModel;
 
-            Hidden = true;
+            _selectionWindowController.SelectionQuit += OnSelectionQuit;
         }
 
 
@@ -83,8 +77,7 @@ namespace LeerCopyWPF.Controller
             switch (action)
             {
                 case MainWindowControllerActions.StartSelection:
-                    HideMainWindow();                     // Hide the main window
-                    StartSelection();           // Start the new selection
+                    StartSelection();
                     break;
 
                 case MainWindowControllerActions.ShowMainWindow:
@@ -116,8 +109,19 @@ namespace LeerCopyWPF.Controller
         /// </summary>
         private void StartSelection()
         {
-            SelectionStartEventArgs args = new SelectionStartEventArgs(MainWindow.Left, MainWindow.Top);
-            SelectionStarted?.Invoke(this, args);
+            // Hide the main window prior to screen capture
+            HideMainWindow();
+
+            if (!_selectionWindowController.StartSelection(MainWindow))
+            {
+                // Unable to start selection
+                PerformAction(MainWindowControllerActions.ShowMainWindow);
+
+                // TODO Log, show notification
+            }
+
+            // Makes sure main window shows up in taskbar/Alt+Tab menu
+            MainWindow.Show();
         }
 
 
@@ -129,8 +133,6 @@ namespace LeerCopyWPF.Controller
 
         private void ShowMainWindow()
         {
-            Hidden = false;
-
             MainWindow.Show();
             MainWindow.WindowState = WindowState.Normal;
             MainWindow.Activate();
@@ -139,8 +141,6 @@ namespace LeerCopyWPF.Controller
 
         private void HideMainWindow()
         {
-            Hidden = true;
-
             MainWindow.WindowState = WindowState.Minimized;
             MainWindow.Hide();
         }
@@ -149,6 +149,17 @@ namespace LeerCopyWPF.Controller
         private void CloseMainWindow()
         {
             MainWindow.Close();
+        }
+
+
+        /// <summary>
+        /// Handler for SelectionQuit event
+        /// </summary>
+        /// <param name="sender">Object which invoked event</param>
+        /// <param name="e">Arguments associated with event</param>
+        private void OnSelectionQuit(object sender, EventArgs e)
+        {
+            PerformAction(MainWindowControllerActions.ShowMainWindow);
         }
 
         #endregion

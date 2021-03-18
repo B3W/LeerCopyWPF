@@ -4,27 +4,37 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace LeerCopyWPF.Controller
 {
     public interface ISelectionWindowController
     {
         /// <summary>
-        /// Event that fires when selection is quit.
+        /// Event that fires when selection is quit
         /// </summary>
         event EventHandler SelectionQuit;
 
         /// <summary>
-        /// Starts selection operation if there is not one already active.
+        /// Starts selection operation if there is not one already active
         /// </summary>
-        /// <param name="startScreenX">X coordinate located on active screen</param>
-        /// <param name="startScreenY">Y coordinate located on active screen</param>
+        /// <param name="owner">Main window that owns selection screens</param>
         /// <returns>true if selection started successfully, false otherwise</returns>
-        bool StartSelection(double startScreenX, double startScreenY);
+        bool StartSelection(Window owner);
 
         /// <summary>
-        /// Exits selection operation.
+        /// Enables all selection windows
         /// </summary>
-        void QuitSelection();
+        void EnableSelection();
+
+        /// <summary>
+        /// Disables all selection windows
+        /// </summary>
+        void DisableSelection();
+
+        /// <summary>
+        /// Exits selection operation
+        /// </summary>
+        void StopSelection();
     }
 }

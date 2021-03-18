@@ -93,6 +93,7 @@ namespace LeerCopyWPF
         /// <param name="e"></param>
         void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
+            // TODO ADD LOGGING
             // Process unhandled exception
             Console.WriteLine("Unhandled Exception: %s\n", e.Exception.Message);
 

@@ -80,8 +80,10 @@ namespace LeerCopyWPF.Controller
         }
 
 
-        public bool StartSelection(Window owner)
+        public bool StartSelection(Window owner, out Window activeSelectionWindow)
         {
+            activeSelectionWindow = null;
+
             if (SelectionActive)
             {
                 return true;
@@ -93,7 +95,6 @@ namespace LeerCopyWPF.Controller
 
             // Initialize selection window for each screen
             SelectionWindows.Clear();
-            Window activeWindow = null;
 
             foreach (SimpleScreen screen in Screens)
             {
@@ -112,11 +113,9 @@ namespace LeerCopyWPF.Controller
 
                 if (screen.Bounds.Contains(owner.Left, owner.Top))
                 {
-                    activeWindow = selectionWindow;
+                    activeSelectionWindow = selectionWindow;
                 }
             }
-
-            activeWindow?.Activate();
 
             return true;
         }

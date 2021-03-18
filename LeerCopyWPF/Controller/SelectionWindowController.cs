@@ -96,6 +96,7 @@ namespace LeerCopyWPF.Controller
                 
                 selectionWindow.DataContext = selectionViewModel;
                 selectionWindow.Owner = Application.Current.MainWindow;
+                selectionWindow.ShowInTaskbar = false;
 
                 SelectionWindows.Add(selectionWindow);
 
@@ -109,6 +110,7 @@ namespace LeerCopyWPF.Controller
             }
 
             activeWindow?.Activate();
+            Application.Current.MainWindow.Show();  // Make sure main window shows up in taskbar/Alt+Tab menu
 
             return true;
         }

@@ -83,20 +83,20 @@ namespace LeerCopyWPF.Controller
             switch (action)
             {
                 case MainWindowControllerActions.StartSelection:
-                    Hide();                     // Hide the main window
+                    HideMainWindow();                     // Hide the main window
                     StartSelection();           // Start the new selection
                     break;
 
                 case MainWindowControllerActions.ShowMainWindow:
-                    Show();
+                    ShowMainWindow();
                     break;
 
                 case MainWindowControllerActions.HideMainWindow:
-                    Hide();
+                    HideMainWindow();
                     break;
 
                 case MainWindowControllerActions.CloseMainWindow:
-                    Close();
+                    CloseMainWindow();
                     break;
 
                 default:
@@ -121,7 +121,13 @@ namespace LeerCopyWPF.Controller
         }
 
 
-        private void Show()
+        private void QuitSelection()
+        {
+            // TODO
+        }
+
+
+        private void ShowMainWindow()
         {
             Hidden = false;
 
@@ -131,7 +137,7 @@ namespace LeerCopyWPF.Controller
         }
 
 
-        private void Hide()
+        private void HideMainWindow()
         {
             Hidden = true;
 
@@ -140,7 +146,7 @@ namespace LeerCopyWPF.Controller
         }
 
 
-        private void Close()
+        private void CloseMainWindow()
         {
             MainWindow.Close();
         }

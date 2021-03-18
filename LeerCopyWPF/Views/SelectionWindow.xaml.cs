@@ -136,7 +136,7 @@ namespace LeerCopyWPF
                     };
 
                     // Show dialog
-                    bool? result = saveDialog.ShowDialog();
+                    bool? result = saveDialog.ShowDialog(this);
 
                     if (result == true)
                     {

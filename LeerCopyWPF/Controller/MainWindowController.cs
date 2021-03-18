@@ -23,6 +23,9 @@ namespace LeerCopyWPF.Controller
 
         #region Private Fields
 
+        /// <summary>
+        /// Handle to the selection window controller
+        /// </summary>
         private readonly ISelectionWindowController _selectionWindowController;
 
         #endregion
@@ -115,7 +118,7 @@ namespace LeerCopyWPF.Controller
             if (!_selectionWindowController.StartSelection(MainWindow))
             {
                 // Unable to start selection
-                PerformAction(MainWindowControllerActions.ShowMainWindow);
+                ShowMainWindow();
 
                 // TODO Log, show notification
             }
@@ -125,6 +128,9 @@ namespace LeerCopyWPF.Controller
         }
 
 
+        /// <summary>
+        /// Shows and activates the main window
+        /// </summary>
         private void ShowMainWindow()
         {
             MainWindow.Show();
@@ -133,6 +139,9 @@ namespace LeerCopyWPF.Controller
         }
 
 
+        /// <summary>
+        /// Minimizes the window and hides the taskbar icon
+        /// </summary>
         private void HideMainWindow()
         {
             MainWindow.WindowState = WindowState.Minimized;
@@ -140,6 +149,9 @@ namespace LeerCopyWPF.Controller
         }
 
 
+        /// <summary>
+        /// Completely closes the main window
+        /// </summary>
         private void CloseMainWindow()
         {
             MainWindow.Close();
@@ -153,7 +165,7 @@ namespace LeerCopyWPF.Controller
         /// <param name="e">Arguments associated with event</param>
         private void OnSelectionQuit(object sender, EventArgs e)
         {
-            PerformAction(MainWindowControllerActions.ShowMainWindow);
+            ShowMainWindow();
         }
 
         #endregion

@@ -126,9 +126,6 @@ namespace LeerCopyWPF.Controller
 
             // Make sure the main window shows up on task bar and in Alt+Tab menu
             MainWindow.Show();
-
-            // Give application focus to selection windows
-            //_selectionWindowController.GiveSelectionFocus(MainWindow);
         }
 
 
@@ -148,7 +145,6 @@ namespace LeerCopyWPF.Controller
         /// </summary>
         private void HideMainWindow()
         {
-            //MainWindow.WindowState = WindowState.Minimized;
             MainWindow.Hide();
         }
 

@@ -16,6 +16,9 @@
         <Style x:Name="BtnStyle" TargetType="Button">
             <Setter Property="Margin" Value="5,5,5,5"/>
         </Style>
+        <Style x:Name="ToolTipStyle" TargetType="ToolTip">
+            <Setter Property="StaysOpen" Value="False"/>
+        </Style>
     </Window.Resources>
     <Grid>
         <!-- Main grid definitions -->

@@ -80,10 +80,8 @@ namespace LeerCopyWPF.Controller
         }
 
 
-        public bool StartSelection(Window owner, out Window activeSelectionWindow)
+        public bool StartSelection(Window owner)
         {
-            activeSelectionWindow = null;
-
             if (SelectionActive)
             {
                 return true;
@@ -110,14 +108,26 @@ namespace LeerCopyWPF.Controller
 
                 // Show all selection windows at the same time
                 selectionWindow.Show();
-
-                if (screen.Bounds.Contains(owner.Left, owner.Top))
-                {
-                    activeSelectionWindow = selectionWindow;
-                }
             }
 
             return true;
+        }
+
+
+        public void GiveSelectionFocus(Window owner)
+        {
+            Console.WriteLine($"FOCUS - SelectionWindow Cnt={SelectionWindows.Count}");
+
+            foreach (SelectionWindow selectionWindow in SelectionWindows)
+            {
+                if (selectionWindow.ScreenBounds.Contains(owner.Left, owner.Top))
+                {
+                    selectionWindow.Activate();
+                    selectionWindow.Focus();
+
+                    break;
+                }
+            }
         }
 
 
@@ -132,6 +142,7 @@ namespace LeerCopyWPF.Controller
                 window.Focusable = true;
             }
         }
+
 
         public void DisableSelection()
         {
@@ -157,6 +168,7 @@ namespace LeerCopyWPF.Controller
                 window.Close();
             }
 
+            SelectionWindows.Clear();
             SelectionQuit?.Invoke(this, EventArgs.Empty);
         }
 

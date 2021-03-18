@@ -19,9 +19,15 @@ namespace LeerCopyWPF.Controller
         /// Starts selection operation if there is not one already active
         /// </summary>
         /// <param name="owner">Main window that owns selection screens</param>
-        /// <param name="activeSelectionWindow">Reports which selection window should be activated</param>
         /// <returns>true if selection started successfully, false otherwise</returns>
-        bool StartSelection(Window owner, out Window activeSelectionWindow);
+        bool StartSelection(Window owner);
+
+        /// <summary>
+        /// Gives focus to selection window that is on same screen as designated owner if a selection
+        /// is started, otherwise does nothing
+        /// </summary>
+        /// <param name="owner">Main window that owns selection screens</param>
+        void GiveSelectionFocus(Window owner);
 
         /// <summary>
         /// Enables all selection windows

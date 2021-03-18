@@ -25,6 +25,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -50,6 +51,11 @@ namespace LeerCopyWPF.Views
         #endregion
 
         #region Private Fields
+
+        /// <summary>
+        /// Amount of time to wait before starting manual selection
+        /// </summary>
+        private const int _SELECT_CAPTURE_START_DELAY_MS = 300;
 
         /// <summary>
         /// Handle to the main window controller
@@ -87,7 +93,7 @@ namespace LeerCopyWPF.Views
         public MainWindow(IMainWindowController mainWindowController)
         {
             // Register window lifetime event handlers
-            this.Loaded += MainWindow_Loaded;
+            Loaded += MainWindow_Loaded;
 
             InitializeComponent();
 
@@ -101,8 +107,8 @@ namespace LeerCopyWPF.Views
         protected override void OnClosing(CancelEventArgs e)
         {
             // Save settings
-            Properties.Settings.Default.MainWinX = this.Left;
-            Properties.Settings.Default.MainWinY = this.Top;
+            Properties.Settings.Default.MainWinX = Left;
+            Properties.Settings.Default.MainWinY = Top;
             Properties.Settings.Default.Save();
 
             base.OnClosing(e);
@@ -126,8 +132,8 @@ namespace LeerCopyWPF.Views
                 {
                     if (screen.Bounds.Contains(pt))
                     {
-                        this.Left = tmpL;
-                        this.Top = tmpT;
+                        Left = tmpL;
+                        Top = tmpT;
                         break;
                     }
                 }
@@ -137,8 +143,13 @@ namespace LeerCopyWPF.Views
         }
 
 
-        private void SelectCaptureBtn_Click(object sender, RoutedEventArgs e)
+        private async void SelectCaptureBtn_Click(object sender, RoutedEventArgs e)
         {
+            _mainWindowController.PerformAction(MainWindowControllerActions.HideMainWindow);
+
+            // Wait for window to hide before starting selection
+            await Task.Delay(_SELECT_CAPTURE_START_DELAY_MS);
+
             _mainWindowController.PerformAction(MainWindowControllerActions.StartSelection);
         }
 

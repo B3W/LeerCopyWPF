@@ -61,6 +61,12 @@ namespace LeerCopyWPF
 
 
         #region Properties
+
+        /// <summary>
+        /// Bounds of screen on which selection window is located
+        /// </summary>
+        public Rect ScreenBounds { get; }
+
         #endregion // Properties
 
 
@@ -77,8 +83,9 @@ namespace LeerCopyWPF
             _keyConverter = new KeyConverter();
 
             // Place form on correct screen
-            Left = screenBounds.Left;
-            Top = screenBounds.Top;
+            ScreenBounds = screenBounds;
+            Left = ScreenBounds.Left;
+            Top = ScreenBounds.Top;
 
             // Subscribe to other window events
             PreviewKeyUp += SelectionWindow_PreviewKeyUp;

@@ -15,6 +15,7 @@ namespace LeerCopyWPF.Enums
         HideMainWindow,
         CloseMainWindow,
         StartSelection,
+        GiveSelectionFocus,
         OpenSettingsWindow
     }
 }

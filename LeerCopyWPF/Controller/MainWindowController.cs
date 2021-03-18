@@ -83,6 +83,10 @@ namespace LeerCopyWPF.Controller
                     StartSelection();
                     break;
 
+                case MainWindowControllerActions.GiveSelectionFocus:
+                    _selectionWindowController.GiveSelectionFocus(MainWindow);
+                    break;
+
                 case MainWindowControllerActions.ShowMainWindow:
                     ShowMainWindow();
                     break;
@@ -112,10 +116,7 @@ namespace LeerCopyWPF.Controller
         /// </summary>
         private void StartSelection()
         {
-            // Hide the main window prior to screen capture
-            HideMainWindow();
-
-            if (!_selectionWindowController.StartSelection(MainWindow, out Window activeSelectionWindow))
+            if (!_selectionWindowController.StartSelection(MainWindow))
             {
                 // Unable to start selection
                 ShowMainWindow();
@@ -123,12 +124,11 @@ namespace LeerCopyWPF.Controller
                 // TODO Log, show notification
             }
 
-            // Makes sure main window shows up in taskbar/Alt+Tab menu
+            // Make sure the main window shows up on task bar and in Alt+Tab menu
             MainWindow.Show();
 
-            // Set focus to the active selection window
-            activeSelectionWindow?.Activate();
-            activeSelectionWindow?.Focus();
+            // Give application focus to selection windows
+            _selectionWindowController.GiveSelectionFocus(MainWindow);
         }
 
 
@@ -148,6 +148,7 @@ namespace LeerCopyWPF.Controller
         /// </summary>
         private void HideMainWindow()
         {
+            //MainWindow.WindowState = WindowState.Minimized;
             MainWindow.Hide();
         }
 

@@ -128,7 +128,7 @@ namespace LeerCopyWPF.Controller
             MainWindow.Show();
 
             // Give application focus to selection windows
-            _selectionWindowController.GiveSelectionFocus(MainWindow);
+            //_selectionWindowController.GiveSelectionFocus(MainWindow);
         }
 
 

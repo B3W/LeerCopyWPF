@@ -116,16 +116,17 @@ namespace LeerCopyWPF.Controller
 
         public void GiveSelectionFocus(Window owner)
         {
-            Console.WriteLine($"FOCUS - SelectionWindow Cnt={SelectionWindows.Count}");
-
-            foreach (SelectionWindow selectionWindow in SelectionWindows)
+            if (SelectionActive)
             {
-                if (selectionWindow.ScreenBounds.Contains(owner.Left, owner.Top))
+                foreach (SelectionWindow selectionWindow in SelectionWindows)
                 {
-                    selectionWindow.Activate();
-                    selectionWindow.Focus();
+                    if (selectionWindow.ScreenBounds.Contains(owner.Left, owner.Top))
+                    {
+                        selectionWindow.Activate();
+                        selectionWindow.Focus();
 
-                    break;
+                        break;
+                    }
                 }
             }
         }
@@ -133,26 +134,32 @@ namespace LeerCopyWPF.Controller
 
         public void EnableSelection()
         {
-            SelectionEnabled = true;
-
-            // Enable all selection windows
-            foreach (Window window in SelectionWindows)
+            if (SelectionActive)
             {
-                window.IsEnabled = true;
-                window.Focusable = true;
+                SelectionEnabled = true;
+
+                // Enable all selection windows
+                foreach (Window window in SelectionWindows)
+                {
+                    window.IsEnabled = true;
+                    window.Focusable = true;
+                }
             }
         }
 
 
         public void DisableSelection()
         {
-            SelectionEnabled = false;
-
-            // Disable all selection windows
-            foreach (Window window in SelectionWindows)
+            if (SelectionActive)
             {
-                window.Focusable = false;
-                window.IsEnabled = false;
+                SelectionEnabled = false;
+
+                // Disable all selection windows
+                foreach (Window window in SelectionWindows)
+                {
+                    window.Focusable = false;
+                    window.IsEnabled = false;
+                }
             }
         }
 

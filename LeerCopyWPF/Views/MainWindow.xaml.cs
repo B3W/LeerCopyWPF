@@ -94,6 +94,7 @@ namespace LeerCopyWPF.Views
         {
             // Register window lifetime event handlers
             Loaded += MainWindow_Loaded;
+            Activated += MainWindow_Activated;
 
             InitializeComponent();
 
@@ -143,12 +144,17 @@ namespace LeerCopyWPF.Views
         }
 
 
+        private void MainWindow_Activated(object sender, EventArgs e)
+        {
+            // Give focus to an active selection, otherwise do nothing
+            _mainWindowController.PerformAction(MainWindowControllerActions.GiveSelectionFocus);
+        }
+
+
         private async void SelectCaptureBtn_Click(object sender, RoutedEventArgs e)
         {
             _mainWindowController.PerformAction(MainWindowControllerActions.HideMainWindow);
-
-            // Wait for window to hide before starting selection
-            await Task.Delay(_SELECT_CAPTURE_START_DELAY_MS);
+            await Task.Delay(_SELECT_CAPTURE_START_DELAY_MS); // Wait for window to hide before starting selection
 
             _mainWindowController.PerformAction(MainWindowControllerActions.StartSelection);
         }

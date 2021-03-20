@@ -216,8 +216,8 @@
         </GroupBox>
         <!-- 'Finalization' Buttons -->
         <Button x:Name="CancelBtn" Style="{StaticResource FinalizationBtnStyle}" Content="Cancel" Margin="0,20,40,20" 
-                Grid.Row="3" Grid.Column="1" IsCancel="True" Click="CancelBtn_Click"/>
+                Grid.Row="3" Grid.Column="1" TabIndex="17" IsCancel="True" Click="CancelBtn_Click"/>
         <Button x:Name="SaveBtn" Style="{StaticResource FinalizationBtnStyle}" Content="Save" Margin="0,20,170,20" 
-                Grid.Row="3" Grid.Column="1" IsDefault="True" Command="{Binding Path=SaveCommand}"/>
+                Grid.Row="3" Grid.Column="1" TabIndex="16" IsDefault="True" Command="{Binding Path=SaveCommand}"/>
     </Grid>
 </UserControl>

@@ -29,6 +29,8 @@ namespace LeerCopyWPF.Views
 
         #endregion // Fields
 
+        #region Constructors
+
         public SettingsView()
         {
             InitializeComponent();
@@ -39,6 +41,8 @@ namespace LeerCopyWPF.Views
             // https://stackoverflow.com/a/818536
             Loaded += (sender, e) => MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
         }
+
+        #endregion // Constructors
 
         #region EventHandlers
 

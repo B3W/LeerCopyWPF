@@ -400,11 +400,6 @@ namespace LeerCopyWPF.ViewModels
         public ICommand SaveCommand { get; }
 
         /// <summary>
-        /// Command for closing the settings window
-        /// </summary>
-        public ICommand CloseCommand { get; }
-
-        /// <summary>
         /// This property is not used by WPF framework so no implementation needed
         /// </summary>
         public string Error { get => throw new NotImplementedException(); }
@@ -441,8 +436,7 @@ namespace LeerCopyWPF.ViewModels
         /// <summary>
         /// Constructs instance of SettingsViewModel
         /// </summary>
-        /// <param name="closeAction"></param>
-        public SettingsViewModel(Action<object> closeAction)
+        public SettingsViewModel()
         {
             _keyBindings = new List<ISetting>();
             _generalSettings = new List<ISetting>();
@@ -528,9 +522,7 @@ namespace LeerCopyWPF.ViewModels
             _tipsVisibility = new Setting<bool>(SettingsConstants.ConstTipsVisPropName, Properties.Settings.Default.TipsVisibility);
             _generalSettings.Add(_tipsVisibility);
 
-            // Setup commands
             SaveCommand = new RelayCommand(param => SaveSettings(), param => CanSave);
-            CloseCommand = new RelayCommand(closeAction);
         }
 
 

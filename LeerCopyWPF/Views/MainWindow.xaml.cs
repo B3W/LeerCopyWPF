@@ -162,7 +162,7 @@ namespace LeerCopyWPF.Views
 
         private void OpenSettings_Click(object sender, RoutedEventArgs e)
         {
-            SettingsViewModel settingsViewModel = new SettingsViewModel(_ => Console.WriteLine("Settings Close"));
+            SettingsViewModel settingsViewModel = new SettingsViewModel();
             DialogWindow dialog = new DialogWindow
             {
                 DataContext = settingsViewModel

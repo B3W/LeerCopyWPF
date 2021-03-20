@@ -38,7 +38,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace LeerCopyWPF
+namespace LeerCopyWPF.Views
 {
     /// <summary>
     /// Interaction logic for SelectionWindow.xaml

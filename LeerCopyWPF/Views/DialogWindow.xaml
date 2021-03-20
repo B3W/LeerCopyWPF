@@ -6,11 +6,14 @@
         xmlns:local="clr-namespace:LeerCopyWPF.Views"
         xmlns:vm="clr-namespace:LeerCopyWPF.ViewModels"
         mc:Ignorable="d"
-        Title="{Binding Path=DisplayName}" MinHeight="100" MinWidth="200" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight">
+        Title="{Binding Path=DisplayName}" MinHeight="100" MinWidth="200" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight" WindowStyle="ToolWindow" ResizeMode="NoResize">
     <!-- Templates for mapping ViewModels to Views -->
     <Window.Resources>
         <DataTemplate DataType="{x:Type vm:NotificationViewModel}">
             <local:NotificationView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
+            <local:SettingsView/>
         </DataTemplate>
     </Window.Resources>
 

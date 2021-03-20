@@ -81,19 +81,36 @@
     <Compile Include="Controller\MainWindowController.cs" />
     <Compile Include="Controller\SelectionWindowController.cs" />
     <Compile Include="Enums\MainWindowControllerActions.cs" />
+    <Compile Include="Enums\NotificationType.cs" />
     <Compile Include="Models\ISetting.cs" />
+    <Compile Include="Models\Notification.cs" />
     <Compile Include="Models\Selection.cs" />
     <Compile Include="Models\Setting.cs" />
     <Compile Include="Utilities\ExtensionMethods.cs" />
     <Compile Include="Utilities\SelectionStartEventArgs.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\NotificationViewModel.cs" />
     <Compile Include="ViewModels\SelectionViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
+    <Compile Include="Views\DialogWindow.xaml.cs">
+      <DependentUpon>DialogWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\NotificationView.xaml.cs">
+      <DependentUpon>NotificationView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="Views\DialogWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\NotificationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

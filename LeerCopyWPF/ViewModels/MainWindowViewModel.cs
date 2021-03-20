@@ -51,7 +51,7 @@ namespace LeerCopyWPF.ViewModels
         #endregion // Properties
 
 
-        #region Fields
+        #region Methods
 
         #region Public Methods
 

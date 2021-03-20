@@ -16,34 +16,12 @@
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace LeerCopyWPF.Enums
 {
     /// <summary>
-    /// All key up actions able to be performed during selection
+    /// All possible directions to resize selection via keys
     /// </summary>
-    public enum KeyUpAction
-    {
-        Invalid,
-        Copy,
-        Edit,
-        Save,
-        SelectAll,
-        Clear,
-        Border,
-        Tips,
-        Switch,
-        Settings,
-        Quit
-    }
-
-    /// <summary>
-    /// All key down actions able to be performed during selection
-    /// </summary>
-    public enum KeyDownAction
+    public enum ResizeDirection
     {
         Invalid,
         Up,

@@ -17,10 +17,7 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows;
-using System.Windows.Media.Imaging;
 
 namespace LeerCopyWPF.Models
 {
@@ -30,26 +27,38 @@ namespace LeerCopyWPF.Models
     /// </summary>
     public class SimpleScreen : IEquatable<SimpleScreen>, IComparable<SimpleScreen>
     {
+        #region Fields
+        #endregion // Fields
+
+
+        #region Properties
+
         /// <summary>
         /// The number of bits of memory, associated with one pixel of data
         /// </summary>
         public int BitsPerPixel { get; set; }
+
         /// <summary>
         /// Bounds of the Bitmap relative to screen captured on
         /// </summary>
         public Rect Bounds { get; set; }
+
         /// <summary>
         /// Name of the device associated with screen
         /// </summary>
         public string DeviceName { get; set; }
 
+        #endregion // Properties
+
+
+        #region Methods
 
         public SimpleScreen()
         {
             BitsPerPixel = -1;
             Bounds = new Rect();
             DeviceName = "<none>";
-        }
+        } // SimpleScreen
 
 
         public SimpleScreen(int bpp, Rect bounds, string name)
@@ -57,7 +66,7 @@ namespace LeerCopyWPF.Models
             BitsPerPixel = bpp;
             Bounds = bounds;
             DeviceName = name;
-        }
+        } // SimpleScreen
 
 
         /// <summary>
@@ -181,5 +190,7 @@ namespace LeerCopyWPF.Models
                 }
             }
         } // CompareTo
+
+        #endregion // Methods
     }
 }

@@ -18,6 +18,8 @@
 
 using LeerCopyWPF.Commands;
 using LeerCopyWPF.Constants;
+using LeerCopyWPF.Enums;
+using LeerCopyWPF.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -28,314 +30,374 @@ using System.Windows.Input;
 
 namespace LeerCopyWPF.ViewModels
 {
-    public class SettingsViewModel : KeyBindingHelperViewModel, IDataErrorInfo
+    public class SettingsViewModel : BaseViewModel, IDataErrorInfo
     {
-        #region Structs
-        private struct SettingData
-        {
-            public readonly object data;
-            public readonly Type type;
-
-            public SettingData(object data, Type type)
-            {
-                this.data = data;
-                this.type = type;
-            }
-        }
-        #endregion
-
         #region Fields
+
         /// <summary>
-        /// Instance of application settings
+        /// 'Copy selection' action key binding
         /// </summary>
-        private Properties.Settings _settingsInst;
+        private readonly Setting<string> _copyKeyBinding;
+
         /// <summary>
-        /// Key binding
+        /// 'Edit selection' action key binding
         /// </summary>
-        private string _copy, _edit, _save, _clear, _selectAll, _border, _tips, _swtchScrn, _settings, _quit;
+        private readonly Setting<string> _editKeyBinding;
+
         /// <summary>
-        /// Default file save setting
+        /// 'Save selection' action key binding
         /// </summary>
-        private string _defaultExt, _defaultFileName;
+        private readonly Setting<string> _saveKeyBinding;
+
         /// <summary>
-        /// Setting for SelectionWindow background
+        /// 'Clear selection' action key binding
         /// </summary>
-        private double _selectWinOpacity;
+        private readonly Setting<string> _clearKeyBinding;
+
         /// <summary>
-        /// Visibility setting
+        /// 'Select all' action key binding
         /// </summary>
-        private Visibility _selectBorderVisibility, _tipsVisibility;
+        private readonly Setting<string> _selectAllKeyBinding;
+
         /// <summary>
-        /// Helper boolean for getting and setting visibility
+        /// 'Toggle border' action key binding
         /// </summary>
-        private bool _borderVisBool, _tipsVisBool;
+        private readonly Setting<string> _toggleBorderKeyBinding;
+
+        /// <summary>
+        /// 'Toggle tips' action key binding
+        /// </summary>
+        private readonly Setting<string> _toggleTipsKeyBinding;
+
+        /// <summary>
+        /// 'Open settings' action key binding
+        /// </summary>
+        private readonly Setting<string> _settingsKeyBinding;
+
+        /// <summary>
+        /// 'Quit selection' action key binding
+        /// </summary>
+        private readonly Setting<string> _quitKeyBinding;
+
+        /// <summary>
+        /// Default file extension used when saving selections
+        /// </summary>
+        private readonly Setting<string> _defaultFileExt;
+
+        /// <summary>
+        /// Default file name used when saving selections
+        /// </summary>
+        private readonly Setting<string> _defaultFileName;
+
+        /// <summary>
+        /// Selection window background opacity
+        /// </summary>
+        private readonly Setting<double> _selectionOpacity;
+
+        /// <summary>
+        /// Visibility of selection border
+        /// </summary>
+        private readonly Setting<bool> _selectionBorderVisibility;
+
+        /// <summary>
+        /// Visibility of tips/hints
+        /// </summary>
+        private readonly Setting<bool> _tipsVisibility;
+
         /// <summary>
         /// Set of options for default extension value
         /// </summary>
-        private string[] _extOptions = new string[] { ".bmp", ".png", ".jpg", ".gif", ".tif", ".wmp" };
+        private readonly string[] _extOptions = new string[] { ".bmp", ".png", ".jpg", ".gif", ".tif", ".wmp" };
+
         /// <summary>
-        /// Keeps track of changes made to the settings with type string
+        /// List of key bindings (these settings are coupled together)
         /// </summary>
-        private IDictionary<string, SettingData> _settingsChanges = new Dictionary<string, SettingData>(13);
+        private readonly IList<ISetting> _keyBindings;
+
         /// <summary>
-        /// Command to run to save settings
+        /// List of general settings (these settings do not depend on each other)
         /// </summary>
-        private ICommand _saveCommand;
+        private readonly IList<ISetting> _generalSettings;
+
         /// <summary>
-        /// Helper flag for validating data
+        /// Current validation errors (Mapping => Setting ID : Error Message)
         /// </summary>
-        private bool _fileNameValid = true, _fileExtValid = true, _opacityValid = true;
-        private int _numInvalidKeys = 0;
+        private readonly IDictionary<string, string> _validationErrors;
+
         #endregion // Fields
 
-        #region Constants
-        private const string ConstFileExtPropName = "DefaultSaveExt";
-        private const string ConstFileNamePropName = "DefaultFileName";
-        private const string ConstSelectWinOpacityPropName = "SelectionWinOpacity";
-        private const string ConstSelectBorderVisPropName = "BorderVisibility";
-        private const string ConstTipsVisPropName = "TipsVisibility";
-        /// <summary>
-        /// Max opacity for the selection window's background
-        /// </summary>
-        private const double ConstSelectOpacityMax = 0.3;
-        #endregion // Constants
 
         #region Properties
+
         public override string DisplayName { get => "Settings"; }
 
+        /// <summary>
+        /// Bound to 'Copy' key binding textbox
+        /// </summary>
         public string CopyKey
         {
-            get => _copy;
+            get => _copyKeyBinding.CurrentValue;
             set
             {
-                if (_copy != value)
+                if (_copyKeyBinding.CurrentValue != value)
                 {
-                    _copy = value;
-                    OnPropertyChanged(SettingsConstants.CopySettingName);
-                    RefreshKeyBinding(SettingsConstants.CopySettingName, value);
-                    RecordPropertyChange(SettingsConstants.CopySettingName, value, typeof(string));
+                    _copyKeyBinding.CurrentValue = value;
+                    ValidateCoupledSettings(_keyBindings);
+                    OnPropertyChanged(_copyKeyBinding.SettingID);
                 }
             }
         }
 
+        /// <summary>
+        /// Bound to 'Edit' key binding textbox
+        /// </summary>
         public string EditKey
         {
-            get => _edit;
+            get => _editKeyBinding.CurrentValue;
             set
             {
-                if (_edit != value)
+                if (_editKeyBinding.CurrentValue != value)
                 {
-                    _edit = value;
-                    OnPropertyChanged(SettingsConstants.EditSettingName);
-                    RefreshKeyBinding(SettingsConstants.EditSettingName, value);
-                    RecordPropertyChange(SettingsConstants.EditSettingName, value, typeof(string));
+                    _editKeyBinding.CurrentValue = value;
+                    ValidateCoupledSettings(_keyBindings);
+                    OnPropertyChanged(_editKeyBinding.SettingID);
                 }
             }
         }
 
+        /// <summary>
+        /// Bound to 'Save' key binding textbox
+        /// </summary>
         public string SaveKey
         {
-            get => _save;
+            get => _saveKeyBinding.CurrentValue;
             set
             {
-                if (_save != value)
+                if (_saveKeyBinding.CurrentValue != value)
                 {
-                    _save = value;
-                    OnPropertyChanged(SettingsConstants.SaveSettingName);
-                    RefreshKeyBinding(SettingsConstants.SaveSettingName, value);
-                    RecordPropertyChange(SettingsConstants.SaveSettingName, value, typeof(string));
+                    _saveKeyBinding.CurrentValue = value;
+                    ValidateCoupledSettings(_keyBindings);
+                    OnPropertyChanged(_saveKeyBinding.SettingID);
                 }
             }
         }
 
+        /// <summary>
+        /// Bound to 'Clear' key binding textbox
+        /// </summary>
         public string ClearKey
         {
-            get => _clear;
+            get => _clearKeyBinding.CurrentValue;
             set
             {
-                if (_clear != value)
+                if (_clearKeyBinding.CurrentValue != value)
                 {
-                    _clear = value;
-                    OnPropertyChanged(SettingsConstants.ClearSettingName);
-                    RefreshKeyBinding(SettingsConstants.ClearSettingName, value);
-                    RecordPropertyChange(SettingsConstants.ClearSettingName, value, typeof(string));
+                    _clearKeyBinding.CurrentValue = value;
+                    ValidateCoupledSettings(_keyBindings);
+                    OnPropertyChanged(_clearKeyBinding.SettingID);
                 }
             }
         }
 
+        /// <summary>
+        /// Bound to 'Select All' key binding textbox
+        /// </summary>
         public string SelectAll
         {
-            get => _selectAll;
+            get => _selectAllKeyBinding.CurrentValue;
             set
             {
-                if (_selectAll != value)
+                if (_selectAllKeyBinding.CurrentValue != value)
                 {
-                    _selectAll = value;
-                    OnPropertyChanged(SettingsConstants.SelectAllSettingName);
-                    RefreshKeyBinding(SettingsConstants.SelectAllSettingName, value);
-                    RecordPropertyChange(SettingsConstants.SelectAllSettingName, value, typeof(string));
+                    _selectAllKeyBinding.CurrentValue = value;
+                    ValidateCoupledSettings(_keyBindings);
+                    OnPropertyChanged(_selectAllKeyBinding.SettingID);
                 }
             }
         }
 
+        /// <summary>
+        /// Bound to 'Toggle Border' key binding textbox
+        /// </summary>
         public string BorderKey
         {
-            get => _border;
+            get => _toggleBorderKeyBinding.CurrentValue;
             set
             {
-                if (_border != value)
+                if (_toggleBorderKeyBinding.CurrentValue != value)
                 {
-                    _border = value;
-                    OnPropertyChanged(SettingsConstants.BorderSettingName);
-                    RefreshKeyBinding(SettingsConstants.BorderSettingName, value);
-                    RecordPropertyChange(SettingsConstants.BorderSettingName, value, typeof(string));
+                    _toggleBorderKeyBinding.CurrentValue = value;
+                    ValidateCoupledSettings(_keyBindings);
+                    OnPropertyChanged(_toggleBorderKeyBinding.SettingID);
                 }
             }
         }
 
+        /// <summary>
+        /// Bound to 'Toggle Tips' key binding textbox
+        /// </summary>
         public string TipsKey
         {
-            get => _tips;
+            get => _toggleTipsKeyBinding.CurrentValue;
             set
             {
-                if (_tips != value)
+                if (_toggleTipsKeyBinding.CurrentValue != value)
                 {
-                    _tips = value;
-                    OnPropertyChanged(SettingsConstants.TipsSettingName);
-                    RefreshKeyBinding(SettingsConstants.TipsSettingName, value);
-                    RecordPropertyChange(SettingsConstants.TipsSettingName, value, typeof(string));
+                    _toggleTipsKeyBinding.CurrentValue = value;
+                    ValidateCoupledSettings(_keyBindings);
+                    OnPropertyChanged(_toggleTipsKeyBinding.SettingID);
                 }
             }
         }
 
-        public string SwitchScreenKey
-        {
-            get => _swtchScrn;
-            set
-            {
-                if (_swtchScrn != value)
-                {
-                    _swtchScrn = value;
-                    OnPropertyChanged(SettingsConstants.SwtchScrnSettingName);
-                    RefreshKeyBinding(SettingsConstants.SwtchScrnSettingName, value);
-                    RecordPropertyChange(SettingsConstants.SwtchScrnSettingName, value, typeof(string));
-                }
-            }
-        }
-
+        /// <summary>
+        /// Bound to 'Open Settings' key binding textbox
+        /// </summary>
         public string SettingsWin
         {
-            get => _settings;
+            get => _settingsKeyBinding.CurrentValue;
             set
             {
-                if (_settings != value)
+                if (_settingsKeyBinding.CurrentValue != value)
                 {
-                    _settings = value;
-                    OnPropertyChanged(SettingsConstants.SettingsSettingName);
-                    RefreshKeyBinding(SettingsConstants.SettingsSettingName, value);
-                    RecordPropertyChange(SettingsConstants.SettingsSettingName, value, typeof(string));
+                    _settingsKeyBinding.CurrentValue = value;
+                    ValidateCoupledSettings(_keyBindings);
+                    OnPropertyChanged(_settingsKeyBinding.SettingID);
                 }
             }
         }
 
+        /// <summary>
+        /// Bound to 'Quit' key binding textbox
+        /// </summary>
         public string QuitKey
         {
-            get => _quit;
+            get => _quitKeyBinding.CurrentValue;
             set
             {
-                if (_quit != value)
+                if (_quitKeyBinding.CurrentValue != value)
                 {
-                    _quit = value;
-                    OnPropertyChanged(SettingsConstants.QuitSettingName);
-                    RefreshKeyBinding(SettingsConstants.QuitSettingName, value);
-                    RecordPropertyChange(SettingsConstants.QuitSettingName, value, typeof(string));
+                    _quitKeyBinding.CurrentValue = value;
+                    ValidateCoupledSettings(_keyBindings);
+                    OnPropertyChanged(_quitKeyBinding.SettingID);
                 }
             }
         }
 
+        /// <summary>
+        /// Bound to file extension dropdown
+        /// </summary>
         public string DefaultSaveExt
         {
-            get => _defaultExt;
+            get => _defaultFileExt.CurrentValue;
             set
             {
-                if (_defaultExt != value)
+                if (_defaultFileExt.CurrentValue != value)
                 {
-                    _defaultExt = value;
-                    OnPropertyChanged(ConstFileExtPropName);
-                    RecordPropertyChange(ConstFileExtPropName, value, typeof(string));
+                    _defaultFileExt.CurrentValue = value;
+                    ValidateDiscreteSetting(_defaultFileExt);
+                    OnPropertyChanged(_defaultFileExt.SettingID);
                 }
             }
         }
 
+        /// <summary>
+        /// Bound to file name textbox
+        /// </summary>
         public string DefaultFileName
         {
-            get => _defaultFileName;
+            get => _defaultFileName.CurrentValue;
             set
             {
-                if (_defaultFileName != value)
+                if (_defaultFileName.CurrentValue != value)
                 {
-                    _defaultFileName = value;
-                    OnPropertyChanged(ConstFileNamePropName);
-                    RecordPropertyChange(ConstFileNamePropName, value, typeof(string));
+                    _defaultFileName.CurrentValue = value;
+                    ValidateDiscreteSetting(_defaultFileName);
+                    OnPropertyChanged(_defaultFileName.SettingID);
                 }
             }
         }
 
+        /// <summary>
+        /// Bound to opacity slider
+        /// </summary>
         public double SelectionWinOpacity
         {
-            get => _selectWinOpacity;
+            get => _selectionOpacity.CurrentValue;
             set
             {
-                if(_selectWinOpacity != value)
+                if(_selectionOpacity.CurrentValue != value)
                 {
-                    _selectWinOpacity = value;
-                    OnPropertyChanged(ConstSelectWinOpacityPropName);
-                    RecordPropertyChange(ConstSelectWinOpacityPropName, value, typeof(double));
+                    _selectionOpacity.CurrentValue = value;
+                    ValidateDiscreteSetting(_selectionOpacity);
+                    OnPropertyChanged(_selectionOpacity.SettingID);
                 }
             }
         }
 
+        /// <summary>
+        /// Bound to border visibility checkbox
+        /// </summary>
         public bool BorderVisibility
         {
-            get => _borderVisBool;
+            get => _selectionBorderVisibility.CurrentValue;
             set
             {
-                if (value != _borderVisBool)
+                if (_selectionBorderVisibility.CurrentValue != value)
                 {
-                    _borderVisBool = value;
-                    _selectBorderVisibility = (_borderVisBool == true) ? Visibility.Visible : Visibility.Hidden;
-                    OnPropertyChanged(ConstSelectBorderVisPropName);
-                    RecordPropertyChange(ConstSelectBorderVisPropName, _selectBorderVisibility, typeof(Visibility));
+                    _selectionBorderVisibility.CurrentValue = value;
+                    ValidateDiscreteSetting(_selectionBorderVisibility);
+                    OnPropertyChanged(_selectionBorderVisibility.SettingID);
                 }
             }
         }
 
+        /// <summary>
+        /// Bound to tips visibility checkbox
+        /// </summary>
         public bool TipsVisibility
         {
-            get => _tipsVisBool;
+            get => _tipsVisibility.CurrentValue;
             set
             {
-                if (value != _tipsVisBool)
+                if (_tipsVisibility.CurrentValue != value)
                 {
-                    _tipsVisBool = value;
-                    _tipsVisibility = (_tipsVisBool == true) ? Visibility.Visible : Visibility.Hidden;
-                    OnPropertyChanged(ConstTipsVisPropName);
-                    RecordPropertyChange(ConstTipsVisPropName, _tipsVisibility, typeof(Visibility));
+                    _tipsVisibility.CurrentValue = value;
+                    ValidateDiscreteSetting(_tipsVisibility);
+                    OnPropertyChanged(_tipsVisibility.SettingID);
                 }
             }
         }
 
-        public string[] ExtOptions { get => _extOptions ?? (_extOptions = new string[] { ".bmp", ".png", ".jpg", ".gif", ".tif", ".wmp" }); }
+        /// <summary>
+        /// File extension options for the dropdown menu
+        /// </summary>
+        public string[] ExtOptions { get => _extOptions; }
 
-        public double OpacityMax { get => ConstSelectOpacityMax; }
+        /// <summary>
+        /// Max value for selection window opacity
+        /// </summary>
+        public double OpacityMax { get => SettingsConstants.ConstSelectOpacityMax; }
 
-        public bool SettingsValid { get => _fileNameValid && _fileExtValid && _opacityValid && _numInvalidKeys == 0; }
+        /// <summary>
+        /// Flag indicating if settings are valid
+        /// </summary>
+        public bool SettingsValid { get => _validationErrors.Count == 0; }
 
-        public bool CanSave { get => SettingsValid && _settingsChanges != null && _settingsChanges.Count > 0; }
+        /// <summary>
+        /// Flag indicating if the settings have been modified
+        /// </summary>
+        public bool SettingsChanged { get => SettingsContainChanges(); }
 
-        public ICommand SaveCommand { get => _saveCommand ?? (_saveCommand = new RelayCommand(param => SaveSettings(), param => CanSave)); }
+        /// <summary>
+        /// Flag indicating if settings can be saved
+        /// </summary>
+        public bool CanSave { get => SettingsValid && SettingsChanged; }
 
-        public ICommand CloseCommand { get; }
+        /// <summary>
+        /// Command for saving settings
+        /// </summary>
+        public ICommand SaveCommand { get; }
 
         /// <summary>
         /// This property is not used by WPF framework so no implementation needed
@@ -351,178 +413,312 @@ namespace LeerCopyWPF.ViewModels
         { 
             get
             {
-                string error = string.Empty;
+                string error;
 
-                switch (columnName)
+                if (_validationErrors.ContainsKey(columnName))
                 {
-                    case SettingsConstants.CopySettingName:
-                    case SettingsConstants.EditSettingName:
-                    case SettingsConstants.SaveSettingName:
-                    case SettingsConstants.ClearSettingName:
-                    case SettingsConstants.SelectAllSettingName:
-                    case SettingsConstants.BorderSettingName:
-                    case SettingsConstants.TipsSettingName:
-                    case SettingsConstants.SwtchScrnSettingName:
-                    case SettingsConstants.SettingsSettingName:
-                    case SettingsConstants.QuitSettingName:
-                        if(IsValidKey(columnName, out error))
-                        {
-                            if (_numInvalidKeys > 0)
-                            {
-                                _numInvalidKeys--;
-                            }
-                        }
-                        else
-                        {
-                            if (_numInvalidKeys < 10)
-                            {
-                                _numInvalidKeys++;
-                            }
-                        }
-                        break;
-                    case ConstFileExtPropName:
-                        // Validate file extension
-                        if (Array.IndexOf(ExtOptions, _defaultExt) == -1)
-                        {
-                            error = "File extension not supported";
-                            _fileExtValid = false;
-                        }
-                        else
-                        {
-                            _fileExtValid = true;
-                        }
-                        break;
-                    case ConstFileNamePropName:
-                        // Validate file name
-                        if (_defaultFileName.Length == 0 || _defaultFileName.Length > 100)
-                        {
-                            error = "Default file name must be between 1 and 100 characters long";
-                            _fileNameValid = false;
-                        }
-                        else if (IsInvalidFileName(_defaultFileName))
-                        {
-                            error = "Invalid file name";
-                            _fileNameValid = false;
-                        }
-                        else
-                        {
-                            _fileNameValid = true;
-                        }
-                        break;
-                    case ConstSelectWinOpacityPropName:
-                        // Validate selection window opacity value
-                        if (_selectWinOpacity < 0.0 || _selectWinOpacity > ConstSelectOpacityMax)
-                        {
-                            error = "Selection window opacity must be between 0.0 and " + ConstSelectOpacityMax;
-                            _opacityValid = false;
-                        }
-                        else
-                        {
-                            _opacityValid = true;
-                        }
-                        break;
-                    default:
-                        break;
+                    error = _validationErrors[columnName];
+                }
+                else
+                {
+                    error = string.Empty;
                 }
 
                 return error;
             }
         }
+
         #endregion // Properties
 
-        #region Constructors
-        public SettingsViewModel(Action<object> closeAction) : base()
+
+        #region Methods
+
+        /// <summary>
+        /// Constructs instance of SettingsViewModel
+        /// </summary>
+        public SettingsViewModel()
         {
-            _settingsInst = Properties.Settings.Default;
+            _keyBindings = new List<ISetting>();
+            _generalSettings = new List<ISetting>();
+            _validationErrors = new Dictionary<string, string>();
 
-            // Fetch initial values from settings
-            // Key bindings
-            _copy = (string)_settingsInst[SettingsConstants.CopySettingName];
-            _edit = (string)_settingsInst[SettingsConstants.EditSettingName];
-            _save = (string)_settingsInst[SettingsConstants.SaveSettingName];
-            _clear = (string)_settingsInst[SettingsConstants.ClearSettingName];
-            _selectAll = (string)_settingsInst[SettingsConstants.SelectAllSettingName];
-            _border = (string)_settingsInst[SettingsConstants.BorderSettingName];
-            _tips = (string)_settingsInst[SettingsConstants.TipsSettingName];
-            _swtchScrn = (string)_settingsInst[SettingsConstants.SwtchScrnSettingName];
-            _settings = (string)_settingsInst[SettingsConstants.SettingsSettingName];
-            _quit = (string)_settingsInst[SettingsConstants.QuitSettingName];
+            // Load 'Copy Selection' key binding
+            _copyKeyBinding = new Setting<string>(SettingsConstants.CopySettingName,
+                                                  Properties.Settings.Default.CopyKey,
+                                                  ValidateKeyBinding);
+            _keyBindings.Add(_copyKeyBinding);
 
-            // Other
-            _defaultExt = (string)_settingsInst[ConstFileExtPropName];
-            _defaultFileName = (string)_settingsInst[ConstFileNamePropName];
-            SelectionWinOpacity = (double)_settingsInst[ConstSelectWinOpacityPropName];
-            _selectBorderVisibility = (Visibility)_settingsInst[ConstSelectBorderVisPropName];
-            _borderVisBool = (_selectBorderVisibility == Visibility.Visible) ? true : false;
-            _tipsVisibility = (Visibility)_settingsInst[ConstTipsVisPropName];
-            _tipsVisBool = (_tipsVisibility == Visibility.Visible) ? true : false;
+            // Load 'Edit Selection' key binding
+            _editKeyBinding = new Setting<string>(SettingsConstants.EditSettingName,
+                                                  Properties.Settings.Default.EditKey,
+                                                  ValidateKeyBinding);
+            _keyBindings.Add(_editKeyBinding);
 
-            CloseCommand = new RelayCommand(closeAction);
+            // Load 'Save Selection' key binding
+            _saveKeyBinding = new Setting<string>(SettingsConstants.SaveSettingName,
+                                                  Properties.Settings.Default.SaveKey,
+                                                  ValidateKeyBinding);
+            _keyBindings.Add(_saveKeyBinding);
+
+            // Load 'Clear Selection' key binding
+            _clearKeyBinding = new Setting<string>(SettingsConstants.ClearSettingName,
+                                                   Properties.Settings.Default.ClearKey,
+                                                   ValidateKeyBinding);
+            _keyBindings.Add(_clearKeyBinding);
+
+            // Load 'Select All' key binding
+            _selectAllKeyBinding = new Setting<string>(SettingsConstants.SelectAllSettingName,
+                                                       Properties.Settings.Default.SelectAll,
+                                                       ValidateKeyBinding);
+            _keyBindings.Add(_selectAllKeyBinding);
+
+            // Load 'Border' key binding
+            _toggleBorderKeyBinding = new Setting<string>(SettingsConstants.BorderSettingName,
+                                                          Properties.Settings.Default.BorderKey,
+                                                          ValidateKeyBinding);
+            _keyBindings.Add(_toggleBorderKeyBinding);
+
+            // Load 'Tips' key binding
+            _toggleTipsKeyBinding = new Setting<string>(SettingsConstants.TipsSettingName,
+                                                        Properties.Settings.Default.TipsKey,
+                                                        ValidateKeyBinding);
+            _keyBindings.Add(_toggleTipsKeyBinding);
+
+            // Load 'Settings' key binding
+            _settingsKeyBinding = new Setting<string>(SettingsConstants.SettingsSettingName,
+                                                      Properties.Settings.Default.SettingsWin,
+                                                      ValidateKeyBinding);
+            _keyBindings.Add(_settingsKeyBinding);
+
+            // Load 'Quit Selection' key binding
+            _quitKeyBinding = new Setting<string>(SettingsConstants.QuitSettingName,
+                                                  Properties.Settings.Default.QuitKey,
+                                                  ValidateKeyBinding);
+            _keyBindings.Add(_quitKeyBinding);
+
+            // Load default file extension setting
+            _defaultFileExt = new Setting<string>(SettingsConstants.ConstFileExtPropName,
+                                                  Properties.Settings.Default.DefaultSaveExt,
+                                                  ValidateFileExtension);
+            _generalSettings.Add(_defaultFileExt);
+
+            // Load default file name setting
+            _defaultFileName = new Setting<string>(SettingsConstants.ConstFileNamePropName,
+                                                   Properties.Settings.Default.DefaultFileName,
+                                                   ValidateFileName);
+            _generalSettings.Add(_defaultFileName);
+
+            // Load selection window opacity setting
+            _selectionOpacity = new Setting<double>(SettingsConstants.ConstSelectWinOpacityPropName,
+                                                    Properties.Settings.Default.SelectionWinOpacity,
+                                                    ValidateOpacity);
+            _generalSettings.Add(_selectionOpacity);
+
+            // Load border visibility setting
+            _selectionBorderVisibility = new Setting<bool>(SettingsConstants.ConstSelectBorderVisPropName, Properties.Settings.Default.BorderVisibility);
+            _generalSettings.Add(_selectionBorderVisibility);
+
+            // Load tips visibility setting
+            _tipsVisibility = new Setting<bool>(SettingsConstants.ConstTipsVisPropName, Properties.Settings.Default.TipsVisibility);
+            _generalSettings.Add(_tipsVisibility);
+
+            SaveCommand = new RelayCommand(param => SaveSettings(), param => CanSave);
         }
-        #endregion // Constructors
 
-        #region Methods/Functions
+
+        /// <summary>
+        /// Checks if settings were modified
+        /// </summary>
+        /// <returns>true if settings modified, false otherwise</returns>
+        private bool SettingsContainChanges()
+        {
+            bool settingsModified = false;
+
+            // Check key bindings for changes
+            foreach (ISetting binding in _keyBindings)
+            {
+                if (binding.ValueModified)
+                {
+                    settingsModified = true;
+                    break;
+                }
+            }
+
+            // Check general settings for changes
+            if (!settingsModified)
+            {
+                foreach (ISetting setting in _generalSettings)
+                {
+                    if (setting.ValueModified)
+                    {
+                        settingsModified = true;
+                        break;
+                    }
+                }
+            }
+
+            return settingsModified;
+        }
+
+
         /// <summary>
         /// Logic for save command
         /// </summary>
-        public void SaveSettings()
+        private void SaveSettings()
         {
             if (!SettingsValid)
             {
                 throw new InvalidOperationException("Trying to save invalid settings");
             }
 
-            dynamic convertedSettingData;
-            foreach (KeyValuePair<string, SettingData> keyValuePair in _settingsChanges)
+            // Save key bindings
+            foreach (ISetting keyBinding in _keyBindings)
             {
-                convertedSettingData = Convert.ChangeType(keyValuePair.Value.data, keyValuePair.Value.type);
-                _settingsInst[keyValuePair.Key] = convertedSettingData;
+                keyBinding.Save();
             }
-            _settingsInst.Save();
 
-            _settingsChanges.Clear();
-        }
-
-
-        /// <summary>
-        /// Adds or updates string type property change
-        /// </summary>
-        /// <param name="propertyName">Name of property changed</param>
-        /// <param name="value">Value of property</param>
-        private void RecordPropertyChange(string propertyName, object value, Type type)
-        {
-            // Adds new KeyValue pair if key doesn't exist, or updates existing
-            _settingsChanges[propertyName] = new SettingData(value, type);
-        }
-
-
-        /// <summary>
-        /// Error checks key binding
-        /// </summary>
-        /// <param name="keyName"></param>
-        /// <param name="error"></param>
-        /// <returns></returns>
-        private bool IsValidKey(string keyName, out string error)
-        {
-            string keyValueStr = (string)GetType().GetProperty(keyName).GetValue(this, null);
-
-            foreach (KeyValuePair<string, string> mapping in KeyMappings)
+            // Save the general settings
+            foreach (ISetting setting in _generalSettings)
             {
-                if (!mapping.Key.Equals(keyName))
+                setting.Save();
+            }
+        }
+
+
+        /// <summary>
+        /// Validates entire set of coupled settings
+        /// </summary>
+        /// <param name="coupledSettings">List of coupled settings to validate</param>
+        /// <returns>true if valid, false otherwise</returns>
+        private bool ValidateCoupledSettings(IList<ISetting> coupledSettings)
+        {
+            bool coupledSettingsValid = true;
+
+            // Re-evaluate validation on all coupled settings
+            foreach (ISetting setting in coupledSettings)
+            {
+                bool settingValid = ValidateDiscreteSetting(setting);
+
+                if (settingValid)
                 {
-                    if (mapping.Value.Equals(keyValueStr))
+                    // Clear UI's error indication if it exists
+                    OnPropertyChanged(setting.SettingID);
+                }
+
+                coupledSettingsValid &= settingValid;
+            }
+
+            return coupledSettingsValid;
+        }
+
+
+        /// <summary>
+        /// Validates a setting independent of all other settings
+        /// </summary>
+        /// <param name="setting">Setting to validate</param>
+        /// <returns>true if valid, false otherwise</returns>
+        private bool ValidateDiscreteSetting(ISetting setting)
+        {
+            bool isValid = setting.Validate();
+
+            if (isValid)
+            {
+                // Remove validation error if it exists
+                if (_validationErrors.ContainsKey(setting.SettingID))
+                {
+                    _validationErrors.Remove(setting.SettingID);
+                }
+            }
+            else
+            {
+                // Add error or replace existing error
+                _validationErrors[setting.SettingID] = setting.ErrorMessage;
+            }
+
+            return isValid;
+        }
+
+
+        /// <summary>
+        /// Validates key binding
+        /// </summary>
+        /// <param name="binding">Binding to valdiate</param>
+        /// <returns>true if valid, false otherwise</returns>
+        private bool ValidateKeyBinding(Setting<string> binding)
+        {
+            bool isValid = true;
+            binding.ErrorMessage = string.Empty;
+
+            foreach (Setting<string> activeBinding in _keyBindings)
+            {
+                // Skip checking binding against itself
+                if (binding.SettingID != activeBinding.SettingID)
+                {
+                    // Check if key is already bound
+                    if (binding.CurrentValue == activeBinding.CurrentValue)
                     {
-                        error = keyValueStr + " is already bound";
-                        return false;
+                        isValid = false;
+                        binding.ErrorMessage = binding.CurrentValue + " is already bound";
+                        break;
                     }
                 }
             }
-            // Update mapping
-            KeyMappings[keyName] = keyValueStr;
 
-            error = string.Empty;
-            return true;
-        } // ValidateKey
+            return isValid;
+        }
+
+
+        /// <summary>
+        /// Validates the default file extension setting
+        /// </summary>
+        /// <param name="setting">Setting to validate</param>
+        /// <returns>true if valid, false otherwise</returns>
+        private bool ValidateFileExtension(Setting<string> setting)
+        {
+            bool isValid;
+
+            if (Array.IndexOf(ExtOptions, setting.CurrentValue) == -1)
+            {
+                isValid = false;
+                setting.ErrorMessage = "File extension not supported";
+            }
+            else
+            {
+                isValid = true;
+                setting.ErrorMessage = string.Empty;
+            }
+
+            return isValid;
+        }
+
+
+        /// <summary>
+        /// Validates the default file name setting
+        /// </summary>
+        /// <param name="setting">Setting to validate</param>
+        /// <returns>true if valid, false otherwise</returns>
+        private bool ValidateFileName(Setting<string> setting)
+        {
+            bool isValid;
+
+            if (setting.CurrentValue.Length == 0 || setting.CurrentValue.Length > 100)
+            {
+                isValid = false;
+                setting.ErrorMessage = "Default file name must be between 1 and 100 characters long";
+            }
+            else if (IsInvalidFileName(setting.CurrentValue))
+            {
+                isValid = false;
+                setting.ErrorMessage = "Invalid file name";
+            }
+            else
+            {
+                isValid = true;
+                setting.ErrorMessage = string.Empty;
+            }
+
+            return isValid;
+        }
 
 
         /// <summary>
@@ -534,19 +730,45 @@ namespace LeerCopyWPF.ViewModels
         {
             const string regexPattern = "^(COM[0-9]|CON|LPT[0-9]|NUL|PRN|AUX)$";
             Regex invalidNameRegex = new Regex(regexPattern, RegexOptions.None);
+            bool isInvalid = false;
 
             if (filename.IndexOfAny(System.IO.Path.GetInvalidFileNameChars()) != -1)
             {
-                return true;
-            }
-            
-            if (invalidNameRegex.IsMatch(filename))
-            {
-                return true;
+                isInvalid = true;
             }
 
-            return false;
+            if (invalidNameRegex.IsMatch(filename))
+            {
+                isInvalid = true;
+            }
+
+            return isInvalid;
         }
-        #endregion // Methods/Functions
+
+
+        /// <summary>
+        /// Validates selection window opacity setting
+        /// </summary>
+        /// <param name="setting">Setting to validate</param>
+        /// <returns>true if valid, false otherwise</returns>
+        private bool ValidateOpacity(Setting<double> setting)
+        {
+            bool opacityValue;
+
+            if (setting.CurrentValue < 0.0 || setting.CurrentValue > OpacityMax)
+            {
+                opacityValue = false;
+                setting.ErrorMessage = "Selection window opacity must be between 0.0 and " + OpacityMax;
+            }
+            else
+            {
+                opacityValue = true;
+                setting.ErrorMessage = string.Empty;
+            }
+
+            return opacityValue;
+        }
+
+        #endregion // Methods
     }
 }

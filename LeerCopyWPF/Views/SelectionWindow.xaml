@@ -1,17 +1,19 @@
-﻿<Window x:Name="SelectWin" x:Class="LeerCopyWPF.SelectionWindow"
+﻿<Window x:Class="LeerCopyWPF.Views.SelectionWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:resx="clr-namespace:LeerCopyWPF.Strings.en_US"
         xmlns:prop="clr-namespace:LeerCopyWPF.Properties"
+        xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:LeerCopyWPF"
         mc:Ignorable="d"
         Title="Leer Copy" ResizeMode="NoResize"
         WindowState="Normal" WindowStyle="None"
         AllowsTransparency="True" Width="750" Height="500">
-    <!-- Styles -->
     <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+        <!-- Styles -->
         <Style x:Name="TxtBlkStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="18"/>
             <Setter Property="FontWeight" Value="Bold"/>
@@ -24,6 +26,57 @@
             <Setter Property="Margin" Value="0,0,10,0"/>
         </Style>
     </Window.Resources>
+    
+    <!-- Input Bindings -->
+    <behaviors:Interaction.Triggers>
+        <!-- Mouse Interactions -->
+        <!-- Mouse Down -->
+        <behaviors:EventTrigger EventName="PreviewMouseLeftButtonDown">
+            <behaviors:InvokeCommandAction Command="{Binding MouseDownCommand}" PassEventArgsToCommand="True"/>
+        </behaviors:EventTrigger>
+        <!-- Mouse Up -->
+        <behaviors:EventTrigger EventName="PreviewMouseLeftButtonUp">
+            <behaviors:InvokeCommandAction Command="{Binding MouseUpCommand}" PassEventArgsToCommand="True"/>
+        </behaviors:EventTrigger>
+        <!-- Mouse Move -->
+        <behaviors:EventTrigger EventName="PreviewMouseMove">
+            <behaviors:InvokeCommandAction Command="{Binding MouseMoveCommand}" PassEventArgsToCommand="True"/>
+        </behaviors:EventTrigger>
+        <!-- Key Interactions -->
+        <!-- Copy Command -->
+        <behaviors:KeyTrigger Key="{Binding Source={x:Static prop:Settings.Default}, Path=CopyKey, Mode=OneWay}" FiredOn="KeyUp" ActiveOnFocus="False">
+            <behaviors:InvokeCommandAction Command="{Binding CopyCommand}"/>
+        </behaviors:KeyTrigger>
+        <!-- Edit Command -->
+        <behaviors:KeyTrigger Key="{Binding Source={x:Static prop:Settings.Default}, Path=EditKey, Mode=OneWay}" FiredOn="KeyUp" ActiveOnFocus="False">
+            <behaviors:InvokeCommandAction Command="{Binding EditCommand}"/>
+        </behaviors:KeyTrigger>
+        <!-- Save Command -->
+        <behaviors:KeyTrigger Key="{Binding Source={x:Static prop:Settings.Default}, Path=SaveKey, Mode=OneWay}" FiredOn="KeyUp" ActiveOnFocus="False">
+            <behaviors:InvokeCommandAction Command="{Binding SaveCommand}"/>
+        </behaviors:KeyTrigger>
+        <!-- SelectAll Command -->
+        <behaviors:KeyTrigger Key="{Binding Source={x:Static prop:Settings.Default}, Path=SelectAll, Mode=OneWay}" FiredOn="KeyUp" ActiveOnFocus="False">
+            <behaviors:InvokeCommandAction Command="{Binding MaximizeCommand}"/>
+        </behaviors:KeyTrigger>
+        <!-- Clear Command -->
+        <behaviors:KeyTrigger Key="{Binding Source={x:Static prop:Settings.Default}, Path=ClearKey, Mode=OneWay}" FiredOn="KeyUp" ActiveOnFocus="False">
+            <behaviors:InvokeCommandAction Command="{Binding ClearCommand}"/>
+        </behaviors:KeyTrigger>
+        <!-- Border Command -->
+        <behaviors:KeyTrigger Key="{Binding Source={x:Static prop:Settings.Default}, Path=BorderKey, Mode=OneWay}" FiredOn="KeyUp" ActiveOnFocus="False">
+            <behaviors:InvokeCommandAction Command="{Binding BorderCommand}"/>
+        </behaviors:KeyTrigger>
+        <!-- Tips Command -->
+        <behaviors:KeyTrigger Key="{Binding Source={x:Static prop:Settings.Default}, Path=TipsKey, Mode=OneWay}" FiredOn="KeyUp" ActiveOnFocus="False">
+            <behaviors:InvokeCommandAction Command="{Binding TipsCommand}"/>
+        </behaviors:KeyTrigger>
+        <!-- Key Down -->
+        <behaviors:EventTrigger EventName="PreviewKeyDown">
+            <behaviors:InvokeCommandAction Command="{Binding KeyDownCommand}" PassEventArgsToCommand="True"/>
+        </behaviors:EventTrigger>
+    </behaviors:Interaction.Triggers>
+
     <!-- Window Content -->
     <Grid>
         <!-- Displays image of the screen in the background -->
@@ -33,7 +86,7 @@
               Opacity="{Binding Source={x:Static prop:Settings.Default}, Path=SelectionWinOpacity, Mode=OneWay}" Panel.ZIndex="1"/>
         <!-- Tips -->
         <StackPanel x:Name="LabelPanel" HorizontalAlignment="Right" Panel.ZIndex="2"
-                    Visibility="{Binding Source={x:Static prop:Settings.Default}, Path=TipsVisibility, Mode=TwoWay}">
+                    Visibility="{Binding Source={x:Static prop:Settings.Default}, Path=TipsVisibility, Mode=OneWay, Converter={StaticResource BoolToVis}}">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="{Binding Source={x:Static prop:Settings.Default}, Path=SaveKey, Mode=OneWay}"/>
                 <TextBlock x:Name="SaveLbl" Text="{x:Static resx:Resources.SaveLblStr}"/>
@@ -57,10 +110,6 @@
             <StackPanel Orientation="Horizontal">
                 <TextBlock x:Name="ArrowKeysLbl" Text="{x:Static resx:Resources.ArrowKeysLblStr}"/>
             </StackPanel>
-            <StackPanel x:Name="SwitchLblPanel" Orientation="Horizontal">
-                <TextBlock Text="{Binding Source={x:Static prop:Settings.Default}, Path=SwitchScreenKey, Mode=OneWay}"/>
-                <TextBlock x:Name="SwitchLbl" Text="{x:Static resx:Resources.SwitchLblStr}"/>
-            </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="{Binding Source={x:Static prop:Settings.Default}, Path=BorderKey, Mode=OneWay}"/>
                 <TextBlock x:Name="BorderLbl" Text="{x:Static resx:Resources.BorderLblStr}"/>
@@ -81,9 +130,10 @@
         <!-- For displaying users selection -->
         <Image x:Name="SelectionImg" Source="{Binding Path=Bitmap, Mode=OneWay}" Clip="{Binding Path=SelectionGeometry, Mode=OneWay}" Panel.ZIndex="3"/>
         <!-- For drawing the border -->
-        <Canvas x:Name="BorderCanvas" Background="Transparent" Panel.ZIndex="4" Visibility="{Binding Source={x:Static prop:Settings.Default}, Path=BorderVisibility, Mode=TwoWay}">
+        <Canvas x:Name="BorderCanvas" Background="Transparent" Panel.ZIndex="4" 
+                Visibility="{Binding Source={x:Static prop:Settings.Default}, Path=BorderVisibility, Mode=OneWay, Converter={StaticResource BoolToVis}}">
             <Rectangle x:Name="BorderRect" StrokeThickness="{Binding Path=BorderThickness, Mode=OneWay}"
-                       Stroke="{Binding Source={x:Static prop:Settings.Default}, Path=SelectionBorderBrush, Mode=TwoWay}"
+                       Stroke="{Binding Source={x:Static prop:Settings.Default}, Path=SelectionBorderBrush, Mode=OneWay}"
                        Canvas.Left="{Binding Path=BorderLeft, Mode=OneWay}" Canvas.Top="{Binding Path=BorderTop, Mode=OneWay}"
                        Width="{Binding Path=BorderWidth, Mode=OneWay}" Height="{Binding Path=BorderHeight, Mode=OneWay}"/>
         </Canvas>

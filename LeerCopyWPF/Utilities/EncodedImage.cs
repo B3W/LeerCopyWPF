@@ -17,15 +17,19 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Windows.Media.Imaging;
 
 namespace LeerCopyWPF.Utilities
 {
     public class EncodedImage
     {
+        #region Fields
+        #endregion // Fields
+
+
+        #region Properties
+
         /// <summary>
         /// Represents all valid encodings for images
         /// </summary>
@@ -38,20 +42,32 @@ namespace LeerCopyWPF.Utilities
             TIFF,
             WMP
         }
+
         /// <summary>
         /// Image to encode
         /// </summary>
-        public BitmapSource Image { get; private set; }
+        public BitmapSource Image { get; }
+
         /// <summary>
         /// Encoder for stream
         /// </summary>
-        public BitmapEncoder Encoder { get; private set; }
+        public BitmapEncoder Encoder { get; }
+
         /// <summary>
         /// Type of encoding for image
         /// </summary>
-        public Encoding EncodingType { get; private set; }
+        public Encoding EncodingType { get; }
+
+        #endregion // Properties
 
 
+        #region Methods
+
+        /// <summary>
+        /// Constructs an encoded image
+        /// </summary>
+        /// <param name="image">Image to encode</param>
+        /// <param name="encoding">Encoding to use on image</param>
         public EncodedImage(BitmapSource image, Encoding encoding)
         {
             Image = image;
@@ -81,19 +97,38 @@ namespace LeerCopyWPF.Utilities
                     Encoder = new BmpBitmapEncoder();
                     break;
             }
-        }
+        } // EncodedImage
 
 
-        public EncodedImage(BitmapSource image, string encoding)
+        /// <summary>
+        /// Constructs an encoded image
+        /// </summary>
+        /// <param name="image">Image to encode</param>
+        /// <param name="extension">Extension of file format to encode image to</param>
+        public EncodedImage(BitmapSource image, string extension)
         {
-            Image = image;
-            Nullable<Encoding> enc = StrToEncoding(encoding);
-            if (enc == null)
+            if (image == null)
             {
                 // TODO Error logging
-                throw new ArgumentException(String.Format("{0} is not a supported encoding", encoding), "encoding");
+                throw new ArgumentNullException("image", "Image cannot be null");
             }
-            EncodingType = enc.Value;
+
+            if (string.IsNullOrEmpty(extension))
+            {
+                // TODO Error logging
+                throw new ArgumentNullException("extension", "File extension cannot be null or empty");
+            }
+
+            Image = image;
+            Encoding? encoding = ConvertExtensionToEncoding(extension);
+
+            if (!encoding.HasValue)
+            {
+                // TODO Error logging
+                throw new ArgumentException($"'{extension}' is not a supported file extension", "extension");
+            }
+
+            EncodingType = encoding.Value;
 
             switch (EncodingType)
             {
@@ -119,17 +154,17 @@ namespace LeerCopyWPF.Utilities
                     Encoder = new BmpBitmapEncoder();
                     break;
             }
-        }
+        } // EncodedImage
 
 
         /// <summary>
-        /// Creates and returns memory stream of encoded image.
-        /// Disposing of memory stream not necessary but good practice.
+        /// Creates and returns memory stream of encoded image. Caller responsible for disposing stream.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Memory stream representing encoded image</returns>
         public MemoryStream GetMemoryStream()
         {
             MemoryStream mStream = new MemoryStream();
+
             // Create local deep copy to write to stream
             BitmapSource clone = Image.Clone();
             clone.Freeze();
@@ -145,7 +180,7 @@ namespace LeerCopyWPF.Utilities
         /// <summary>
         /// Saves image to disk at given path in specified encoding
         /// </summary>
-        /// <param name="path"></param>
+        /// <param name="fullPath">Path to save file to</param>
         public void SaveToFile(string fullPath)
         {
             // Remove file name from path
@@ -159,7 +194,8 @@ namespace LeerCopyWPF.Utilities
                 {
                     Directory.CreateDirectory(extractedPath);
                 }
-            } catch (Exception)
+            }
+            catch (Exception)
             {
                 // TODO Exception logging
                 throw;
@@ -182,38 +218,38 @@ namespace LeerCopyWPF.Utilities
         /// <summary>
         /// Conversion from file extension to encoding
         /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
-        private Nullable<Encoding> StrToEncoding(string str)
+        /// <param name="extension">File extension to convert to encoding</param>
+        /// <returns>Encoding represented by file extension</returns>
+        private Encoding? ConvertExtensionToEncoding(string extension)
         {
-            Nullable<Encoding> retEnc;
+            Encoding? retEnc;
 
             // Clean inputted string
-            str = str.Trim('.');
-            str = str.ToLower();
+            extension = extension.Trim('.');
+            extension = extension.ToLower();
 
             // Determine extension for encoder
-            if (str.Equals("bmp"))
+            if (extension.Equals("bmp"))
             {
                 retEnc = Encoding.BMP;
             }
-            else if (str.Equals("gif"))
+            else if (extension.Equals("gif"))
             {
                 retEnc = Encoding.GIF;
             }
-            else if (str.Equals("jpg") || str.Equals("jpeg"))
+            else if (extension.Equals("jpg") || extension.Equals("jpeg"))
             {
                 retEnc = Encoding.JPEG;
             }
-            else if (str.Equals("png"))
+            else if (extension.Equals("png"))
             {
                 retEnc = Encoding.PNG;
             }
-            else if (str.Equals("tif") || str.Equals("tiff"))
+            else if (extension.Equals("tif") || extension.Equals("tiff"))
             {
                 retEnc = Encoding.TIFF;
             }
-            else if (str.Equals("wmp"))
+            else if (extension.Equals("wmp"))
             {
                 retEnc = Encoding.WMP;
             }
@@ -221,7 +257,10 @@ namespace LeerCopyWPF.Utilities
             {
                 retEnc = null;
             }
+
             return retEnc;
         } // StrToEncoding
+
+        #endregion // Methods
     }
 }

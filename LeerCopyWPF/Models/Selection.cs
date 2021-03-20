@@ -1,7 +1,5 @@
 ﻿using LeerCopyWPF.Enums;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using LeerCopyWPF.Utilities;
 using System.Windows;
 using System.Windows.Media.Imaging;
 
@@ -9,121 +7,69 @@ namespace LeerCopyWPF.Models
 {
     public class Selection
     {
-        #region Members
-        public Point StartPt { get; set; }
-        public Point EndPt { get; set; }
-        public BitmapSource Bitmap { get; }
-        public Rect ScreenBounds { get; }
-        #endregion // Members
+        #region Fields
+        #endregion // Fields
 
-        #region Constructors
+
+        #region Properties
+
+        /// <summary>
+        /// Starting point of the selection
+        /// </summary>
+        public Point StartPt { get; set; }
+
+        /// <summary>
+        /// Ending point of the selection
+        /// </summary>
+        public Point EndPt { get; set; }
+
+        /// <summary>
+        /// Image being selected
+        /// </summary>
+        public BitmapSource Bitmap { get; }
+
+        /// <summary>
+        /// Max bounds for the selection. Relative application's selection window.
+        /// </summary>
+        public Rect SelectionBounds { get; }
+
+        /// <summary>
+        /// Bounds for screen selection is occuring on. Relative to other screens.
+        /// </summary>
+        public Rect ScreenBounds { get; }
+
+        #endregion // Properties
+
+
+        #region Methods
+
+        /// <summary>
+        /// Constructs a selection
+        /// </summary>
+        /// <param name="bitmap">Image for selection</param>
+        /// <param name="screenBounds">Bounds of the screen</param>
         public Selection(BitmapSource bitmap, Rect screenBounds)
         {
             Bitmap = bitmap;
             ScreenBounds = screenBounds;
             StartPt = new Point();
             EndPt = new Point();
-        }
-        #endregion // Constructors
 
-        #region Methods
+            // Selection bounds are derived from screen bounds but always start at (0, 0) because screen
+            // coordinates are global where as selection coordinates are relative to the selection windows.
+            SelectionBounds = new Rect(0, 0, ScreenBounds.Width, ScreenBounds.Height);
+        } // Selection
+
+
+        /// <summary>
+        /// Resets the selection
+        /// </summary>
         public void Reset()
         {
             StartPt = new Point();
             EndPt = new Point();
-        }
+        } // Reset
 
-
-        /// <summary>
-        /// Resizes selection if the resized selection fits within the bounds of the screens
-        /// and it does not overlap edges (i.e. left edge passes over right edge)
-        /// </summary>
-        /// <param name="offsetX"></param>
-        /// <param name="offsetY"></param>
-        /// <param name="dir"></param>
-        public void Resize(double offsetX, double offsetY, KeyDownAction dir)
-        {
-            Point tmpPt;
-
-            switch (dir)
-            {
-                case KeyDownAction.Up:
-                    if (StartPt.Y > EndPt.Y)
-                    {
-                        tmpPt = new Point(EndPt.X, (EndPt.Y + offsetY));
-                        if (ScreenBounds.Top <= tmpPt.Y && StartPt.Y > tmpPt.Y)
-                        {
-                            EndPt = tmpPt;
-                        }
-                    }
-                    else if (StartPt.Y < EndPt.Y)
-                    {
-                        tmpPt = new Point(StartPt.X, (StartPt.Y + offsetY));
-                        if (ScreenBounds.Top <= tmpPt.Y && EndPt.Y > tmpPt.Y)
-                        {
-                            StartPt = tmpPt;
-                        }
-                    }
-                    break;
-                case KeyDownAction.Down:
-                    if (StartPt.Y > EndPt.Y)
-                    {
-                        tmpPt = new Point(StartPt.X, (StartPt.Y + offsetY));
-                        if (ScreenBounds.Bottom >= tmpPt.Y && EndPt.Y < tmpPt.Y)
-                        {
-                            StartPt = tmpPt;
-                        }
-                    }
-                    else if (StartPt.Y < EndPt.Y)
-                    {
-                        tmpPt = new Point(EndPt.X, (EndPt.Y + offsetY));
-                        if (ScreenBounds.Bottom >= tmpPt.Y && StartPt.Y < tmpPt.Y)
-                        {
-                            EndPt = tmpPt;
-                        }
-                    }
-                    break;
-                case KeyDownAction.Left:
-                    if (StartPt.X > EndPt.X)
-                    {
-                        tmpPt = new Point((EndPt.X + offsetX), EndPt.Y);
-                        if (ScreenBounds.Left <= tmpPt.X && StartPt.X > tmpPt.X)
-                        {
-                            EndPt = tmpPt;
-                        }
-                    }
-                    else if (StartPt.X < EndPt.X)
-                    {
-                        tmpPt = new Point((StartPt.X + offsetX), StartPt.Y);
-                        if (ScreenBounds.Left <= tmpPt.X && EndPt.X > tmpPt.X)
-                        {
-                            StartPt = tmpPt;
-                        }
-                    }
-                    break;
-                case KeyDownAction.Right:
-                    if (StartPt.X > EndPt.X)
-                    {
-                        tmpPt = new Point((StartPt.X + offsetX), StartPt.Y);
-                        if (ScreenBounds.Right >= tmpPt.X && EndPt.X < tmpPt.X)
-                        {
-                            StartPt = tmpPt;
-                        }
-                    }
-                    else if (StartPt.X < EndPt.X)
-                    {
-                        tmpPt = new Point((EndPt.X + offsetX), EndPt.Y);
-                        if (ScreenBounds.Right >= tmpPt.X && StartPt.X < tmpPt.X)
-                        {
-                            EndPt = tmpPt;
-                        }
-                    }
-                    break;
-                case KeyDownAction.Invalid:
-                default:
-                    break;
-            }
-        } // Resize
         #endregion // Methods
     }
 }

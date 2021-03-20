@@ -1,7 +1,8 @@
-﻿using LeerCopyWPF.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -9,36 +10,42 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace LeerCopyWPF.Views
 {
     /// <summary>
-    /// Interaction logic for SettingsWindow.xaml
+    /// Interaction logic for SettingsView.xaml
     /// </summary>
-    public partial class SettingsWindow : Window
+    public partial class SettingsView : UserControl
     {
         #region Fields
-        private readonly SettingsViewModel _viewModel;
+
+        /// <summary>
+        /// Converts key codes to/from strings
+        /// </summary>
         private readonly KeyConverter _keyConverter;
+
         #endregion // Fields
 
         #region Constructors
-        public SettingsWindow()
+
+        public SettingsView()
         {
             InitializeComponent();
 
             _keyConverter = new KeyConverter();
-            _viewModel = new SettingsViewModel(param => this.Close());
-            DataContext = _viewModel;
 
-            // This makes sure the first UserControl in the tab order gets focus when the window is opened
+            // This makes sure the first UserControl in the tab order gets focus when the view is opened
             // https://stackoverflow.com/a/818536
             Loaded += (sender, e) => MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
         }
+
         #endregion // Constructors
 
         #region EventHandlers
+
         /// <summary>
         /// Update the text within the text box
         /// </summary>
@@ -57,7 +64,25 @@ namespace LeerCopyWPF.Views
             {
                 keyBindTxtBx.Text = _keyConverter.ConvertToString(key);
             }
-        } // KeyBindingTxtBox_KeyUp
+        }
+
+
+        /// <summary>
+        /// Closes the dialog
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CancelBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Window parentWindow = Window.GetWindow(this);
+
+            if (parentWindow != null)
+            {
+                parentWindow.DialogResult = false;
+                parentWindow.Close();
+            }
+        }
+
         #endregion // EventHandlers
     }
 }

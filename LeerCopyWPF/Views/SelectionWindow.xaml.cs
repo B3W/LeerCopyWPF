@@ -17,6 +17,7 @@
  */
 
 using LeerCopyWPF.Constants;
+using LeerCopyWPF.Controller;
 using LeerCopyWPF.Enums;
 using LeerCopyWPF.Utilities;
 using LeerCopyWPF.ViewModels;
@@ -37,7 +38,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace LeerCopyWPF
+namespace LeerCopyWPF.Views
 {
     /// <summary>
     /// Interaction logic for SelectionWindow.xaml
@@ -45,277 +46,55 @@ namespace LeerCopyWPF
     public partial class SelectionWindow : Window
     {
         #region Fields
-        private readonly SelectionViewModel _selectionViewModel;
-        private SelectionViewModel _tmpVM;
+
         /// <summary>
-        /// Dictionary for quick lookup of key up mappings
+        /// Handle to selection window controller
         /// </summary>
-        private IDictionary<Key, KeyUpAction> _keyUpMappings = new Dictionary<Key, KeyUpAction>(10);
+        private readonly ISelectionWindowController _selectionWindowController;
+
         /// <summary>
-        /// Dictionary for quick lookup of key up mappings
+        /// Converter instance for converter Key object to string
         /// </summary>
-        private readonly IDictionary<Key, KeyDownAction> _keyDownMappings;
-        /// <summary>
-        /// Dictionary containing mappings between KeyUpAction enum and string values
-        /// </summary>
-        private readonly IDictionary<string, KeyUpAction> _keyUpStringMappings;
-        /// <summary>
-        /// Flag indicating whether switch is possible
-        /// </summary>
-        private bool _switchValid;
-        /// <summary>
-        /// Flag to prevent loaded event from firing multiple times
-        /// </summary>
-        private bool _winLoaded = false;
+        private readonly KeyConverter _keyConverter;
+
         #endregion // Fields
 
+
         #region Properties
+
         /// <summary>
-        /// Event for signaling the MainWindow
+        /// Bounds of screen on which selection window is located
         /// </summary>
-        public event EventHandler<FlagEventArgs> SignalMain;
+        public Rect ScreenBounds { get; }
+
         #endregion // Properties
 
+
         #region Constructors
-        public SelectionWindow(Rect bounds, bool switchValid)
+
+        public SelectionWindow(ISelectionWindowController selectionWindowController, Rect screenBounds)
         {
             // Register window lifetime events
-            this.Loaded += SelectionWindow_Loaded;
+            Loaded += SelectionWindow_Loaded;
 
             InitializeComponent();
 
-            // Construct conversion mapping
-            _keyUpStringMappings = new Dictionary<string, KeyUpAction>
-            {
-                { SettingsConstants.CopySettingName, KeyUpAction.Copy },
-                { SettingsConstants.EditSettingName, KeyUpAction.Edit },
-                { SettingsConstants.SaveSettingName, KeyUpAction.Save },
-                { SettingsConstants.ClearSettingName, KeyUpAction.Clear },
-                { SettingsConstants.SelectAllSettingName, KeyUpAction.SelectAll },
-                { SettingsConstants.BorderSettingName, KeyUpAction.Border },
-                { SettingsConstants.TipsSettingName, KeyUpAction.Tips },
-                { SettingsConstants.SwtchScrnSettingName, KeyUpAction.Switch },
-                { SettingsConstants.SettingsSettingName, KeyUpAction.Settings },
-                { SettingsConstants.QuitSettingName, KeyUpAction.Quit }
-            };
-
-            // Set DataContext
-            _selectionViewModel = new SelectionViewModel(bounds);
-            _selectionViewModel.OpenSettingsEvent += (s, eargs) => new SettingsWindow().ShowDialog();
-            _selectionViewModel.KeyBindingsChangedEvent += (s, eargs) => KeyMappingsChanged();
-            DataContext = _selectionViewModel;
-
-            _switchValid = switchValid;
+            _selectionWindowController = selectionWindowController;
+            _keyConverter = new KeyConverter();
 
             // Place form on correct screen
-            this.Left = bounds.Left;
-            this.Top = bounds.Top;
+            ScreenBounds = screenBounds;
+            Left = ScreenBounds.Left;
+            Top = ScreenBounds.Top;
 
-            // Bind keys to actions
-            _selectionViewModel.RefreshKeyBindings();
-            _keyDownMappings = new Dictionary<Key, KeyDownAction>
-            {
-                // Add arrow keys
-                { Key.Up, KeyDownAction.Up },
-                { Key.Down, KeyDownAction.Down },
-                { Key.Left, KeyDownAction.Left },
-                { Key.Right, KeyDownAction.Right }
-            };
+            // Subscribe to other window events
+            PreviewKeyUp += SelectionWindow_PreviewKeyUp;
+        }
 
-            // Register event handlers
-            this.PreviewKeyUp += SelectionWindow_PreviewKeyUp;
-            this.PreviewKeyDown += SelectionWindow_PreviewKeyDown;
-            this.PreviewMouseLeftButtonDown += SelectionWindow_MouseLeftButtonDown;
-            this.PreviewMouseLeftButtonUp += SelectionWindow_MouseLeftButtonUp;
-            this.PreviewMouseMove += SelectionWindow_MouseMove;
-        } // SelectionWindow
         #endregion // Constructors
 
-        #region Methods
-        /// <summary>
-        /// Switch screen if possible
-        /// </summary>
-        private void SwitchScreens()
-        {
-            if (_switchValid)
-            {
-                this.Hide();
-                RaiseSignal(true);
-            }
-        } // SwitchScreens
-        #endregion // Methods
 
         #region EventHandlers
-        /// <summary>
-        /// EventHandler for updating the key up bindings (called by the ViewModel)
-        /// </summary>
-        private void KeyMappingsChanged()
-        {
-            SelectionViewModel _tmpVM = DataContext as SelectionViewModel;
-            IDictionary<string, string> keyMappings = _tmpVM.KeyMappings;
-            KeyConverter converter = new KeyConverter();
-            Key key;
-
-            // Update mappings
-            foreach (KeyValuePair<string, string> mapping in keyMappings)
-            {
-                key = (Key)converter.ConvertFromString(mapping.Value);
-                if (_keyUpStringMappings.TryGetValue(mapping.Key, out KeyUpAction value))
-                {
-                    _keyUpMappings[key] = value;
-                }
-                else
-                {
-                    throw new KeyNotFoundException("KeyMappings from SelectionViewModel contain invalid key: " + mapping.Key);
-                }
-            }
-
-        } // InitKeyUpMappings
-
-
-        /// <summary>
-        /// Raise the EventHandler to signal MainWindow
-        /// </summary>
-        private void RaiseSignal(bool switchFlag)
-        {
-            this.SignalMain?.Invoke(this, new FlagEventArgs { Flag = switchFlag });
-        } // RaiseSignal
-
-
-        private void SelectionWindow_PreviewKeyUp(object sender, KeyEventArgs e)
-        {
-            if (_keyUpMappings.ContainsKey(e.Key))
-            {
-                _tmpVM = DataContext as SelectionViewModel;
-                KeyUpAction action = _keyUpMappings[e.Key];
-                Visibility vis;
-
-                switch (action)
-                {
-                    case KeyUpAction.Copy:
-                        // Copy selection to the clipboard
-                        if (_tmpVM.CopyCommand.CanExecute(null))
-                        {
-                            _tmpVM.CopyCommand.Execute(null);
-                        }
-                        break;
-                    case KeyUpAction.Edit:
-                        // Edit the selection in default image editor
-                        if (_tmpVM.EditCommand.CanExecute(null))
-                        {
-                            _tmpVM.EditCommand.Execute(null);
-                        }
-                        break;
-                    case KeyUpAction.Save:
-                        // Save the selection to disk
-                        if (_tmpVM.SaveCommand.CanExecute(null))
-                        {
-                            _tmpVM.SaveCommand.Execute(null);
-                        }
-                        break;
-                    case KeyUpAction.SelectAll:
-                        // Select the entire screen
-                        if (_tmpVM.MaximizeCommand.CanExecute(null))
-                        {
-                            _tmpVM.MaximizeCommand.Execute(null);
-                        }
-                        break;
-                    case KeyUpAction.Clear:
-                        // Clear the current selection
-                        if (_tmpVM.ClearCommand.CanExecute(null))
-                        {
-                            _tmpVM.ClearCommand.Execute(null);
-                        }
-                        break;
-                    case KeyUpAction.Border:
-                        // Show/Hide border
-                        vis = (Properties.Settings.Default.BorderVisibility == Visibility.Visible) ? Visibility.Hidden : Visibility.Visible;
-                        Properties.Settings.Default.BorderVisibility = vis;
-                        break;
-                    case KeyUpAction.Tips:
-                        // Show/Hide tip labels
-                        vis = (Properties.Settings.Default.TipsVisibility == Visibility.Visible) ? Visibility.Hidden : Visibility.Visible;
-                        Properties.Settings.Default.TipsVisibility = vis;
-                        break;
-                    case KeyUpAction.Switch:
-                        e.Handled = true;
-                        SwitchScreens();
-                        break;
-                    case KeyUpAction.Settings:
-                        // Open up settings window
-                        if (_tmpVM.SettingsCommand.CanExecute(null))
-                        {
-                            _tmpVM.SettingsCommand.Execute(null);
-                        }
-                        break;
-                    case KeyUpAction.Quit:
-                        // Quit selection
-                        RaiseSignal(false);
-                        this.Close();
-                        break;
-                    case KeyUpAction.Invalid:
-                    default:
-                        break;
-                }
-            }
-            e.Handled = true;
-        } // SelectionWindow_PreviewKeyDown
-        
-
-        private void SelectionWindow_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (_keyDownMappings.ContainsKey(e.Key))
-            {
-                _tmpVM = DataContext as SelectionViewModel;
-                KeyDownAction dir = _keyDownMappings[e.Key];
-
-                _tmpVM.ResizeSelection(dir);                
-            }
-            e.Handled = true;
-        } // SelectionWindow_PreviewKeyDown
-
-
-        private void SelectionWindow_Loaded(object sender, RoutedEventArgs e)
-        {
-            if (!_winLoaded)
-            {
-                // Don't show the tip if you cannot switch screens
-                if (!_switchValid)
-                {
-                    LabelPanel.Children.Remove(SwitchLblPanel);
-                }
-
-                _winLoaded = true;
-            }
-
-            this.WindowState = WindowState.Maximized;
-        } // SelectionWindow_Loaded
-
-
-        private void SelectionWindow_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            _tmpVM = DataContext as SelectionViewModel;
-            _tmpVM.StartSelection(e.GetPosition(this));
-
-            e.Handled = true;
-        } // SelectionWindow_MouseLeftButtonDown
-
-
-        private void SelectionWindow_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            _tmpVM?.StopSelection(e.GetPosition(this));
-
-            e.Handled = true;
-        } // SelectionWindow_MouseLeftButtonUp
-
-
-        private void SelectionWindow_MouseMove(object sender, MouseEventArgs e)
-        {
-            _tmpVM?.UpdateSelection(e.GetPosition(this));
-
-            e.Handled = true;
-        } // SelectionWindow_MouseMove
-
 
         protected override void OnClosing(CancelEventArgs e)
         {
@@ -324,6 +103,100 @@ namespace LeerCopyWPF
 
             base.OnClosing(e);
         }
+
+
+        private void SelectionWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState.Maximized;
+        }
+
+
+        /// <summary>
+        /// Handles all key events that are not able to be handled in XAML through KeyTriggers without breaking MVVM
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SelectionWindow_PreviewKeyUp(object sender, KeyEventArgs e)
+        {
+            string keyStr = _keyConverter.ConvertToString(e.Key);
+
+            if (keyStr == Properties.Settings.Default.SaveKey)          // Save selection key binding
+            {
+                SelectionViewModel viewModel = DataContext as SelectionViewModel;
+
+                if (viewModel.CanSave)
+                {
+                    // Important that selection window opening save dialog is always topmost in z-order otherwise
+                    // dragging the dialog to a different screen and clicking on that window would cover the dialog
+                    Topmost = true;
+
+                    // Disable selection on all other selection windows
+                    _selectionWindowController.DisableSelection();
+
+                    // Get the full path for the initial save directory (relative paths will throw exception)
+                    string initialSavePath = System.IO.Path.GetFullPath(Properties.Settings.Default.LastSavePath);
+
+                    // Configure save dialog
+                    Microsoft.Win32.SaveFileDialog saveDialog = new Microsoft.Win32.SaveFileDialog
+                    {
+                        AddExtension = true,
+                        DefaultExt = Properties.Settings.Default.DefaultSaveExt,
+                        FileName = Properties.Settings.Default.DefaultFileName,
+                        Filter = "BMP (.bmp)|*.bmp|GIF (.gif)|*.gif|JPEG (.jpg)|*.jpg;*.jpeg|PNG (.png)|*.png|TIFF (.tif)|*.tif;*.tiff|WMP (.wmp)|*.wmp",
+                        InitialDirectory = initialSavePath,
+                        OverwritePrompt = true,
+                        Title = "Save Leer"
+                    };
+
+                    // Show dialog
+                    bool? result = saveDialog.ShowDialog(this);
+
+                    if (result == true)
+                    {
+                        viewModel.SaveCommand.Execute(saveDialog.FileName);
+                    }
+
+                    // Enable selection on all other selection windows
+                    _selectionWindowController.EnableSelection();
+
+                    // Clear the topmost designation for normal operation and give focus to this window
+                    Topmost = false;
+                    Activate();
+                    Focus();
+                }
+
+                e.Handled = true;
+            }
+            else if (keyStr == Properties.Settings.Default.SettingsWin) // Open settings key binding
+            {
+                SelectionViewModel viewModel = DataContext as SelectionViewModel;
+
+                if (viewModel.CanOpenSettings)
+                {
+                    SettingsViewModel settingsViewModel = new SettingsViewModel();
+                    DialogWindow dialog = new DialogWindow
+                    {
+                        DataContext = settingsViewModel
+                    };
+
+                    dialog.ShowDialog();
+                }
+
+                e.Handled = true;
+            }
+            else if (keyStr == Properties.Settings.Default.QuitKey)     // Quit selection key binding
+            {
+                SelectionViewModel viewModel = DataContext as SelectionViewModel;
+
+                if (viewModel.CanClose)
+                {
+                    _selectionWindowController.StopSelection();
+                }
+
+                e.Handled = true;
+            }
+        }
+
         #endregion // EventHandlers
     }
 }

@@ -41,32 +41,14 @@
     <Setting Name="MainWinY" Type="System.Double" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="SwitchScreenKey" Type="System.String" Scope="User">
-      <Value Profile="(Default)">F</Value>
-    </Setting>
-    <Setting Name="KeyUpNames" Type="System.String[]" Scope="Application">
-      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
-&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-  &lt;string&gt;CopyKey&lt;/string&gt;
-  &lt;string&gt;EditKey&lt;/string&gt;
-  &lt;string&gt;SaveKey&lt;/string&gt;
-  &lt;string&gt;ClearKey&lt;/string&gt;
-  &lt;string&gt;QuitKey&lt;/string&gt;
-  &lt;string&gt;TipsKey&lt;/string&gt;
-  &lt;string&gt;SettingsWin&lt;/string&gt;
-  &lt;string&gt;SelectAll&lt;/string&gt;
-  &lt;string&gt;SwitchScreenKey&lt;/string&gt;
-  &lt;string&gt;BorderKey&lt;/string&gt;
-&lt;/ArrayOfString&gt;</Value>
-    </Setting>
     <Setting Name="BorderKey" Type="System.String" Scope="User">
       <Value Profile="(Default)">B</Value>
     </Setting>
-    <Setting Name="BorderVisibility" Type="System.Windows.Visibility" Scope="User">
-      <Value Profile="(Default)">Visible</Value>
+    <Setting Name="BorderVisibility" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="TipsVisibility" Type="System.Windows.Visibility" Scope="User">
-      <Value Profile="(Default)">Visible</Value>
+    <Setting Name="TipsVisibility" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="DefaultFileName" Type="System.String" Scope="User">
       <Value Profile="(Default)">L33R</Value>

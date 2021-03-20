@@ -1,8 +1,11 @@
 ﻿using LeerCopyWPF.Commands;
+using LeerCopyWPF.Controller;
+using LeerCopyWPF.Enums;
 using LeerCopyWPF.Models;
 using LeerCopyWPF.Utilities;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Windows.Input;
 
@@ -10,94 +13,60 @@ namespace LeerCopyWPF.ViewModels
 {
     public class MainWindowViewModel : BaseViewModel
     {
-        #region Fields
-        /// <summary>
-        /// All screens in user's environment
-        /// </summary>
-        private IList<SimpleScreen> _screens;
-        /// <summary>
-        /// Command for opening settings window
-        /// </summary>
-        private ICommand _settingsCommand;
-        #endregion // Fields
-
         #region Constants
+
         private const string ConstDisplayName = "Leer Copy";
+
         #endregion // Constants
 
+
+        #region Fields
+
+        #region Public Fields
+        #endregion
+
+        #region Protected Fields
+        #endregion
+
+        #region Private Fields
+        #endregion
+
+        #endregion // Fields
+
+
         #region Properties
+
+        #region Public Properties
+
         public override string DisplayName { get => ConstDisplayName; }
 
-        public IList<SimpleScreen> Screens { get => _screens ?? (_screens = BitmapUtilities.CaptureScreens()); }
+        #endregion
 
-        public int CurScreenIndex { get; private set; }
+        #region Protected Properties
+        #endregion
 
-        public SimpleScreen CurrentScreen { get => Screens[CurScreenIndex]; }
+        #region Private Properties
+        #endregion
 
-        public event EventHandler OpenSettingsEvent;
-
-        public ICommand SettingsCommand { get => _settingsCommand ?? (_settingsCommand = new RelayCommand(param => ShowSettings())); }
-
-        public ICommand CloseCommand { get; }
         #endregion // Properties
 
-        #region Constructors
-        public MainWindowViewModel(Action<object> closeAction)
-        {
-            // Capture all screens
-            _screens = BitmapUtilities.CaptureScreens();
 
-            CurScreenIndex = 0;
-            CloseCommand = new RelayCommand(closeAction);
+        #region Methods
+
+        #region Public Methods
+
+        public MainWindowViewModel()
+        {
         }
-        #endregion // Constructors
 
-        #region Functions
-        /// <summary>
-        /// Initializes screen index to screen that contains given coordinates
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <returns>Index of screen cooridinates lie within, 0 otherwise</returns>
-        public int InitScreenIndex(double x, double y)
-        {
-            int i;
-            bool found = false;
+        #endregion
 
-            for (i = 0; i < Screens.Count; i++)
-            {
-                if (Screens[i].Bounds.Contains(x, y))
-                {
-                    found = true;
-                    break;
-                }
-            }
+        #region Protected Methods
+        #endregion
 
-            if (found)
-            {
-                return (CurScreenIndex = i);
-            }
-            return (CurScreenIndex = 0);
-        } // InitScreenIndex
+        #region Private Methods
+        #endregion
 
-
-        /// <summary>
-        /// Increments the screen index
-        /// </summary>
-        /// <returns>New screen index</returns>
-        public int IncrementScreen()
-        {
-            return (CurScreenIndex = (CurScreenIndex + 1) % Screens.Count);
-        } // IncrementScreen
-
-
-        /// <summary>
-        /// Opens SettingsWindow
-        /// </summary>
-        public void ShowSettings()
-        {
-            OpenSettingsEvent?.Invoke(this, EventArgs.Empty);
-        } // OpenSettings
-        #endregion // Functions
+        #endregion // Methods
     }
 }

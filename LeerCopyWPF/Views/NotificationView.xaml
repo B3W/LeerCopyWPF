@@ -36,6 +36,10 @@
         <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20,0,20,0">
             <!-- OK Button -->
             <Button x:Name="OkButton" Content="Ok" Click="OkButton_Click" IsDefault="True">
+                <!-- Style trigger references -->
+                <!-- https://docs.microsoft.com/en-us/dotnet/api/system.windows.datatrigger?view=net-5.0 -->
+                <!-- https://stackoverflow.com/a/19319456 -->
+                <!-- https://stackoverflow.com/a/38396778 -->
                 <Button.Style>
                     <Style BasedOn="{StaticResource NotificationBtnStyle}" TargetType="Button">
                         <!-- Default values for properties involved in style trigger -->

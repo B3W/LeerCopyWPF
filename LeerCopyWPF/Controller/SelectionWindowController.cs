@@ -22,6 +22,12 @@ namespace LeerCopyWPF.Controller
         #endregion
 
         #region Private Fields
+
+        /// <summary>
+        /// Handle to the dialog window controller
+        /// </summary>
+        private readonly IDialogWindowController _dialogWindowController;
+
         #endregion
 
         #endregion // Fields
@@ -32,6 +38,8 @@ namespace LeerCopyWPF.Controller
         #region Public Properties
 
         public event EventHandler SelectionQuit;
+
+        public IDialogWindowController DialogWindowController { get => _dialogWindowController; }
 
         /// <summary>
         /// Metadata on all screens in user's environment
@@ -72,8 +80,10 @@ namespace LeerCopyWPF.Controller
         /// <summary>
         /// Constructs instance of SelectionWindowController
         /// </summary>
-        public SelectionWindowController()
+        public SelectionWindowController(IDialogWindowController dialogWindowController)
         {
+            _dialogWindowController = dialogWindowController;
+
             SelectionActive = false;
             SelectionEnabled = false;
             SelectionWindows = new List<Window>();

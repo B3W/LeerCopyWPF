@@ -28,6 +28,11 @@ namespace LeerCopyWPF.Controller
         /// </summary>
         private readonly ISelectionWindowController _selectionWindowController;
 
+        /// <summary>
+        /// Handle to the dialog window controller
+        /// </summary>
+        private readonly IDialogWindowController _dialogWindowController;
+
         #endregion
 
         #endregion // Fields
@@ -36,6 +41,9 @@ namespace LeerCopyWPF.Controller
         #region Properties
 
         #region Public Properties
+
+        public IDialogWindowController DialogWindowController { get => _dialogWindowController; }
+
         #endregion
 
         #region Protected Properties
@@ -60,9 +68,10 @@ namespace LeerCopyWPF.Controller
         /// <summary>
         /// Constructs instance of MainWindowController
         /// </summary>
-        public MainWindowController(ISelectionWindowController selectionWindowController)
+        public MainWindowController(ISelectionWindowController selectionWindowController, IDialogWindowController dialogWindowController)
         {
             _selectionWindowController = selectionWindowController;
+            _dialogWindowController = dialogWindowController;
 
             // First Window object instantiated in AppDomain sets MainWindow property of Application (set anyway to be safe)
             MainWindow = new MainWindow(this);
@@ -75,7 +84,7 @@ namespace LeerCopyWPF.Controller
         }
 
 
-        public void PerformAction(MainWindowControllerActions action)
+        public void PerformAction(MainWindowControllerActions action, object data = null)
         {
             switch (action)
             {

@@ -163,12 +163,7 @@ namespace LeerCopyWPF.Views
         private void OpenSettings_Click(object sender, RoutedEventArgs e)
         {
             SettingsViewModel settingsViewModel = new SettingsViewModel();
-            DialogWindow dialog = new DialogWindow
-            {
-                DataContext = settingsViewModel
-            };
-
-            dialog.ShowDialog();
+            _mainWindowController.DialogWindowController.ShowDialog(settingsViewModel);
         }
 
 

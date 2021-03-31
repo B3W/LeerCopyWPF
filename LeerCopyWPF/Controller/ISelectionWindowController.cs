@@ -16,6 +16,11 @@ namespace LeerCopyWPF.Controller
         event EventHandler SelectionQuit;
 
         /// <summary>
+        /// Handle to dialog window controller
+        /// </summary>
+        IDialogWindowController DialogWindowController { get; }
+
+        /// <summary>
         /// Starts selection operation if there is not one already active
         /// </summary>
         /// <param name="owner">Main window that owns selection screens</param>

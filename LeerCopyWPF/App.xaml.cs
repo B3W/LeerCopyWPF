@@ -40,8 +40,9 @@ namespace LeerCopyWPF
             }
 
             // Initialize window controllers
-            ISelectionWindowController selectionWindowController = new SelectionWindowController();
-            IMainWindowController mainWindowController = new MainWindowController(selectionWindowController);
+            IDialogWindowController dialogWindowController = new DialogWindowController();
+            ISelectionWindowController selectionWindowController = new SelectionWindowController(dialogWindowController);
+            IMainWindowController mainWindowController = new MainWindowController(selectionWindowController, dialogWindowController);
 
             // Show main window
             mainWindowController.PerformAction(MainWindowControllerActions.ShowMainWindow);

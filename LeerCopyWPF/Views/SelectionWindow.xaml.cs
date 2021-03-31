@@ -174,12 +174,7 @@ namespace LeerCopyWPF.Views
                 if (viewModel.CanOpenSettings)
                 {
                     SettingsViewModel settingsViewModel = new SettingsViewModel();
-                    DialogWindow dialog = new DialogWindow
-                    {
-                        DataContext = settingsViewModel
-                    };
-
-                    dialog.ShowDialog();
+                    _selectionWindowController.DialogWindowController.ShowDialog(settingsViewModel);
                 }
 
                 e.Handled = true;

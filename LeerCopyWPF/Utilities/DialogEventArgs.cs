@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LeerCopyWPF.Controller
+namespace LeerCopyWPF.Utilities
 {
     public class DialogEventArgs : EventArgs
     {

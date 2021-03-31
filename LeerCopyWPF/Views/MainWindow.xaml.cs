@@ -147,16 +147,16 @@ namespace LeerCopyWPF.Views
         private void MainWindow_Activated(object sender, EventArgs e)
         {
             // Give focus to an active selection, otherwise do nothing
-            _mainWindowController.PerformAction(MainWindowControllerActions.GiveSelectionFocus);
+            _mainWindowController.GiveSelectionFocus();
         }
 
 
         private async void SelectCaptureBtn_Click(object sender, RoutedEventArgs e)
         {
-            _mainWindowController.PerformAction(MainWindowControllerActions.HideMainWindow);
+            _mainWindowController.HideMainWindow();
             await Task.Delay(_SELECT_CAPTURE_START_DELAY_MS); // Wait for window to hide before starting selection
 
-            _mainWindowController.PerformAction(MainWindowControllerActions.StartSelection);
+            _mainWindowController.StartSelection();
         }
 
 
@@ -169,7 +169,7 @@ namespace LeerCopyWPF.Views
 
         private void ExitApp_Click(object sender, RoutedEventArgs e)
         {
-            _mainWindowController.PerformAction(MainWindowControllerActions.CloseMainWindow);
+            _mainWindowController.CloseMainWindow();
         }
 
         #endregion

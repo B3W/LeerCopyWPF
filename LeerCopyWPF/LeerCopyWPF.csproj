@@ -82,7 +82,6 @@
     <Compile Include="Controller\IMainWindowController.cs" />
     <Compile Include="Controller\MainWindowController.cs" />
     <Compile Include="Controller\SelectionWindowController.cs" />
-    <Compile Include="Enums\MainWindowControllerActions.cs" />
     <Compile Include="Enums\NotificationType.cs" />
     <Compile Include="Models\ISetting.cs" />
     <Compile Include="Models\Notification.cs" />

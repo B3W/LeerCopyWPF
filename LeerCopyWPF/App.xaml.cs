@@ -45,7 +45,7 @@ namespace LeerCopyWPF
             IMainWindowController mainWindowController = new MainWindowController(selectionWindowController, dialogWindowController);
 
             // Show main window
-            mainWindowController.PerformAction(MainWindowControllerActions.ShowMainWindow);
+            mainWindowController.ShowMainWindow();
         }
 
         protected override void OnExit(ExitEventArgs e)

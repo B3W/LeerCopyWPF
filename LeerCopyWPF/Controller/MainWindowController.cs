@@ -83,47 +83,31 @@ namespace LeerCopyWPF.Controller
             _selectionWindowController.SelectionQuit += OnSelectionQuit;
         }
 
-
-        public void PerformAction(MainWindowControllerActions action, object data = null)
+        
+        public void ShowMainWindow()
         {
-            switch (action)
-            {
-                case MainWindowControllerActions.StartSelection:
-                    StartSelection();
-                    break;
-
-                case MainWindowControllerActions.GiveSelectionFocus:
-                    _selectionWindowController.GiveSelectionFocus(MainWindow);
-                    break;
-
-                case MainWindowControllerActions.ShowMainWindow:
-                    ShowMainWindow();
-                    break;
-
-                case MainWindowControllerActions.HideMainWindow:
-                    HideMainWindow();
-                    break;
-
-                case MainWindowControllerActions.CloseMainWindow:
-                    CloseMainWindow();
-                    break;
-
-                default:
-                    break;
-            }
+            MainWindow.Show();
+            MainWindow.WindowState = WindowState.Normal;
+            MainWindow.Activate();
         }
 
-        #endregion
 
-        #region Protected Methods
-        #endregion
+        public void HideMainWindow()
+        {
+            MainWindow.Hide();
+        }
 
-        #region Private Methods
 
         /// <summary>
-        /// Logic to perform start selection action.
+        /// Completely closes the main window
         /// </summary>
-        private void StartSelection()
+        public void CloseMainWindow()
+        {
+            MainWindow.Close();
+        }
+
+
+        public void StartSelection()
         {
             if (!_selectionWindowController.StartSelection(MainWindow))
             {
@@ -138,34 +122,17 @@ namespace LeerCopyWPF.Controller
         }
 
 
-        /// <summary>
-        /// Shows and activates the main window
-        /// </summary>
-        private void ShowMainWindow()
+        public void GiveSelectionFocus()
         {
-            MainWindow.Show();
-            MainWindow.WindowState = WindowState.Normal;
-            MainWindow.Activate();
+            _selectionWindowController.GiveSelectionFocus(MainWindow);
         }
 
+        #endregion
 
-        /// <summary>
-        /// Minimizes the window and hides the taskbar icon
-        /// </summary>
-        private void HideMainWindow()
-        {
-            MainWindow.Hide();
-        }
+        #region Protected Methods
+        #endregion
 
-
-        /// <summary>
-        /// Completely closes the main window
-        /// </summary>
-        private void CloseMainWindow()
-        {
-            MainWindow.Close();
-        }
-
+        #region Private Methods
 
         /// <summary>
         /// Handler for SelectionQuit event

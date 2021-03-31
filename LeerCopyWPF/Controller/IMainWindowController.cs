@@ -15,9 +15,28 @@ namespace LeerCopyWPF.Controller
         IDialogWindowController DialogWindowController { get; }
 
         /// <summary>
-        /// Signals window controller to perform specified action.
+        /// Shows and activates main window
         /// </summary>
-        /// <param name="action">Action to perform</param>
-        void PerformAction(MainWindowControllerActions action, object data = null);
+        void ShowMainWindow();
+
+        /// <summary>
+        /// Minimizes main window and hides taskbar icon
+        /// </summary>
+        void HideMainWindow();
+
+        /// <summary>
+        /// Completely closes main window
+        /// </summary>
+        void CloseMainWindow();
+
+        /// <summary>
+        /// Logic to start selection
+        /// </summary>
+        void StartSelection();
+
+        /// <summary>
+        /// Gives input focus to active selection
+        /// </summary>
+        void GiveSelectionFocus();
     }
 }

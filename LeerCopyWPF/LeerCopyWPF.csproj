@@ -82,13 +82,14 @@
     <Compile Include="Controller\IMainWindowController.cs" />
     <Compile Include="Controller\MainWindowController.cs" />
     <Compile Include="Controller\SelectionWindowController.cs" />
+    <Compile Include="Enums\NotificationOptions.cs" />
     <Compile Include="Enums\NotificationType.cs" />
     <Compile Include="Models\ISetting.cs" />
     <Compile Include="Models\Notification.cs" />
     <Compile Include="Models\Selection.cs" />
     <Compile Include="Models\Setting.cs" />
     <Compile Include="Utilities\ExtensionMethods.cs" />
-    <Compile Include="Controller\DialogEventArgs.cs" />
+    <Compile Include="Utilities\DialogEventArgs.cs" />
     <Compile Include="Utilities\SelectionStartEventArgs.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
@@ -175,6 +176,8 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Assets\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

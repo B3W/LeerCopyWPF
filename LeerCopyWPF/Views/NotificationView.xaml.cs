@@ -36,5 +36,41 @@ namespace LeerCopyWPF.Views
                 parentWindow.Close();
             }
         }
+
+
+        private void YesButton_Click(object sender, RoutedEventArgs e)
+        {
+            Window parentWindow = Window.GetWindow(this);
+
+            if (parentWindow != null)
+            {
+                parentWindow.DialogResult = true;
+                parentWindow.Close();
+            }
+        }
+
+
+        private void NoButton_Click(object sender, RoutedEventArgs e)
+        {
+            Window parentWindow = Window.GetWindow(this);
+
+            if (parentWindow != null)
+            {
+                parentWindow.DialogResult = false;
+                parentWindow.Close();
+            }
+        }
+
+
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            Window parentWindow = Window.GetWindow(this);
+
+            if (parentWindow != null)
+            {
+                parentWindow.DialogResult = false;
+                parentWindow.Close();
+            }
+        }
     }
 }

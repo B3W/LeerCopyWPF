@@ -46,6 +46,11 @@ namespace LeerCopyWPF.ViewModels
         /// </summary>
         public NotificationType NotificationType { get => _notification.NotificationType; }
 
+        /// <summary>
+        /// User options for notification
+        /// </summary>
+        public NotificationOptions UserOptions { get => _notification.UserOptions; }
+
         #endregion
 
         #region Protected Properties

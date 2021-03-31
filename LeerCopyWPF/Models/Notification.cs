@@ -49,6 +49,11 @@ namespace LeerCopyWPF.Models
         /// </summary>
         public NotificationType NotificationType { get; }
 
+        /// <summary>
+        /// User options for notification
+        /// </summary>
+        public NotificationOptions UserOptions { get; }
+
         #endregion
 
         #region Protected Properties
@@ -65,16 +70,35 @@ namespace LeerCopyWPF.Models
         #region Public Methods
 
         /// <summary>
+        /// Constructs Notification instance with notification type set to 'Information' and user options set to 'Ok'
+        /// </summary>
+        /// <param name="title">Title for the notification</param>
+        /// <param name="message">Message to be displayed for the notification</param>
+        public Notification(string title, string message) : this(title, message, NotificationType.Information, NotificationOptions.Ok) { }
+
+
+        /// <summary>
+        /// Constructs Notification instance with user options set to 'Ok'
+        /// </summary>
+        /// <param name="title">Title for the notification</param>
+        /// <param name="message">Message to be displayed for the notification</param>
+        /// <param name="notificationType">Type of notification displayed</param>
+        public Notification(string title, string message, NotificationType notificationType) : this(title, message, notificationType, NotificationOptions.Ok) { }
+
+
+        /// <summary>
         /// Constructs Notification instance
         /// </summary>
         /// <param name="title">Title for the notification</param>
         /// <param name="message">Message to be displayed for the notification</param>
         /// <param name="notificationType">Type of notification displayed</param>
-        public Notification(string title, string message, NotificationType notificationType)
+        /// <param name="notificationOptions">User options for notification</param>
+        public Notification(string title, string message, NotificationType notificationType, NotificationOptions notificationOptions)
         {
             Title = title ?? ConstDefaultTitle;
             Message = message;
             NotificationType = notificationType;
+            UserOptions = notificationOptions;
         }
 
         #endregion

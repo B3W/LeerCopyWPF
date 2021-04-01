@@ -177,7 +177,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Assets\" />
+    <Resource Include="Assets\InformationIcon1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\InformationIcon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

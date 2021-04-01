@@ -177,10 +177,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\InformationIcon1.png" />
+    <Resource Include="Assets\InformationIcon.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\InformationIcon.png" />
+    <Resource Include="Assets\WarningIcon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -8,6 +8,7 @@ using System.Windows.Threading;
 using LeerCopyWPF.Controller;
 using LeerCopyWPF.Views;
 using LeerCopyWPF.Enums;
+using Serilog;
 
 namespace LeerCopyWPF
 {
@@ -16,28 +17,38 @@ namespace LeerCopyWPF
     /// </summary>
     public partial class App : Application
     {
+        /// <summary>
+        /// Handle to logger for this source context
+        /// </summary>
+        private ILogger _logger;
+
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
 
-            // Initialize AppData setting
-            try
-            {
-                string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-                LeerCopyWPF.Properties.Settings.Default.AppDataLoc = Path.Combine(appDataPath, ResourceAssembly.GetName().Name);
+            // Setup logger
+            string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            string logPath = Path.Combine(appDataPath, "log-.txt");
 
-                LeerCopyWPF.Properties.Settings.Default.Save();
-            }
-            catch (PlatformNotSupportedException ex)
-            {
-                // TODO exception handling
-                Console.WriteLine("App.OnStartup: Exception initializing AppData - %s\n", ex.Message);
-            }
-            catch (InvalidOperationException ex)
-            {
-                // TODO exception handling
-                Console.WriteLine("App.OnStartup: Exception initializing AppData - %s\n", ex.Message);
-            }
+            const string ConstLogTemplate = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] [{SourceContext:l}] {Message:lj}{NewLine}{Exception}";
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.File(logPath,
+                              outputTemplate: ConstLogTemplate,         // Format for logs
+                              rollingInterval: RollingInterval.Day,     // New log file created each day with date appended to file name
+                              retainedFileCountLimit: 20,               // Most recent 20 log files will be retained
+                              buffered: false)                          // Each log event is flushed to disk
+                .CreateLogger();
+
+            _logger = Log.ForContext<App>();
+
+            // Record application version
+            string appVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            _logger.Information("Application startup {Version}", appVersion);
+
+            // Initialize AppData setting
+            LeerCopyWPF.Properties.Settings.Default.AppDataLoc = Path.Combine(appDataPath, ResourceAssembly.GetName().Name);
+            LeerCopyWPF.Properties.Settings.Default.Save();
 
             // Initialize window controllers
             IDialogWindowController dialogWindowController = new DialogWindowController();
@@ -45,6 +56,7 @@ namespace LeerCopyWPF
             IMainWindowController mainWindowController = new MainWindowController(selectionWindowController, dialogWindowController);
 
             // Show main window
+            _logger.Debug("Showing main window");
             mainWindowController.ShowMainWindow();
         }
 
@@ -76,30 +88,47 @@ namespace LeerCopyWPF
 
                         if (fileDT.AddDays(NUM_DAYS_TO_EXPIRE) < currentDT)
                         {
+                            _logger.Debug("Deleting expired temp 'edit' file {File}", file);
                             File.Delete(file);
                         }
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Exception while deleting temp 'edit' files");
+            }
             finally
             {
+                Log.CloseAndFlush();
                 base.OnExit(e);
             }
         }
 
         /// <summary>
-        /// Handles any exceptions unhandled by the application.
+        /// Handles any exceptions unhandled by the UI thread of the application.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
-            // TODO ADD LOGGING
             // Process unhandled exception
-            Console.WriteLine("Unhandled Exception: %s\n", e.Exception.Message);
+            _logger.Fatal(e.Exception, "Unhandled exception on UI thread");
+            Log.CloseAndFlush();
 
-            // Prevent default unhandled exception processing
-            e.Handled = true;
+            string fatalMsg = "Fatal error encountered; application will exit."
+                              + $" Check logs located in \"{LeerCopyWPF.Properties.Settings.Default.AppDataLoc}\" for details.";
+            Models.Notification fatalNotification = new Models.Notification("Fatal Error", fatalMsg, NotificationType.Error);
+            ViewModels.NotificationViewModel notificationViewModel = new ViewModels.NotificationViewModel(fatalNotification);
+
+            DialogWindow dialog = new DialogWindow
+            {
+                DataContext = notificationViewModel
+            };
+            dialog.ShowDialog();
+
+            // Prevent default unhandled exception processing of allowing WPF to handle it (continues application execution)
+            // e.Handled = true;
         }
     }
 }

@@ -4,8 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:LeerCopyWPF.Views"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800"
+             MinWidth="300" MaxWidth="800">
     <UserControl.Resources>
         <Style x:Key="NotificationBtnStyle" TargetType="Button">
             <Setter Property="FontSize" Value="16"/>
@@ -15,6 +15,13 @@
             <Setter Property="MinWidth" Value="85"/>
             <Setter Property="MinHeight" Value="20"/>
             <Setter Property="Margin" Value="10,20,10,20"/>
+        </Style>
+        <Style x:Key="NotificationIconStyle" TargetType="Image">
+            <Setter Property="MaxWidth" Value="64"/>
+            <Setter Property="MaxHeight" Value="64"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="20,10,10,10"/>
         </Style>
     </UserControl.Resources>
     <Grid x:Name="NotificationViewGrid">
@@ -28,18 +35,35 @@
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
         <!-- Notification Icon -->
-        <!-- TODO -->
+        <!-- Style trigger references -->
+        <!-- https://docs.microsoft.com/en-us/dotnet/api/system.windows.datatrigger?view=net-5.0 -->
+        <!-- https://stackoverflow.com/a/19319456 -->
+        <!-- https://stackoverflow.com/a/38396778 -->
+        <Image x:Name="NotificationIcon" Grid.Row="0" Grid.Column="0">
+            <Image.Style>
+                <Style BasedOn="{StaticResource NotificationIconStyle}" TargetType="Image">
+                    <!-- Default values for properties involved in style trigger -->
+                    <Setter Property="Source" Value="pack://application:,,,/LeerCopyWPF;component/Assets/InformationIcon.png"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=NotificationType}" Value="Warning">
+                            <!-- 'Triggered' values for properties involved in style trigger -->
+                            <Setter Property="Source" Value="pack://application:,,,/LeerCopyWPF;component/Assets/WarningIcon.png"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=NotificationType}" Value="Error">
+                            <!-- 'Triggered' values for properties involved in style trigger -->
+                            <Setter Property="Source" Value="pack://application:,,,/LeerCopyWPF;component/Assets/ErrorIcon.png"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Image.Style>
+        </Image>
         <!-- Notification Message -->
         <TextBlock x:Name="NotificationMessage" Grid.Row="0" Grid.Column="1" Text="{Binding Path=Message}" TextWrapping="Wrap" TextAlignment="Left"
-                   FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,10,20,10"/>
+                   FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,10,20,10"/>
         <!-- Notification Buttons -->
         <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20,0,20,0">
             <!-- OK Button -->
             <Button x:Name="OkButton" Content="Ok" Click="OkButton_Click" IsDefault="True">
-                <!-- Style trigger references -->
-                <!-- https://docs.microsoft.com/en-us/dotnet/api/system.windows.datatrigger?view=net-5.0 -->
-                <!-- https://stackoverflow.com/a/19319456 -->
-                <!-- https://stackoverflow.com/a/38396778 -->
                 <Button.Style>
                     <Style BasedOn="{StaticResource NotificationBtnStyle}" TargetType="Button">
                         <!-- Default values for properties involved in style trigger -->

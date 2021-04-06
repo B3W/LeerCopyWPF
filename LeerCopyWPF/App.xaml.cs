@@ -9,6 +9,7 @@ using LeerCopyWPF.Controller;
 using LeerCopyWPF.Views;
 using LeerCopyWPF.Enums;
 using Serilog;
+using System.Reflection;
 
 namespace LeerCopyWPF
 {
@@ -26,9 +27,12 @@ namespace LeerCopyWPF
         {
             base.OnStartup(e);
 
+            // Initialize local AppData directory
+            string rootAppDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            string appDataPath = Path.Combine(rootAppDataPath, Assembly.GetExecutingAssembly().GetName().Name);
+
             // Setup logger
             const string ConstLogTemplate = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] [{SourceContext:l}] {Message:lj}{NewLine}{Exception}";
-            string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             string logPath = Path.Combine(appDataPath, "log-.txt");
 
             Log.Logger = new LoggerConfiguration()
@@ -43,7 +47,7 @@ namespace LeerCopyWPF
             _logger = Log.ForContext<App>();
 
             // Record application version
-            string appVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            string appVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             _logger.Information("Application startup {Version}", appVersion);
 
             // Initialize AppData setting

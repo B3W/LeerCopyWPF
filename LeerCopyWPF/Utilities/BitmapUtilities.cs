@@ -80,6 +80,7 @@ namespace LeerCopyWPF.Utilities
         {
             if (bitmap == null)
             {
+                _logger.Error("Null bitmap passed in");
                 throw new ArgumentNullException("bitmap");
             }
 
@@ -125,6 +126,7 @@ namespace LeerCopyWPF.Utilities
         {
             if (bmSrc == null)
             {
+                _logger.Error("Null bitmap source passed in");
                 throw new ArgumentNullException("bmSrc");
             }
 
@@ -191,6 +193,7 @@ namespace LeerCopyWPF.Utilities
         {
             if (screen == null)
             {
+                _logger.Error("Null screen passed in");
                 throw new ArgumentNullException("screen");
             }
 

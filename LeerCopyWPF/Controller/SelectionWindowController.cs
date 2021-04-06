@@ -2,6 +2,7 @@
 using LeerCopyWPF.Utilities;
 using LeerCopyWPF.ViewModels;
 using LeerCopyWPF.Views;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -64,6 +65,11 @@ namespace LeerCopyWPF.Controller
         #region Private Properties
 
         /// <summary>
+        /// Handle to logger for this source context
+        /// </summary>
+        private readonly ILogger _logger;
+
+        /// <summary>
         /// Collection of all selection windows
         /// </summary>
         private IList<Window> SelectionWindows { get; set; }
@@ -82,6 +88,7 @@ namespace LeerCopyWPF.Controller
         /// </summary>
         public SelectionWindowController(IDialogWindowController dialogWindowController)
         {
+            _logger = Log.ForContext<SelectionWindowController>();
             _dialogWindowController = dialogWindowController;
 
             SelectionActive = false;
@@ -94,12 +101,13 @@ namespace LeerCopyWPF.Controller
         {
             if (SelectionActive)
             {
+                _logger.Debug("Attempted to start selection when one was already active");
                 return true;
             }
 
             SelectionActive = true;
             SelectionEnabled = true;
-            Screens = BitmapUtilities.CaptureScreens();
+            Screens = BitmapUtilities.DetectScreens();
 
             // Initialize selection window for each screen
             SelectionWindows.Clear();
@@ -118,6 +126,8 @@ namespace LeerCopyWPF.Controller
 
                 // Show all selection windows at the same time
                 selectionWindow.Show();
+
+                _logger.Debug("Constructed selection window {Window}", selectionWindow);
             }
 
             return true;
@@ -132,6 +142,8 @@ namespace LeerCopyWPF.Controller
                 {
                     if (selectionWindow.ScreenBounds.Contains(owner.Left, owner.Top))
                     {
+                        _logger.Debug("{Window} given focus", selectionWindow);
+
                         selectionWindow.Activate();
                         selectionWindow.Focus();
 
@@ -146,6 +158,7 @@ namespace LeerCopyWPF.Controller
         {
             if (SelectionActive)
             {
+                _logger.Debug("Enabling selection");
                 SelectionEnabled = true;
 
                 // Enable all selection windows
@@ -162,6 +175,7 @@ namespace LeerCopyWPF.Controller
         {
             if (SelectionActive)
             {
+                _logger.Debug("Disabling selection");
                 SelectionEnabled = false;
 
                 // Disable all selection windows
@@ -176,6 +190,7 @@ namespace LeerCopyWPF.Controller
 
         public void StopSelection()
         {
+            _logger.Debug("Quitting selection");
             SelectionActive = false;
             SelectionEnabled = false;
 

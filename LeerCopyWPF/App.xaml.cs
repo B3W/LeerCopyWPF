@@ -60,7 +60,6 @@ namespace LeerCopyWPF
             IMainWindowController mainWindowController = new MainWindowController(selectionWindowController, dialogWindowController);
 
             // Show main window
-            _logger.Debug("Showing main window");
             mainWindowController.ShowMainWindow();
         }
 

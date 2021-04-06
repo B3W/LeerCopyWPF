@@ -1,7 +1,9 @@
 ﻿using LeerCopyWPF.Enums;
+using LeerCopyWPF.Models;
 using LeerCopyWPF.Utilities;
 using LeerCopyWPF.ViewModels;
 using LeerCopyWPF.Views;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +24,11 @@ namespace LeerCopyWPF.Controller
         #endregion
 
         #region Private Fields
+
+        /// <summary>
+        /// Handle to logger for this source context
+        /// </summary>
+        private readonly ILogger _logger;
 
         /// <summary>
         /// Handle to the selection window controller
@@ -70,6 +77,7 @@ namespace LeerCopyWPF.Controller
         /// </summary>
         public MainWindowController(ISelectionWindowController selectionWindowController, IDialogWindowController dialogWindowController)
         {
+            _logger = Log.ForContext<MainWindowController>();
             _selectionWindowController = selectionWindowController;
             _dialogWindowController = dialogWindowController;
 
@@ -86,6 +94,8 @@ namespace LeerCopyWPF.Controller
         
         public void ShowMainWindow()
         {
+            _logger.Debug("Showing main window");
+
             MainWindow.Show();
             MainWindow.WindowState = WindowState.Normal;
             MainWindow.Activate();
@@ -94,6 +104,7 @@ namespace LeerCopyWPF.Controller
 
         public void HideMainWindow()
         {
+            _logger.Debug("Hiding main window");
             MainWindow.Hide();
         }
 
@@ -103,6 +114,7 @@ namespace LeerCopyWPF.Controller
         /// </summary>
         public void CloseMainWindow()
         {
+            _logger.Debug("Closing main window");
             MainWindow.Close();
         }
 
@@ -112,9 +124,14 @@ namespace LeerCopyWPF.Controller
             if (!_selectionWindowController.StartSelection(MainWindow))
             {
                 // Unable to start selection
-                ShowMainWindow();
+                _logger.Error("Unable to start selection");
 
-                // TODO Log, show notification
+                // Show notification then re-show main window
+                Notification notification = new Notification("Error", "Unable to start selection. Please try again.", NotificationType.Error);
+                NotificationViewModel notificationViewModel = new NotificationViewModel(notification);
+                _dialogWindowController.ShowDialog(notificationViewModel);                
+
+                ShowMainWindow();
             }
 
             // Make sure the main window shows up on task bar and in Alt+Tab menu
@@ -141,6 +158,7 @@ namespace LeerCopyWPF.Controller
         /// <param name="e">Arguments associated with event</param>
         private void OnSelectionQuit(object sender, EventArgs e)
         {
+            _logger.Debug("Selection quit");
             ShowMainWindow();
         }
 

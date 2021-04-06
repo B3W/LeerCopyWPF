@@ -31,6 +31,23 @@ namespace LeerCopyWPF
             string rootAppDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             string appDataPath = Path.Combine(rootAppDataPath, Assembly.GetExecutingAssembly().GetName().Name);
 
+            LeerCopyWPF.Properties.Settings.Default.AppDataLoc = appDataPath;
+            LeerCopyWPF.Properties.Settings.Default.Save();
+
+            try
+            {
+                Directory.CreateDirectory(appDataPath);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Fatal error prior to starting application's UI. Exiting application...",
+                                "Fatal Error",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Error);
+
+                Environment.Exit(1);
+            }
+
             // Setup logger
             const string ConstLogTemplate = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] [{SourceContext:l}] {Message:lj}{NewLine}{Exception}";
             string logPath = Path.Combine(appDataPath, "log-.txt");
@@ -49,10 +66,6 @@ namespace LeerCopyWPF
             // Record application version
             string appVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             _logger.Information("Application startup {Version}", appVersion);
-
-            // Initialize AppData setting
-            LeerCopyWPF.Properties.Settings.Default.AppDataLoc = Path.Combine(appDataPath, ResourceAssembly.GetName().Name);
-            LeerCopyWPF.Properties.Settings.Default.Save();
 
             // Initialize window controllers
             IDialogWindowController dialogWindowController = new DialogWindowController();

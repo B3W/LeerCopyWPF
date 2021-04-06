@@ -16,6 +16,7 @@
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+using Serilog;
 using System;
 using System.IO;
 using System.Windows.Media.Imaging;
@@ -24,12 +25,6 @@ namespace LeerCopyWPF.Utilities
 {
     public class EncodedImage
     {
-        #region Fields
-        #endregion // Fields
-
-
-        #region Properties
-
         /// <summary>
         /// Represents all valid encodings for images
         /// </summary>
@@ -42,6 +37,30 @@ namespace LeerCopyWPF.Utilities
             TIFF,
             WMP
         }
+
+        #region Fields
+
+        #region Public Fields
+        #endregion
+
+        #region Protected Fields
+        #endregion
+
+        #region Private Fields
+
+        /// <summary>
+        /// Handle to logger for this source context
+        /// </summary>
+        private readonly ILogger _logger;
+
+        #endregion
+
+        #endregion // Fields
+
+
+        #region Properties
+
+        #region Public Properties
 
         /// <summary>
         /// Image to encode
@@ -58,6 +77,14 @@ namespace LeerCopyWPF.Utilities
         /// </summary>
         public Encoding EncodingType { get; }
 
+        #endregion
+
+        #region Protected Properties
+        #endregion
+
+        #region Private Properties
+        #endregion
+
         #endregion // Properties
 
 
@@ -70,6 +97,14 @@ namespace LeerCopyWPF.Utilities
         /// <param name="encoding">Encoding to use on image</param>
         public EncodedImage(BitmapSource image, Encoding encoding)
         {
+            _logger = Log.ForContext<EncodedImage>();
+
+            if (image == null)
+            {
+                _logger.Error("Null image passed to constructor");
+                throw new ArgumentNullException("image", "Image cannot be null");
+            }
+
             Image = image;
             EncodingType = encoding;
 
@@ -97,7 +132,7 @@ namespace LeerCopyWPF.Utilities
                     Encoder = new BmpBitmapEncoder();
                     break;
             }
-        } // EncodedImage
+        }
 
 
         /// <summary>
@@ -107,16 +142,12 @@ namespace LeerCopyWPF.Utilities
         /// <param name="extension">Extension of file format to encode image to</param>
         public EncodedImage(BitmapSource image, string extension)
         {
+            _logger = Log.ForContext<EncodedImage>();
+
             if (image == null)
             {
-                // TODO Error logging
+                _logger.Error("Null image passed to constructor");
                 throw new ArgumentNullException("image", "Image cannot be null");
-            }
-
-            if (string.IsNullOrEmpty(extension))
-            {
-                // TODO Error logging
-                throw new ArgumentNullException("extension", "File extension cannot be null or empty");
             }
 
             Image = image;
@@ -124,7 +155,7 @@ namespace LeerCopyWPF.Utilities
 
             if (!encoding.HasValue)
             {
-                // TODO Error logging
+                _logger.Error("Unsupported file extension {Extension}", extension);
                 throw new ArgumentException($"'{extension}' is not a supported file extension", "extension");
             }
 
@@ -154,7 +185,7 @@ namespace LeerCopyWPF.Utilities
                     Encoder = new BmpBitmapEncoder();
                     break;
             }
-        } // EncodedImage
+        }
 
 
         /// <summary>
@@ -169,12 +200,13 @@ namespace LeerCopyWPF.Utilities
             BitmapSource clone = Image.Clone();
             clone.Freeze();
 
+            // Write copy to stream
             Encoder.Frames.Add(BitmapFrame.Create(clone));
             Encoder.Save(mStream);
             Encoder.Frames.Clear();
 
             return mStream;
-        } // GetMemoryStream
+        }
 
 
         /// <summary>
@@ -190,29 +222,40 @@ namespace LeerCopyWPF.Utilities
             // Create the path if it does not exist
             try
             {
-                if (!Directory.Exists(extractedPath))
-                {
-                    Directory.CreateDirectory(extractedPath);
-                }
+                Directory.CreateDirectory(extractedPath);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // TODO Exception logging
+                _logger.Error(ex, "Exception creating save path {SavePath}", extractedPath);
                 throw;
             }
 
-            // Save file
-            using (Stream fStream = new FileStream(fullPath, FileMode.Create))
+            // Save file (allow any IOExceptions to bubble up)
+            Stream fStream = null;
+
+            try
             {
+                fStream = new FileStream(fullPath, FileMode.Create);
+
                 // Create local deep copy to write to stream
                 BitmapSource clone = Image.Clone();
                 clone.Freeze();
 
+                // Write copy to stream
                 Encoder.Frames.Add(BitmapFrame.Create(clone));
                 Encoder.Save(fStream);
                 Encoder.Frames.Clear();
             }
-        } // SaveStreamToFile
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Exception saving BitmapSource {BitmapSource} to file {FilePath}", Image, fullPath);
+                throw;
+            }
+            finally
+            {
+                fStream?.Dispose();
+            }
+        }
 
 
         /// <summary>
@@ -222,6 +265,12 @@ namespace LeerCopyWPF.Utilities
         /// <returns>Encoding represented by file extension</returns>
         private Encoding? ConvertExtensionToEncoding(string extension)
         {
+            if (string.IsNullOrEmpty(extension))
+            {
+                _logger.Error("Null or empty file extension");
+                throw new ArgumentNullException("extension", "File extension cannot be null or empty");
+            }
+
             Encoding? retEnc;
 
             // Clean inputted string
@@ -259,7 +308,7 @@ namespace LeerCopyWPF.Utilities
             }
 
             return retEnc;
-        } // StrToEncoding
+        }
 
         #endregion // Methods
     }

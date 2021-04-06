@@ -40,7 +40,7 @@ namespace LeerCopyWPF
             }
             catch (Exception)
             {
-                MessageBox.Show("Fatal error prior to starting application's UI. Exiting application...",
+                MessageBox.Show("Fatal error prior to starting application's UI.\nExiting application...",
                                 "Fatal Error",
                                 MessageBoxButton.OK,
                                 MessageBoxImage.Error);

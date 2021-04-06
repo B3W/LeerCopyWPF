@@ -58,7 +58,7 @@ namespace LeerCopyWPF.Models
             BitsPerPixel = -1;
             Bounds = new Rect();
             DeviceName = "<none>";
-        } // SimpleScreen
+        }
 
 
         public SimpleScreen(int bpp, Rect bounds, string name)
@@ -66,7 +66,7 @@ namespace LeerCopyWPF.Models
             BitsPerPixel = bpp;
             Bounds = bounds;
             DeviceName = name;
-        } // SimpleScreen
+        }
 
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace LeerCopyWPF.Models
             }
 
             return this.Equals(obj as SimpleScreen);
-        } // Equals
+        }
 
 
         /// <summary>
@@ -103,7 +103,7 @@ namespace LeerCopyWPF.Models
             }
 
             return (Bounds.Equals(other.Bounds)) && (DeviceName.Equals(other.DeviceName));
-        } // Equals
+        }
 
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace LeerCopyWPF.Models
         public override int GetHashCode()
         {
             return base.GetHashCode();
-        } // GetHashCode
+        }
 
 
         /// <summary>
@@ -189,7 +189,15 @@ namespace LeerCopyWPF.Models
                     }
                 }
             }
-        } // CompareTo
+        }
+
+
+        public override string ToString()
+        {
+            string boundsJSONStr = $"\"Bounds\":{{\"X\":{Bounds.X},\"Y\":{Bounds.Y},\"Width\":{Bounds.Width},\"Height\":{Bounds.Height}}}";
+
+            return $"{{\"BitsPerPixel\":{BitsPerPixel},{boundsJSONStr},\"DeviceName\":\"{DeviceName}\"}}";
+        }
 
         #endregion // Methods
     }

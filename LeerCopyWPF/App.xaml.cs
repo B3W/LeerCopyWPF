@@ -46,6 +46,7 @@ namespace LeerCopyWPF
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
             // Initialize local AppData directory
             string rootAppDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
@@ -96,6 +97,7 @@ namespace LeerCopyWPF
             mainWindowController.ShowMainWindow();
         }
 
+
         protected override void OnExit(ExitEventArgs e)
         {
             const double NUM_DAYS_TO_EXPIRE = 1.0D;
@@ -141,6 +143,7 @@ namespace LeerCopyWPF
             }
         }
 
+
         /// <summary>
         /// Handles any exceptions unhandled by the UI thread of the application.
         /// </summary>
@@ -165,6 +168,22 @@ namespace LeerCopyWPF
 
             // Prevent default unhandled exception processing of allowing WPF to handle it (continues application execution)
             // e.Handled = true;
+        }
+
+
+        /// <summary>
+        /// Handler for any unhandled exceptions in the current app domain.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            // Process unhandled exception
+            Exception ex = (Exception)e.ExceptionObject;
+            string terminatingStr = e.IsTerminating ? "exit" : "continue";
+
+            _logger.Fatal(ex, $"Unhandled exception on background thread. Application will {terminatingStr}.");
+            Log.CloseAndFlush();
         }
     }
 }

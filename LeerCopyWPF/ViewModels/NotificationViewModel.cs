@@ -23,11 +23,6 @@
 
 using LeerCopyWPF.Enums;
 using LeerCopyWPF.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LeerCopyWPF.ViewModels
 {

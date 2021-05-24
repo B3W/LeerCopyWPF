@@ -21,10 +21,6 @@
  * SOFTWARE.
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace LeerCopyWPF.Constants
 {
     public static class SettingsConstants

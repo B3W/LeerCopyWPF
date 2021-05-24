@@ -23,15 +23,10 @@
 
 using LeerCopyWPF.Enums;
 using LeerCopyWPF.Models;
-using LeerCopyWPF.Utilities;
 using LeerCopyWPF.ViewModels;
 using LeerCopyWPF.Views;
 using Serilog;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace LeerCopyWPF.Controller

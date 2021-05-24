@@ -21,8 +21,6 @@
  * SOFTWARE.
  */
 
-using LeerCopyWPF.Enums;
-using LeerCopyWPF.Utilities;
 using System.Windows;
 using System.Windows.Media.Imaging;
 

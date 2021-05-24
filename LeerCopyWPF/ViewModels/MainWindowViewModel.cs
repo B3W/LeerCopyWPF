@@ -21,17 +21,6 @@
  * SOFTWARE.
  */
 
-using LeerCopyWPF.Commands;
-using LeerCopyWPF.Controller;
-using LeerCopyWPF.Enums;
-using LeerCopyWPF.Models;
-using LeerCopyWPF.Utilities;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using System.Windows.Input;
-
 namespace LeerCopyWPF.ViewModels
 {
     public class MainWindowViewModel : BaseViewModel

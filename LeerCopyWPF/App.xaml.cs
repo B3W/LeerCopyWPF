@@ -21,18 +21,15 @@
  * SOFTWARE.
  */
 
+using LeerCopyWPF.Controller;
+using LeerCopyWPF.Enums;
+using LeerCopyWPF.Views;
+using Serilog;
 using System;
 using System.IO;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Threading;
-using LeerCopyWPF.Controller;
-using LeerCopyWPF.Views;
-using LeerCopyWPF.Enums;
-using Serilog;
-using System.Reflection;
 
 namespace LeerCopyWPF
 {

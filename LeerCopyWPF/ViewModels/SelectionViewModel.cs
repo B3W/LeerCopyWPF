@@ -22,16 +22,12 @@
  */
 
 using LeerCopyWPF.Commands;
-using LeerCopyWPF.Constants;
-using LeerCopyWPF.Controller;
 using LeerCopyWPF.Enums;
 using LeerCopyWPF.Models;
 using LeerCopyWPF.Utilities;
 using Serilog;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;

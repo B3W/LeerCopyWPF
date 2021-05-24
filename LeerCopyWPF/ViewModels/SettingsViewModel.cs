@@ -23,15 +23,12 @@
 
 using LeerCopyWPF.Commands;
 using LeerCopyWPF.Constants;
-using LeerCopyWPF.Enums;
 using LeerCopyWPF.Models;
 using Serilog;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Windows;
 using System.Windows.Input;
 
 namespace LeerCopyWPF.ViewModels

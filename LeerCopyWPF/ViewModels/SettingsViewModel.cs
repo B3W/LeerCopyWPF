@@ -20,6 +20,7 @@ using LeerCopyWPF.Commands;
 using LeerCopyWPF.Constants;
 using LeerCopyWPF.Enums;
 using LeerCopyWPF.Models;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -33,6 +34,11 @@ namespace LeerCopyWPF.ViewModels
     public class SettingsViewModel : BaseViewModel, IDataErrorInfo
     {
         #region Fields
+
+        /// <summary>
+        /// Handle to logger for this source context
+        /// </summary>
+        private readonly ILogger _logger;
 
         /// <summary>
         /// 'Copy selection' action key binding
@@ -438,6 +444,7 @@ namespace LeerCopyWPF.ViewModels
         /// </summary>
         public SettingsViewModel()
         {
+            _logger = Log.ForContext<SettingsViewModel>();
             _keyBindings = new List<ISetting>();
             _generalSettings = new List<ISetting>();
             _validationErrors = new Dictionary<string, string>();
@@ -568,8 +575,11 @@ namespace LeerCopyWPF.ViewModels
         {
             if (!SettingsValid)
             {
+                _logger.Fatal("Tried to save invalid settings");
                 throw new InvalidOperationException("Trying to save invalid settings");
             }
+
+            _logger.Debug("User requested to save settings");
 
             // Save key bindings
             foreach (ISetting keyBinding in _keyBindings)

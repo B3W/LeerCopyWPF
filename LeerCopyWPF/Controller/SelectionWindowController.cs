@@ -25,6 +25,11 @@ namespace LeerCopyWPF.Controller
         #region Private Fields
 
         /// <summary>
+        /// Handle to logger for this source context
+        /// </summary>
+        private readonly ILogger _logger;
+
+        /// <summary>
         /// Handle to the dialog window controller
         /// </summary>
         private readonly IDialogWindowController _dialogWindowController;
@@ -63,11 +68,6 @@ namespace LeerCopyWPF.Controller
         #endregion
 
         #region Private Properties
-
-        /// <summary>
-        /// Handle to logger for this source context
-        /// </summary>
-        private readonly ILogger _logger;
 
         /// <summary>
         /// Collection of all selection windows

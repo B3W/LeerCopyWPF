@@ -4,6 +4,7 @@ using LeerCopyWPF.Controller;
 using LeerCopyWPF.Enums;
 using LeerCopyWPF.Models;
 using LeerCopyWPF.Utilities;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,7 +19,12 @@ namespace LeerCopyWPF.ViewModels
     public class SelectionViewModel : BaseViewModel
     {
         #region Fields
-        
+
+        /// <summary>
+        /// Handle to logger for this source context
+        /// </summary>
+        private readonly ILogger _logger;
+
         /// <summary>
         /// Modifier which determines how much to speed up selection resizing
         /// </summary>
@@ -241,6 +247,7 @@ namespace LeerCopyWPF.ViewModels
         /// <param name="bounds"></param>
         public SelectionViewModel(IInputElement inputOwner, Rect bounds)
         {
+            _logger = Log.ForContext<SelectionViewModel>();
             _inputOwner = inputOwner;
 
             // Capture screen
@@ -263,7 +270,7 @@ namespace LeerCopyWPF.ViewModels
             MouseDownCommand = new RelayCommand<MouseButtonEventArgs>(MouseDown);
             MouseUpCommand = new RelayCommand<MouseButtonEventArgs>(MouseUp);
             MouseMoveCommand = new RelayCommand<MouseEventArgs>(MouseMove);
-        } // SelectionViewModel
+        }
 
 
         /// <summary>
@@ -283,7 +290,7 @@ namespace LeerCopyWPF.ViewModels
                 _selection.EndPt = point;
             }
             IsSelecting = true;
-        } // StartSelection
+        }
 
 
         /// <summary>
@@ -297,7 +304,7 @@ namespace LeerCopyWPF.ViewModels
                 _selection.EndPt = point;
                 SelectionRect = new Rect(StartPt, EndPt);
             }
-        } // UpdateSelection
+        }
 
 
         /// <summary>
@@ -318,7 +325,7 @@ namespace LeerCopyWPF.ViewModels
             }
 
             IsSelecting = false;
-        } // StopSelection
+        }
 
 
         /// <summary>
@@ -452,7 +459,7 @@ namespace LeerCopyWPF.ViewModels
                         break;
                 }
             }
-        } // ResizeSelection
+        }
 
 
         #region Command Functions
@@ -462,15 +469,18 @@ namespace LeerCopyWPF.ViewModels
         /// </summary>
         private void CopySelection()
         {
+            _logger.Information("User requested to copy selection");
             BitmapUtilities.CopyToClipboard(BitmapUtilities.GetCroppedBitmap(Bitmap, SelectionRect));
-        } // CopySelection
+        }
 
 
         /// <summary>
-        /// Edit current selection in default text editor
+        /// Edit current selection in default image editor
         /// </summary>
         private void EditSelection()
         {
+            _logger.Information("User requested to edit selection");
+
             // Crop bitmap to selection area 
             CroppedBitmap finalBitmap = BitmapUtilities.GetCroppedBitmap(Bitmap, SelectionRect);
 
@@ -493,11 +503,13 @@ namespace LeerCopyWPF.ViewModels
             {
                 System.Diagnostics.Process.Start(stInfo);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // TODO Error logging
+                _logger.Error(ex, "Exception while opening image editor");
+
+                // TODO Show notification
             }
-        } // EditSelection
+        }
 
 
         /// <summary>
@@ -506,6 +518,8 @@ namespace LeerCopyWPF.ViewModels
         /// <param name="savePath">Path to save selection to</param>
         private void SaveSelection(string savePath)
         {
+            _logger.Information("User requested to save selection");
+
             // Crop bitmap to selection area
             CroppedBitmap finalBitmap = BitmapUtilities.GetCroppedBitmap(Bitmap, SelectionRect);
 
@@ -517,7 +531,7 @@ namespace LeerCopyWPF.ViewModels
 
             // Update last save directory
             Properties.Settings.Default.LastSavePath = saveFile.DirectoryName;
-        } // SaveSelection
+        }
 
 
         /// <summary>
@@ -525,12 +539,14 @@ namespace LeerCopyWPF.ViewModels
         /// </summary>
         private void MaximizeSelection()
         {
+            _logger.Debug("User requested to maximize selection");
+
             IsSelecting = false;
             IsSelected = true;
             _selection.StartPt = new Point();
             _selection.EndPt = new Point(Bitmap.Width, Bitmap.Height);
             SelectionRect = new Rect(StartPt, EndPt);
-        } // MaximizeSelection
+        }
 
 
         /// <summary>
@@ -538,11 +554,13 @@ namespace LeerCopyWPF.ViewModels
         /// </summary>
         private void ClearSelection()
         {
+            _logger.Debug("User requested to clear selection");
+
             IsSelecting = false;
             IsSelected = false;
             _selection.Reset();
             SelectionRect = new Rect(StartPt, EndPt);
-        } // ClearSelection
+        }
 
 
         /// <summary>
@@ -550,8 +568,9 @@ namespace LeerCopyWPF.ViewModels
         /// </summary>
         private void ToggleBorder()
         {
+            _logger.Debug("User requested to toggle border");
             Properties.Settings.Default.BorderVisibility = !Properties.Settings.Default.BorderVisibility;
-        } // ToggleBorder
+        }
 
 
         /// <summary>
@@ -559,8 +578,9 @@ namespace LeerCopyWPF.ViewModels
         /// </summary>
         private void ToggleTips()
         {
+            _logger.Debug("User requested to toggle tips");
             Properties.Settings.Default.TipsVisibility = !Properties.Settings.Default.TipsVisibility;
-        } // ToggleTips
+        }
 
 
         /// <summary>
